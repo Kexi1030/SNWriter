@@ -1,0 +1,15 @@
+F:\Code\硬件序列号烧写\SNWrite\bin\Debug\SNWrite.exe.config
+F:\Code\硬件序列号烧写\SNWrite\bin\Debug\SNWrite.exe
+F:\Code\硬件序列号烧写\SNWrite\bin\Debug\SNWrite.pdb
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.csprojAssemblyReference.cache
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\MainWindow.g.cs
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\App.g.cs
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite_MarkupCompile.cache
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite_MarkupCompile.lref
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\MainWindow.baml
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.g.resources
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.Properties.Resources.resources
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.csproj.GenerateResource.cache
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.csproj.CoreCompileInputs.cache
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.exe
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.pdb
