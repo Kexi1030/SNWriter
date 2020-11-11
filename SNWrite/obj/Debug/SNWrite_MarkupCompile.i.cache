@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-F:\Code\硬件序列号烧写\SNWrite\obj\Debug\
+F:\Code\SNWriter\SNWrite\obj\Debug\
 SNWrite
 none
 false
 DEBUG;TRACE
-F:\Code\硬件序列号烧写\SNWrite\App.xaml
+F:\Code\SNWriter\SNWrite\App.xaml
 4-1481578047
 
-92037563300
+10680599751
 14-1290796308
 InitializationInput.xaml;InputUser.xaml;MainWindow.xaml;PopupAddOneSN.xaml;
 
-True
+False
 

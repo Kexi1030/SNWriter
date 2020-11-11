@@ -19,12 +19,12 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
             <Label Content="请选择型号:" Width="120" Margin="5"/>
-            <ComboBox Width="190" Margin="5"/>
+            <ComboBox x:Name="ModelSelectComboBox" Width="190" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5">
             <Label Content="请选择PCBA厂家:" Width="120" Margin="5"/>
-            <ComboBox Width="190" Margin="5"/>
+            <ComboBox x:Name="PCBASelectComboBox" Width="190" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="5">
