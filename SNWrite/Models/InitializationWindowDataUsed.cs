@@ -19,5 +19,15 @@ namespace SNWrite.Models
     {
         public string pcbaSelected { get; set; }
     }
+
+    class Year
+    {
+        public string year { get; set; }
+    }
+
+    class WeekOfYear
+    {
+        public string weekofyear { get; set; }
+    }
 }
 

@@ -25,6 +25,12 @@ namespace SNWrite
             InitializeComponent();
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
+            initalizeComboBoxs();
+
+        }
+
+        private void initalizeComboBoxs()
+        {
             // 准备数据源
             List<ModelSelect> modelSelects = new List<ModelSelect>()
             {
@@ -46,11 +52,44 @@ namespace SNWrite
             this.PCBASelectComboBox.ItemsSource = pCBASelecteds;
             this.PCBASelectComboBox.DisplayMemberPath = "pcbaSelected";
             this.PCBASelectComboBox.SelectedIndex = 0;
+
+
+            List<Year> years = new List<Year>()
+            {
+                new Year(){year=(DateTime.Now.Year-1).ToString()},
+                new Year(){year=(DateTime.Now.Year).ToString()},
+                new Year(){year=(DateTime.Now.Year+1).ToString()},
+            };
+
+            this.YearSelectComboBox.ItemsSource = years;
+            this.YearSelectComboBox.DisplayMemberPath = "year";
+            this.YearSelectComboBox.SelectedIndex = 1;
+
+            List<WeekOfYear> weekOfYears = new List<WeekOfYear>()
+            {
+                new WeekOfYear(){weekofyear = ((DateTime.Now.DayOfYear/7)-1).ToString()},
+                new WeekOfYear(){weekofyear = (DateTime.Now.DayOfYear/7).ToString()},
+                new WeekOfYear(){weekofyear = ((DateTime.Now.DayOfYear/7)+1).ToString()},
+            };
+
+            this.WeekSelectComboBox.ItemsSource = weekOfYears;
+            this.WeekSelectComboBox.DisplayMemberPath = "weekofyear";
+            this.WeekSelectComboBox.SelectedIndex = 1;
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // 对输入的年份进行正确性分析
+        }
+
+        private void WeekSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            // 对输入的周次进行正确性分析
         }
     }
 }

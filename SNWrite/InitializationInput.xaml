@@ -29,8 +29,8 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="5">
             <Label Content="请选择年份和周次:" Width="120" Margin="5"/>
-            <ComboBox Width="90" Margin="5"/>
-            <ComboBox Width="90" Margin="5"/>
+            <ComboBox x:Name="YearSelectComboBox" Width="90" Margin="5" IsEditable="True" SelectionChanged="ComboBox_SelectionChanged"/>
+            <ComboBox x:Name="WeekSelectComboBox" Width="90" Margin="5" IsEditable="True" SelectionChanged="WeekSelectComboBox_SelectionChanged"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="5">
