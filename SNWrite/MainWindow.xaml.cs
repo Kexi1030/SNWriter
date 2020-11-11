@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
+using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -34,7 +36,8 @@ namespace SNWrite
     {
         public MainWindow()
         {
-            InitializeComponent(); // 
+            InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             SNList.ItemsSource = new List<SNinList>
             {
@@ -43,6 +46,32 @@ namespace SNWrite
             };
 
             SNList.DisplayMemberPath = "sn";
+
+            InputUser inputUser = new InputUser();
+            //inputUser.Owner = this;
+            inputUser.ShowDialog();
+        }
+
+        private void InitialButton_Click(object sender, RoutedEventArgs e)
+        {
+            InitializationInput initializationInput = new InitializationInput();
+            initializationInput.Owner = this;
+            initializationInput.ShowDialog();
+        }
+
+
+
+        private void ModifyUserName_Click(object sender, RoutedEventArgs e)
+        {
+            InputUser inputUser = new InputUser();
+            //inputUser.Owner = this;
+            inputUser.ShowDialog();
+        }
+
+        private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
+            DialogResult result = folderBrowserDialog.ShowDialog();
         }
     }
 

@@ -13,3 +13,9 @@ F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.csproj.GenerateResource.
 F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.csproj.CoreCompileInputs.cache
 F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.exe
 F:\Code\硬件序列号烧写\SNWrite\obj\Debug\SNWrite.pdb
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\InitializationInput.g.cs
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\InitializationInput.baml
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\InputUser.g.cs
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\InputUser.baml
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\PopupAddOneSN.g.cs
+F:\Code\硬件序列号烧写\SNWrite\obj\Debug\PopupAddOneSN.baml

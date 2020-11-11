@@ -20,15 +20,15 @@
         </Grid.ColumnDefinitions>
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="0" HorizontalAlignment="Center">
-            <Button Content="新建" FontSize="24" Width="70" Margin="5"/>
-            <Button Content="导入" FontSize="24" Width="70" Margin="5"/>
+            <Button x:Name="InitialButton" Content="新建" FontSize="24" Width="70" Margin="5" Click="InitialButton_Click"/>
+            <Button x:Name="InitialSNListFromFileButton" Content="导入" FontSize="24" Width="70" Margin="5" Click="InitialSNListFromFileButton_Click"/>
             <Button Content="+" FontSize="28" Width="70" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Label Content="当前操作人为:" FontSize="24" Margin="5"/>
-            <TextBlock Width="240" Margin="5"/>
-            <Button Content="修改" FontSize="24" Width="70" Margin="5"/>
+            <TextBlock FontSize="24" Width="240" Margin="5"/>
+            <Button x:Name="ModifyUserName" Content="修改" FontSize="24" Width="70" Margin="5" Click="ModifyUserName_Click" />
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="2" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center">
