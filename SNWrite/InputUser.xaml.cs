@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,17 @@ namespace SNWrite
     /// </summary>
     public partial class InputUser : Window
     {
-
+        public OperatorName OName
+        {
+            get;
+            set;
+        }
+        
         public InputUser()
         {
             InitializeComponent();
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            
         }
 
         private void NameInputBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -40,9 +47,11 @@ namespace SNWrite
             }
         }
 
-        private string DefineOperator_Click(object sender, RoutedEventArgs e)
+        private void DefineOperator_Click(object sender, RoutedEventArgs e)
         {
-            operatorName.operatorname = this.NameInputBox.Text.Trim();
+            OperatorName temp = new OperatorName();
+            temp.operatorname = this.NameInputBox.Text.Trim();
+            OName = temp;
             this.Close();
         }
     }

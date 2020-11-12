@@ -27,7 +27,7 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.Column="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center">
             <Label Content="当前操作人为:" FontSize="24" Margin="5"/>
-            <TextBlock x:Name="OperatorNameTextBlock"  FontSize="24" Text="{Binding Path=operatorname, Source=InputUser.operatorName}" Width="240" Margin="5"/>
+            <TextBlock x:Name="OperatorNameTextBlock"  FontSize="26" Text="{Binding Path=operatorname}" Width="240" Margin="5"/>
             <Button x:Name="ModifyUserName" Content="修改" FontSize="24" Width="70" Margin="5" Click="ModifyUserName_Click" />
         </StackPanel>
 

@@ -31,7 +31,7 @@ namespace SNWrite.Models
         public string weekofyear { get; set; }
     }
 
-    class OperatorName: INotifyPropertyChanged
+    public class OperatorName: INotifyPropertyChanged
     {
         private string _operatorname;
         public string operatorname

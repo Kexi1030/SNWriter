@@ -40,8 +40,13 @@ namespace SNWrite
             InitializeComponent();
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            OperatorName operatorName;
-            this.OperatorNameTextBlock.DataContext = operatorName;
+            InputUser inputUser = new InputUser();
+            //inputUser.Owner = this;
+            inputUser.ShowDialog();
+
+            //OperatorName operatorName = inputUser.OName;
+           
+            this.OperatorNameTextBlock.DataContext = inputUser.OName;
 
             SNList.ItemsSource = new List<SNinList>
             {
@@ -51,9 +56,6 @@ namespace SNWrite
 
             SNList.DisplayMemberPath = "sn";
 
-            InputUser inputUser = new InputUser();
-            //inputUser.Owner = this;
-            inputUser.ShowDialog();
         }
 
         private void InitialButton_Click(object sender, RoutedEventArgs e)
