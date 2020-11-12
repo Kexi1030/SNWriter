@@ -25,13 +25,32 @@ namespace SNWrite.Commands
             JavaScriptSerializer ser = new JavaScriptSerializer();
             SNinitalize sNinitalize = ser.Deserialize<SNinitalize>(JsonString);
 
-            
         }
 
         private void CreateSNFromsNinitalize(SNinitalize sNinitalize)
         {
             string SerialNumber = sNinitalize.SerialNumber;
             List<string> list = new List<string>(SerialNumber.Split(','));
+            int length = 0;
+
+            foreach(var eachstring in list)
+            {
+                bool containOr = eachstring.Contains("-");
+                if(containOr)
+                {
+                    List<string> listContainsTwo = new List<string>(eachstring.Split('-'));
+                    length += (Convert.ToInt32(listContainsTwo[1]) - Convert.ToInt32(listContainsTwo[0]));
+                }
+                else
+                {
+                    length += 1;
+                }
+            }
+
+            for(int i=0;i<length;i++)
+            {
+
+            }
 
         }
     }
