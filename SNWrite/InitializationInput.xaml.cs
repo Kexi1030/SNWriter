@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SNWrite.Commands;
 using SNWrite.Models;
 
 namespace SNWrite
@@ -90,6 +91,24 @@ namespace SNWrite
         private void WeekSelectComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             // 对输入的周次进行正确性分析
+        }
+
+        private void OKButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 对所有输入的信息进行正确性分析 未完成
+            SNinitalize sNinitalize = new SNinitalize();
+            sNinitalize.Model = ModelSelectComboBox.Text;
+            sNinitalize.PCBAfactory = PCBASelectComboBox.Text;
+            sNinitalize.Year = YearSelectComboBox.Text;
+            sNinitalize.Week = WeekSelectComboBox.Text;
+            sNinitalize.SerialNumber = SerialNumberTextBox.Text;
+            sNinitalize.HardWareNumber = HardWareNumberTextBox.Text;
+            sNinitalize.FirmWareNumber = FirmWareNumberTextBox.Text;
+
+            CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
+            creatJsonFromInitalizationWindow.CreateJson(sNinitalize);
+
+            this.Close();
         }
     }
 }

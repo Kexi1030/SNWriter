@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
@@ -10,11 +11,13 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SNWrite.Models;
+using MessageBox = System.Windows.Forms.MessageBox;
 
 namespace SNWrite
 {
@@ -35,6 +38,12 @@ namespace SNWrite
 
     public partial class MainWindow : Window
     {
+        ObservableCollection<SNStringInListBox> sNStringInListBoxes = new ObservableCollection<SNStringInListBox>
+        {
+            new SNStringInListBox(){snstring = "1"},
+            new SNStringInListBox(){snstring = "2"},
+        };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,13 +54,11 @@ namespace SNWrite
            
             this.OperatorNameTextBlock.DataContext = inputUser.OName;
 
-            SNList.ItemsSource = new List<SNinList>
-            {
-                new SNinList("0301 2032 0017 5152")
-                ,new SNinList("0301 2032 0018 5152")
-            };
 
-            SNList.DisplayMemberPath = "sn";
+            //this.SNList.DataContext = sNStringInListBox;
+
+            SNList.ItemsSource = sNStringInListBoxes;
+            
 
         }
 
@@ -76,6 +83,17 @@ namespace SNWrite
         {
             FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
             DialogResult result = folderBrowserDialog.ShowDialog();
+        }
+
+        private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 这里需要对输入的onesn进行校验 未完成
+            PopupAddOneSN popupAddOneSN = new PopupAddOneSN();
+            popupAddOneSN.Owner = this;
+            popupAddOneSN.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            popupAddOneSN.ShowDialog();
+
+            sNStringInListBoxes.Add(popupAddOneSN.SNStringInListBox);
         }
     }
 

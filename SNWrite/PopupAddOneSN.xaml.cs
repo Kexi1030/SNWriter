@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SNWrite.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Policy;
@@ -20,6 +21,11 @@ namespace SNWrite
     /// </summary>
     public partial class PopupAddOneSN : Window
     {
+        public SNStringInListBox SNStringInListBox
+        {
+            get;
+            set;
+        }
         public PopupAddOneSN()
         {
             InitializeComponent();
@@ -27,7 +33,7 @@ namespace SNWrite
 
         private void SNInputBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // 还需要对SN进行逻辑判断
+            // 还需要对SN进行逻辑判断 缺
             if(SNInputBox.Text.Trim().Length > 0)
             {
                 DefineOneSNButton.IsEnabled = true;
@@ -36,6 +42,14 @@ namespace SNWrite
             {
                 DefineOneSNButton.IsEnabled = false;
             }
+        }
+
+        private void DefineOneSNButton_Click(object sender, RoutedEventArgs e)
+        {
+            SNStringInListBox temp = new SNStringInListBox();
+            temp.snstring = this.SNInputBox.Text.Trim();
+            SNStringInListBox = temp;
+            this.Close();
         }
     }
 }

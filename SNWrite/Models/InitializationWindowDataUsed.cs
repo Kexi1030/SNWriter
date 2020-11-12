@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
 
 namespace SNWrite.Models
 {
@@ -56,6 +57,28 @@ namespace SNWrite.Models
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+
+    public class SNStringInListBox
+        /*
+         * 列表中的sn的数据类
+         */
+    {
+        private string Snstring;
+
+        public string snstring
+        {
+            get
+            {
+                return Snstring;
+            }
+            set
+            {
+                Snstring = value;
+            }
+        }
+
+
     }
 }
 

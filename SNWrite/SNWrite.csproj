@@ -37,6 +37,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -72,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\CreatJsonFromInitalizationWindow.cs" />
     <Compile Include="Models\InitializationWindowDataUsed.cs" />
     <Compile Include="InitializationInput.xaml.cs">
       <DependentUpon>InitializationInput.xaml</DependentUpon>
@@ -89,6 +91,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\InfoFromInitializationWindow.cs" />
     <Compile Include="PopupAddOneSN.xaml.cs">
       <DependentUpon>PopupAddOneSN.xaml</DependentUpon>
     </Compile>

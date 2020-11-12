@@ -15,6 +15,6 @@
 
         <Label Content="请输入需要添加的单条序列号:" FontSize="20" Grid.Row="0" HorizontalAlignment="Left" Margin="5"/>
         <TextBox x:Name="SNInputBox" FontSize="22" Margin="5" Grid.Row="1" TextChanged="SNInputBox_TextChanged"/>
-        <Button x:Name="DefineOneSNButton" Content="确定" FontSize="20" Width="100" Grid.Row="2" HorizontalAlignment="Right" IsEnabled="False" Margin="5" IsDefault="True" />
+        <Button x:Name="DefineOneSNButton" Content="确定" FontSize="20" Width="100" Grid.Row="2" HorizontalAlignment="Right" IsEnabled="False" Margin="5" IsDefault="True" Click="DefineOneSNButton_Click" />
     </Grid>
 </Window>

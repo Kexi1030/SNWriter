@@ -35,21 +35,21 @@
 
         <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="5">
             <Label Content="请输入编号:" Width="120" Margin="5"/>
-            <TextBox Width="190" Margin="5"/>
+            <TextBox x:Name="SerialNumberTextBox" Width="190" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="5">
             <Label Content="请输入硬件版本号:" Width="120" Margin="5"/>
-            <TextBox Width="190" Margin="5"/>
+            <TextBox x:Name="HardWareNumberTextBox" Width="190" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="5">
             <Label Content="请输入固件版本号:" Width="120" Margin="5"/>
-            <TextBox Width="190" Margin="5"/>
+            <TextBox x:Name="FirmWareNumberTextBox" Width="190" Margin="5"/>
         </StackPanel>
 
         <StackPanel Orientation="Horizontal" Grid.Row="6" HorizontalAlignment="Right" Margin="0,5,22,5">
-            <Button Content="确定" Width="90" Margin="5"/>
+            <Button x:Name="OKButton" Content="确定" Width="90" Margin="5" Click="OKButton_Click"/>
             <Button x:Name="CancelButton" Content="取消" Width="90" Margin="5" Click="CancelButton_Click"/>
         </StackPanel>
     </Grid>
