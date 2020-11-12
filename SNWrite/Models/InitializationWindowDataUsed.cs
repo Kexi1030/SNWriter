@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -28,6 +29,33 @@ namespace SNWrite.Models
     class WeekOfYear
     {
         public string weekofyear { get; set; }
+    }
+
+    class OperatorName: INotifyPropertyChanged
+    {
+        private string _operatorname;
+        public string operatorname
+        {
+            get
+            {
+                return _operatorname;
+            }
+            set
+            { 
+                _operatorname = value;
+                OnPropertyChanged("operatorname");
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChangedEventHandler handler = this.PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
 }
 

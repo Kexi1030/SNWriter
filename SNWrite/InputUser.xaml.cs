@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using SNWrite.Models;
 
 namespace SNWrite
 {
@@ -20,6 +21,7 @@ namespace SNWrite
     /// </summary>
     public partial class InputUser : Window
     {
+
         public InputUser()
         {
             InitializeComponent();
@@ -38,9 +40,10 @@ namespace SNWrite
             }
         }
 
-        private void DefineOperator_Click(object sender, RoutedEventArgs e)
+        private string DefineOperator_Click(object sender, RoutedEventArgs e)
         {
-            
+            operatorName.operatorname = this.NameInputBox.Text.Trim();
+            this.Close();
         }
     }
 }

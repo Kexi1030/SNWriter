@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using SNWrite.Models;
 
 namespace SNWrite
 {
@@ -38,6 +39,9 @@ namespace SNWrite
         {
             InitializeComponent();
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+
+            OperatorName operatorName;
+            this.OperatorNameTextBlock.DataContext = operatorName;
 
             SNList.ItemsSource = new List<SNinList>
             {
