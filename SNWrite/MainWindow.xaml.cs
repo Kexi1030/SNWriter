@@ -41,10 +41,7 @@ namespace SNWrite
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
             InputUser inputUser = new InputUser();
-            //inputUser.Owner = this;
             inputUser.ShowDialog();
-
-            //OperatorName operatorName = inputUser.OName;
            
             this.OperatorNameTextBlock.DataContext = inputUser.OName;
 
@@ -70,8 +67,9 @@ namespace SNWrite
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
         {
             InputUser inputUser = new InputUser();
-            //inputUser.Owner = this;
             inputUser.ShowDialog();
+
+            this.OperatorNameTextBlock.DataContext = inputUser.OName;
         }
 
         private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
