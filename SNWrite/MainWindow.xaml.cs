@@ -17,7 +17,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SNWrite.Models;
+using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
+using SNWrite.Commands;
 
 namespace SNWrite
 {
@@ -26,28 +28,19 @@ namespace SNWrite
     /// </summary>
     /// 
 
-
-
     public partial class MainWindow : Window
     {
-        ObservableCollection<SNStringInListBox> sNStringInListBoxes = new ObservableCollection<SNStringInListBox>
-        {
-            new SNStringInListBox(){snstring = "1"},
-            new SNStringInListBox(){snstring = "2"},
-        };
+        ObservableCollection<SNStringInListBox> sNStringInListBoxes = new ObservableCollection<SNStringInListBox>();
 
         public MainWindow()
         {
             InitializeComponent();
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
-            InputUser inputUser = new InputUser();
-            inputUser.ShowDialog();
+           // InputUser inputUser = new InputUser();
+            //inputUser.ShowDialog();
            
-            this.OperatorNameTextBlock.DataContext = inputUser.OName;
-
-
-            //this.SNList.DataContext = sNStringInListBox;
+            //this.OperatorNameTextBlock.DataContext = inputUser.OName;
 
             SNList.ItemsSource = sNStringInListBoxes;
         }
@@ -57,9 +50,13 @@ namespace SNWrite
             InitializationInput initializationInput = new InitializationInput();
             initializationInput.Owner = this;
             initializationInput.ShowDialog();
+
+             
+            foreach (var i in initializationInput.observableCollection)
+            {
+                sNStringInListBoxes.Add(i);
+            }
         }
-
-
 
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
         {
@@ -71,8 +68,23 @@ namespace SNWrite
 
         private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog folderBrowserDialog = new FolderBrowserDialog();
-            DialogResult result = folderBrowserDialog.ShowDialog();
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Title = "请选择需要导入的Json配置文件";
+            openFileDialog.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Application.StartupPath;
+            if(openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
+                SNinitalize sNinitalize = creatJsonFromInitalizationWindow.CreateSNFromJsonFile(openFileDialog.FileName);
+
+                foreach (var i in sNinitalize.SN.SNnumber)
+                {
+                    sNStringInListBoxes.Add(new SNStringInListBox() { snstring = i.number });
+                }
+            }
+
+
+
         }
 
         private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
@@ -83,9 +95,9 @@ namespace SNWrite
             popupAddOneSN.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             popupAddOneSN.ShowDialog();
 
+
+
             sNStringInListBoxes.Add(popupAddOneSN.SNStringInListBox);
         }
     }
-
-
 }

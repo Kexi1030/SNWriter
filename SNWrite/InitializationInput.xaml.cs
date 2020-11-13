@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,6 +22,12 @@ namespace SNWrite
     /// </summary>
     public partial class InitializationInput : Window
     {
+
+        public ObservableCollection<SNStringInListBox> observableCollection
+        {
+            get;
+            set;
+        }
         public InitializationInput()
         {
             InitializeComponent();
@@ -108,6 +115,14 @@ namespace SNWrite
             CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
             sNinitalize.SN = creatJsonFromInitalizationWindow.CreateSNFromsNinitalize(sNinitalize);
             creatJsonFromInitalizationWindow.CreateJson(sNinitalize);
+
+            ObservableCollection<SNStringInListBox> temp = new ObservableCollection<SNStringInListBox>();
+            foreach (var i in sNinitalize.SN.SNnumber)
+            {
+                temp.Add(new SNStringInListBox() { snstring = i.number });
+            }
+
+            observableCollection = temp;
 
             this.Close();
         }
