@@ -49,6 +49,10 @@ namespace SNWrite
             SNStringInListBox temp = new SNStringInListBox();
             temp.snstring = this.SNInputBox.Text.Trim();
             SNStringInListBox = temp;
+
+            // 将onesn 导入到json文件
+
+
             this.Close();
         }
     }

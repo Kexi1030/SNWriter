@@ -73,6 +73,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Commands\AddOneSnToJson.cs" />
     <Compile Include="Commands\CreatJsonFromInitalizationWindow.cs" />
     <Compile Include="Models\InitializationWindowDataUsed.cs" />
     <Compile Include="InitializationInput.xaml.cs">

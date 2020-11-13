@@ -106,6 +106,7 @@ namespace SNWrite
             sNinitalize.FirmWareNumber = FirmWareNumberTextBox.Text;
 
             CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
+            sNinitalize.SN = creatJsonFromInitalizationWindow.CreateSNFromsNinitalize(sNinitalize);
             creatJsonFromInitalizationWindow.CreateJson(sNinitalize);
 
             this.Close();

@@ -26,15 +26,7 @@ namespace SNWrite
     /// </summary>
     /// 
 
-    class SNinList
-    {
-        public SNinList(string sn)
-        {
-            this.sn = sn;
-        }
 
-        public string sn { set; get; }
-    }
 
     public partial class MainWindow : Window
     {
@@ -58,8 +50,6 @@ namespace SNWrite
             //this.SNList.DataContext = sNStringInListBox;
 
             SNList.ItemsSource = sNStringInListBoxes;
-            
-
         }
 
         private void InitialButton_Click(object sender, RoutedEventArgs e)

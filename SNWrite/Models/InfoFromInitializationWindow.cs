@@ -15,7 +15,7 @@ namespace SNWrite.Models
         public string SerialNumber { get; set; }
         public string HardWareNumber { get; set; }
         public string FirmWareNumber { get; set; }
-        public InfoFromInitializationWindow SN { get; set; }
+        public SN SN { get; set; }
     }
 
     public class InfoFromInitializationWindow
