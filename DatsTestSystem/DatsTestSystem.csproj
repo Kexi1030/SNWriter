@@ -56,12 +56,36 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandFrameCollection.cs" />
+    <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml.cs">
+      <DependentUpon>HardwareSerialNumberWriterInitialSNinofWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml.cs">
+      <DependentUpon>HardwareSerialNumberWriterInputUserNameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml.cs">
+      <DependentUpon>HardwareSerialNumberWriterMainWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HardwareSerialNumberWirter\Models\ComboboxDataUsedInInitialSNinfoWindow.cs" />
+    <Compile Include="HardwareSerialNumberWirter\Models\JsonModels\JsonFormat.cs" />
+    <Compile Include="HardwareSerialNumberWirter\Models\OperatorName.cs" />
     <Compile Include="ParameterManagement.cs" />
     <Compile Include="SerialPortManagement\SerialPortController.xaml.cs">
       <DependentUpon>SerialPortController.xaml</DependentUpon>
     </Compile>
     <Compile Include="SerialPortManagement\SerialPortManagement.cs" />
     <Compile Include="StatusFrameDistribution.cs" />
+    <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -106,7 +130,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="HardwareSerialNumberWirter\" />
+    <Folder Include="HardwareSerialNumberWirter\Commands\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-F:\Code\硬件序列号烧写\DatsTestSystem\obj\Debug\
+F:\Code\SNWriter\DatsTestSystem\obj\Debug\
 DatsTestSystem
 none
 false
 DEBUG;TRACE
-F:\Code\硬件序列号烧写\DatsTestSystem\App.xaml
-2111317508
+F:\Code\SNWriter\DatsTestSystem\App.xaml
+5-305043590
 
-10-521857019
+15901675948
 13-1505183044
-MainWindow.xaml;SerialPortManagement\SerialPortController.xaml;
+HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml;MainWindow.xaml;SerialPortManagement\SerialPortController.xaml;
 
-True
+False
 

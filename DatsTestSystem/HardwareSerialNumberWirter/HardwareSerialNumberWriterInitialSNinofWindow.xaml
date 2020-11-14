@@ -1,0 +1,56 @@
+﻿<Window x:Class="DatsTestSystem.HardwareSerialNumberWirter.HardwareSerialNumberWriterInitialSNinofWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatsTestSystem.HardwareSerialNumberWirter"
+        mc:Ignorable="d"
+ Title="InitializationInput" Height="370" Width="370" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="0" Margin="5">
+            <Label Content="请选择型号:" Width="120" Margin="5"/>
+            <ComboBox x:Name="ModelSelectComboBox" Width="190" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="5">
+            <Label Content="请选择PCBA厂家:" Width="120" Margin="5"/>
+            <ComboBox x:Name="PCBASelectComboBox" Width="190" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="2" Margin="5">
+            <Label Content="请选择年份和周次:" Width="120" Margin="5"/>
+            <ComboBox x:Name="YearSelectComboBox" Width="90" Margin="5" IsEditable="True" SelectionChanged="YearSelectComboBox_SelectionChanged" />
+            <ComboBox x:Name="WeekSelectComboBox" Width="90" Margin="5" IsEditable="True" SelectionChanged="WeekSelectComboBox_SelectionChanged"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="3" Margin="5">
+            <Label Content="请输入编号:" Width="120" Margin="5"/>
+            <TextBox x:Name="SerialNumberTextBox" Width="190" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Margin="5">
+            <Label Content="请输入硬件版本号:" Width="120" Margin="5"/>
+            <TextBox x:Name="HardWareNumberTextBox" Width="190" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="5" Margin="5">
+            <Label Content="请输入固件版本号:" Width="120" Margin="5"/>
+            <TextBox x:Name="FirmWareNumberTextBox" Width="190" Margin="5"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="6" HorizontalAlignment="Right" Margin="0,5,22,5">
+            <Button x:Name="OKButton" Content="确定" Width="90" Margin="5" Click="OKButton_Click"/>
+            <Button x:Name="CancelButton" Content="取消" Width="90" Margin="5" Click="CancelButton_Click"/>
+        </StackPanel>
+    </Grid>
+</Window>

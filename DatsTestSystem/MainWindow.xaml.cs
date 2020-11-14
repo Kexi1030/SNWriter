@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using DatsTestSystem.HardwareSerialNumberWirter;
 
 namespace DatsTestSystem
 {
@@ -23,6 +24,14 @@ namespace DatsTestSystem
         public MainWindow()
         {
             InitializeComponent();
+
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
+
+        private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)
+        {
+            HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+            hardwareSerialNumberWriterMainWindow.ShowDialog();
         }
     }
 }

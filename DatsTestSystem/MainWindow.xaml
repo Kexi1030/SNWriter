@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatsTestSystem"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="250" Width="400" ResizeMode="NoResize">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment='Center' Margin="5">
+            <Button x:Name="HardwareSerialNumberButton" Content="烧写" FontSize="26" Width="90" Margin="5,5,70,5" Click="HardwareSerialNumberButton_Click"/>
+            <Button  Content="QC" FontSize="26" Width="90" Margin="5"/>
+        </StackPanel>
     </Grid>
 </Window>

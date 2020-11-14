@@ -1,5 +1,8 @@
 ﻿
 
-FF:\Code\硬件序列号烧写\DatsTestSystem\MainWindow.xaml;;
-FF:\Code\硬件序列号烧写\DatsTestSystem\SerialPortManagement\SerialPortController.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\MainWindow.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\SerialPortManagement\SerialPortController.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml;;
 
