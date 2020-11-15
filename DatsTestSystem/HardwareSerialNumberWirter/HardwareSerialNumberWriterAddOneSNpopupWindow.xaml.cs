@@ -19,6 +19,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     /// </summary>
     public partial class HardwareSerialNumberWriterAddOneSNpopupWindow : Window
     {
+
+        public string addOneSnString { get; set; }
+
         public HardwareSerialNumberWriterAddOneSNpopupWindow()
         {
             InitializeComponent();
@@ -28,6 +31,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void DefineOneSNButton_Click(object sender, RoutedEventArgs e)
         {
+            addOneSnString = SNInputBox.Text.Trim();
+
             this.Close();
         }
 

@@ -114,6 +114,7 @@ namespace SNWrite
 
             CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
             sNinitalize.SN = creatJsonFromInitalizationWindow.CreateSNFromsNinitalize(sNinitalize);
+            
             creatJsonFromInitalizationWindow.CreateJson(sNinitalize);
 
             ObservableCollection<SNStringInListBox> temp = new ObservableCollection<SNStringInListBox>();

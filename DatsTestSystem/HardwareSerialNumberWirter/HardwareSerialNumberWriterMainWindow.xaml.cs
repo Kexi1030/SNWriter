@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -22,6 +24,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         /*
          * 存在问题 第一次输入操作人姓名的时候 点击X也会进入烧写主界面 未解决
          */
+
+        ObservableCollection<string> sNStringInListBoxes = new ObservableCollection<string>();
+
         public HardwareSerialNumberWriterMainWindow()
         {
             InitializeComponent();
@@ -32,6 +37,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
 
             this.OperatorNameTextBlock.DataContext = hardwareSerialNumberWriterInputUserNameWindow.operatorName;
+
+            SNList.ItemsSource = sNStringInListBoxes;
         }
 
         private void InitialButton_Click(object sender, RoutedEventArgs e)
@@ -39,6 +46,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             HardwareSerialNumberWriterInitialSNinofWindow hardwareSerialNumberWriterInitialSNinofWindow = new HardwareSerialNumberWriterInitialSNinofWindow();
             hardwareSerialNumberWriterInitialSNinofWindow.Owner = this;
             hardwareSerialNumberWriterInitialSNinofWindow.ShowDialog();
+
+            foreach(string i in hardwareSerialNumberWriterInitialSNinofWindow.observableCollection)
+            {
+                sNStringInListBoxes.Add(i);
+            }
         }
 
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
@@ -72,10 +84,18 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 }
             }
             */
+            
         }
 
         private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
         {
+            HardwareSerialNumberWriterAddOneSNpopupWindow hardwareSerialNumberWriterAddOneSNpopupWindow = new HardwareSerialNumberWriterAddOneSNpopupWindow();
+            hardwareSerialNumberWriterAddOneSNpopupWindow.Owner = this;
+            hardwareSerialNumberWriterAddOneSNpopupWindow.ShowDialog();
+
+            sNStringInListBoxes.Add(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString);
+
+            // 写入到Json文件中去
 
         }
     }
