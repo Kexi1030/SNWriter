@@ -68,7 +68,25 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void OKButton_Click(object sender, RoutedEventArgs e)
         {
+            // 对所有输入的信息进行正确性分析 未完成
 
+            Models.JsonModels.JsonFormat jsonFormat = new Models.JsonModels.JsonFormat();
+
+            jsonFormat.Model = ModelSelectComboBox.Text;
+            jsonFormat.PCBAfactory = PCBASelectComboBox.Text;
+            jsonFormat.Year = YearSelectComboBox.Text;
+            jsonFormat.Week = WeekSelectComboBox.Text;
+            jsonFormat.SerialNumber = SerialNumberTextBox.Text;
+            jsonFormat.HardWareNumber = HardWareNumberTextBox.Text;
+            jsonFormat.FirmWareNumber = FirmWareNumberTextBox.Text;
+
+            // jsonFormat.SnList;
+        }
+
+        private string[] CreateSnListinJsonFormat(string serialnumber)
+        {
+
+            return null;
         }
     }
 }

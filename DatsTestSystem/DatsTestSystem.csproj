@@ -56,6 +56,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="CommandFrameCollection.cs" />
+    <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml.cs">
+      <DependentUpon>HardwareSerialNumberWriterAddOneSNpopupWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml.cs">
       <DependentUpon>HardwareSerialNumberWriterInitialSNinofWindow.xaml</DependentUpon>
     </Compile>
@@ -74,6 +77,10 @@
     </Compile>
     <Compile Include="SerialPortManagement\SerialPortManagement.cs" />
     <Compile Include="StatusFrameDistribution.cs" />
+    <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
