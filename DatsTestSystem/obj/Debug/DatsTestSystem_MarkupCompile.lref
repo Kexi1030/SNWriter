@@ -5,5 +5,6 @@ FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumber
 FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml;;
 FF:\Code\SNWriter\DatsTestSystem\HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml;;
 FF:\Code\SNWriter\DatsTestSystem\MainWindow.xaml;;
-FF:\Code\SNWriter\DatsTestSystem\SerialPortManagement\SerialPortController.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\SerialPortManagement\PortControlWindow.xaml;;
+FF:\Code\SNWriter\DatsTestSystem\SerialPortManagement\SerialPortControllerUserControl.xaml;;
 

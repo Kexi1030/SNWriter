@@ -77,8 +77,12 @@
     <Compile Include="HardwareSerialNumberWirter\Models\OperatorName.cs" />
     <Compile Include="ParameterManagement.cs" />
     <Compile Include="SerialPortManagement\Commands\PortController.cs" />
-    <Compile Include="SerialPortManagement\SerialPortController.xaml.cs">
-      <DependentUpon>SerialPortController.xaml</DependentUpon>
+    <Compile Include="SerialPortManagement\Models\SerialportConfigurationInformation.cs" />
+    <Compile Include="SerialPortManagement\PortControlWindow.xaml.cs">
+      <DependentUpon>PortControlWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SerialPortManagement\SerialPortControllerUserControl.xaml.cs">
+      <DependentUpon>SerialPortControllerUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="SerialPortManagement\SerialPortManagement.cs" />
     <Compile Include="StatusFrameDistribution.cs" />
@@ -110,7 +114,11 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="SerialPortManagement\SerialPortController.xaml">
+    <Page Include="SerialPortManagement\PortControlWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SerialPortManagement\SerialPortControllerUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -17,6 +17,7 @@ using System.Windows.Shapes;
 using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
+using DatsTestSystem.SerialPortManagement;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -133,6 +134,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
 
             return returnString;
+        }
+
+        private void PortControllerButton_Click(object sender, RoutedEventArgs e)
+        {
+            PortControlWindow portControlWindow = new PortControlWindow();
+            portControlWindow.Show();
         }
     }
 }

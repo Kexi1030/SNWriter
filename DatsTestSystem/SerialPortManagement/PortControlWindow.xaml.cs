@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace DatsTestSystem.SerialPortManagement
 {
     /// <summary>
-    /// SerialPortController.xaml 的交互逻辑
+    /// PortControlWindow.xaml 的交互逻辑
     /// </summary>
-    public partial class SerialPortController : UserControl
+    public partial class PortControlWindow : Window
     {
-        public SerialPortController()
+        public PortControlWindow()
         {
             InitializeComponent();
         }
