@@ -71,3 +71,5 @@ C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\DatsTestSystem.g
 C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\DatsTestSystem.Properties.Resources.resources
 C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\DatsTestSystem.csproj.GenerateResource.cache
 C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\DatsTestSystem.csproj.CoreCompileInputs.cache
+F:\Code\SNWriter\DatsTestSystem\obj\Debug\HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.g.cs
+F:\Code\SNWriter\DatsTestSystem\obj\Debug\HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.baml

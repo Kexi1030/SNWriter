@@ -10,9 +10,13 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DatsTestSystem.HardwareSerialNumberWirter.Commands;
+using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
+using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -47,11 +51,17 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             hardwareSerialNumberWriterInitialSNinofWindow.Owner = this;
             hardwareSerialNumberWriterInitialSNinofWindow.ShowDialog();
 
-            foreach(string i in hardwareSerialNumberWriterInitialSNinofWindow.observableCollection)
+            if (hardwareSerialNumberWriterInitialSNinofWindow.observableCollection != null)
             {
-                sNStringInListBoxes.Add(i);
+                foreach (string i in hardwareSerialNumberWriterInitialSNinofWindow.observableCollection)
+                {
+                    string sNStringContainBlock = StringProcess(i);
+                    // 对其中的每个string每隔4个添加空格
+                    sNStringInListBoxes.Add(sNStringContainBlock);
+                }
             }
         }
+
 
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
         {
@@ -59,32 +69,30 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
             hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
 
-            if(hardwareSerialNumberWriterInputUserNameWindow.operatorName != null)
+            if (hardwareSerialNumberWriterInputUserNameWindow.operatorName != null)
             {
                 this.OperatorNameTextBlock.DataContext = hardwareSerialNumberWriterInputUserNameWindow.operatorName;
             }
-            
+
         }
 
         private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
         {
-            /*
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "请选择需要导入的Json配置文件";
             openFileDialog.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
-            openFileDialog.InitialDirectory = Application.StartupPath;
+            openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                CreatJsonFromInitalizationWindow creatJsonFromInitalizationWindow = new CreatJsonFromInitalizationWindow();
-                SNinitalize sNinitalize = creatJsonFromInitalizationWindow.CreateSNFromJsonFile(openFileDialog.FileName);
+                JsonCreate jsonCreate = new JsonCreate();
+                JsonFormat JsonData = jsonCreate.CreateSNFromJsonFile(openFileDialog.FileName);
 
-                foreach (var i in sNinitalize.SN.SNnumber)
+                foreach (var i in JsonData.SnList)
                 {
-                    sNStringInListBoxes.Add(new SNStringInListBox() { snstring = i.number });
+                    sNStringInListBoxes.Add(StringProcess(i));
                 }
             }
-            */
-            
         }
 
         private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
@@ -93,10 +101,38 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             hardwareSerialNumberWriterAddOneSNpopupWindow.Owner = this;
             hardwareSerialNumberWriterAddOneSNpopupWindow.ShowDialog();
 
-            sNStringInListBoxes.Add(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString);
+            if (hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString != null)
+            {
+                sNStringInListBoxes.Add(StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString));
 
-            // 写入到Json文件中去
+                // 写入到Json文件中去
+                JsonCreate jsonCreate = new JsonCreate();
+                JsonFormat ReturnJsonCreate = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要更改 文件路径需要更改
 
+                List<string> newSnList = new List<string>(ReturnJsonCreate.SnList);
+                newSnList.Add(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString);
+
+                ReturnJsonCreate.SnList = newSnList.ToArray();
+
+                jsonCreate.CreateJson(ReturnJsonCreate);
+            }
+        }
+
+        private string StringProcess(string demo)
+        {
+            char[] demoChar = demo.ToCharArray();
+            string returnString = "";
+
+            for (int i = 0; i < demoChar.Length; i++)
+            {
+                if (i % 4 == 0 && i > 0)
+                {
+                    returnString += " ";
+                }
+                returnString += demoChar[i];
+            }
+
+            return returnString;
         }
     }
 }

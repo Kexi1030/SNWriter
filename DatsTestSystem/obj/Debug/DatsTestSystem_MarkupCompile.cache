@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\
+F:\Code\SNWriter\DatsTestSystem\obj\Debug\
 DatsTestSystem
 none
 false
 DEBUG;TRACE
-C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\App.xaml
+F:\Code\SNWriter\DatsTestSystem\App.xaml
 670542404
 
 19-202151547
-14-1686202416
+15-1471815680
 HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml;MainWindow.xaml;SerialPortManagement\SerialPortController.xaml;
 
 False
