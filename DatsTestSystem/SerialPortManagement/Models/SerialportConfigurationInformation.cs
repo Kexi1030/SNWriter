@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DatsTestSystem.SerialPortManagement.Models
 {
-    class SerialportConfigurationInformation
+    public class SerialportConfigurationInformation
     {
         public string PortName { get; set; }
         public int BaudRate { get; set; }

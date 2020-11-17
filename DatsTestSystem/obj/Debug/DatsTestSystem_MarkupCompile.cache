@@ -16,5 +16,5 @@ F:\Code\SNWriter\DatsTestSystem\App.xaml
 15-1471815680
 HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterInitialSNinofWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterInputUserNameWindow.xaml;HardwareSerialNumberWirter\HardwareSerialNumberWriterMainWindow.xaml;MainWindow.xaml;SerialPortManagement\PortControlWindow.xaml;SerialPortManagement\SerialPortControllerUserControl.xaml;
 
-True
+False
 

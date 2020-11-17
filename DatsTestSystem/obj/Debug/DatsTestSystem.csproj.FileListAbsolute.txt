@@ -75,3 +75,4 @@ F:\Code\SNWriter\DatsTestSystem\obj\Debug\SerialPortManagement\SerialPortControl
 F:\Code\SNWriter\DatsTestSystem\obj\Debug\SerialPortManagement\PortControlWindow.g.cs
 F:\Code\SNWriter\DatsTestSystem\obj\Debug\GeneratedInternalTypeHelper.g.cs
 F:\Code\SNWriter\DatsTestSystem\obj\Debug\SerialPortManagement\PortControlWindow.baml
+F:\Code\SNWriter\DatsTestSystem\obj\Debug\DatsTestSystem.csprojAssemblyReference.cache

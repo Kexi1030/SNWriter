@@ -25,8 +25,10 @@ namespace DatsTestSystem.SerialPortManagement
         {
             InitializeComponent();
 
-            SerialPort serialPort = new SerialPort();
-            serialPort.
+            //List<string> PortName = SerialPort.GetPortNames().ToList();
+            //Console.WriteLine(PortName);
+            PortNamesComboBox.ItemsSource = SerialPort.GetPortNames();
+            PortNamesComboBox.SelectedIndex = 0;
 
             List<string> BaudRate = new List<string>() { "300", "9600" };
             BaudRateComboBox.ItemsSource = BaudRate;
@@ -44,5 +46,6 @@ namespace DatsTestSystem.SerialPortManagement
             ParityComboBox.ItemsSource = Parity;
             ParityComboBox.SelectedIndex = 0;
         }
+
     }
 }

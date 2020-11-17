@@ -5,8 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatsTestSystem.SerialPortManagement"
         mc:Ignorable="d"
-        Title="PortControlWindow" Height="370" Width="370" ResizeMode="NoResize">
+        Title="PortControlWindow" Height="430" Width="370" ResizeMode="NoResize">
     <Grid>
-        <local:SerialPortController/>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <local:SerialPortController x:Name="SerialPortController" Grid.Row="0"/>
+        <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="1" HorizontalAlignment="Right">
+            <Button x:Name="OKButton" Content="确认" FontSize="26" Width="100" Margin="5,5,15,5" Click="OKButton_Click"/>
+            <Button x:Name="CancelButton" Content="取消" FontSize="26" Width="100" Margin="5" Click="CancelButton_Click"/>
+        </StackPanel>
     </Grid>
 </Window>

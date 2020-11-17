@@ -50,6 +50,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             HardwareSerialNumberWriterInitialSNinofWindow hardwareSerialNumberWriterInitialSNinofWindow = new HardwareSerialNumberWriterInitialSNinofWindow();
             hardwareSerialNumberWriterInitialSNinofWindow.Owner = this;
+            hardwareSerialNumberWriterInitialSNinofWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             hardwareSerialNumberWriterInitialSNinofWindow.ShowDialog();
 
             if (hardwareSerialNumberWriterInitialSNinofWindow.observableCollection != null)
@@ -68,6 +69,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
             hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
+            hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
 
             if (hardwareSerialNumberWriterInputUserNameWindow.operatorName != null)
@@ -139,6 +141,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void PortControllerButton_Click(object sender, RoutedEventArgs e)
         {
             PortControlWindow portControlWindow = new PortControlWindow();
+            portControlWindow.Owner = this;
+            portControlWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             portControlWindow.Show();
         }
     }

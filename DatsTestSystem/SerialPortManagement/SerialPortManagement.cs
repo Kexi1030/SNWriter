@@ -13,6 +13,8 @@ namespace DatsTestSystem.SerialPortManagement
     {
         private SerialPort serialPort = new SerialPort();
 
+        private SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation() { }; // 这里需要默认端口信息
+
         /// <summary>
         /// 发送数据
         /// </summary>

@@ -17,7 +17,7 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0">
-                    <ComboBox Margin="5,10,15,10" FontSize="20" Width="220"/>
+                    <ComboBox Name="PortNamesComboBox" Margin="5,10,15,10" FontSize="20" Width="220"/>
                     <Label Content="端口" Margin="5" FontSize="20"/>
                 </StackPanel>
 
@@ -40,6 +40,7 @@
                     <ComboBox Name="ParityComboBox" Margin="5,10,15,10" FontSize="24" Width="220"/>
                     <Label Content="校验位" Margin="5" FontSize="20"/>
                 </StackPanel>
+
             </Grid>
         </GroupBox>
     </Grid>
