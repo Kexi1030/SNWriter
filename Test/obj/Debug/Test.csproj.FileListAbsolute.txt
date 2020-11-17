@@ -1,0 +1,13 @@
+F:\Code\硬件序列号烧写\Test\obj\Debug\Test.csprojAssemblyReference.cache
+F:\Code\硬件序列号烧写\Test\obj\Debug\Test.csproj.CoreCompileInputs.cache
+F:\Code\硬件序列号烧写\Test\bin\Debug\Test.exe.config
+F:\Code\硬件序列号烧写\Test\bin\Debug\Test.exe
+F:\Code\硬件序列号烧写\Test\bin\Debug\Test.pdb
+F:\Code\硬件序列号烧写\Test\bin\Debug\BouncyCastle.Crypto.dll
+F:\Code\硬件序列号烧写\Test\bin\Debug\itextsharp.dll
+F:\Code\硬件序列号烧写\Test\bin\Debug\Newtonsoft.Json.dll
+F:\Code\硬件序列号烧写\Test\bin\Debug\itextsharp.xml
+F:\Code\硬件序列号烧写\Test\bin\Debug\Newtonsoft.Json.xml
+F:\Code\硬件序列号烧写\Test\obj\Debug\Test.csproj.CopyComplete
+F:\Code\硬件序列号烧写\Test\obj\Debug\Test.exe
+F:\Code\硬件序列号烧写\Test\obj\Debug\Test.pdb
