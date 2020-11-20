@@ -56,10 +56,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             this.YearSelectComboBox.ItemsSource = comboboxDataUsedInInitialSNinfoWindow.years;
             this.YearSelectComboBox.DisplayMemberPath = "year";
             this.YearSelectComboBox.SelectedIndex = 1;
+            // this.YearSelectComboBox.IsEditable = true;
 
             this.WeekSelectComboBox.ItemsSource = comboboxDataUsedInInitialSNinfoWindow.weekOfYears;
             this.WeekSelectComboBox.DisplayMemberPath = "weekofyear";
             this.WeekSelectComboBox.SelectedIndex = 1;
+            // this.WeekSelectComboBox.IsEditable = true;
         }
 
 
@@ -93,32 +95,45 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             jsonFormat.HardWareNumber = HardWareNumberTextBox.Text;
             jsonFormat.FirmWareNumber = FirmWareNumberTextBox.Text;
 
-            jsonFormat.SnList = CreateSnListinJsonFormat(jsonFormat);
-
-            ObservableCollection<string> temp = new ObservableCollection<string>();
-            foreach (string i in jsonFormat.SnList)
+            try
             {
-                temp.Add(i);
+                jsonFormat.SnList = CreateSnListinJsonFormat(jsonFormat);
+
+                ObservableCollection<string> temp = new ObservableCollection<string>();
+
+                foreach (string i in jsonFormat.SnList)
+                {
+                    temp.Add(i);
+                }
+                observableCollection = temp;
+
+                // 保存在本地
+                JsonCreate jsonCreate = new JsonCreate();
+                jsonCreate.CreateJson(jsonFormat);
+
+                this.Close();
             }
-            observableCollection = temp;
-
-            // 保存在本地
-            JsonCreate jsonCreate = new JsonCreate();
-            jsonCreate.CreateJson(jsonFormat);
-
-            this.Close();
+            catch(Exception ex)
+            {
+                MessageBox.Show("输入有误请检查");
+            }
         }
+
 
         private string[] CreateSnListinJsonFormat(JsonFormat sNinitalize)
         {
             string SerialNumber = sNinitalize.SerialNumber;
-            List<string> list = new List<string>(SerialNumber.Split(','));
+
+            char[] SplitChars = { ',', '，' };
+
+            List<string> list = new List<string>(SerialNumber.Split(SplitChars));
 
             string DoneSerialNumber = createShortSNSerialNumber(sNinitalize);
 
-            var snstringlist = new List<string>();
+            List<string> snstringlist = new List<string>();
             // C#中的数组是不支持动态添加元素的，只能创建固定大小的数组
             // 使用泛型list< T >,先将元素存入list中，最后使用ToArray()转成数组
+
             foreach (string eachstring in list)
             {
                 bool containOr = eachstring.Contains("-");

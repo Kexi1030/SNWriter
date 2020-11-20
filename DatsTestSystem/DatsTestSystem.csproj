@@ -68,6 +68,7 @@
     </ApplicationDefinition>
     <Compile Include="CommandFrameCollection.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\JsonCreate.cs" />
+    <Compile Include="HardwareSerialNumberWirter\Commands\ProtocolProcess.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\ReportCreation.cs" />
     <Compile Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml.cs">
       <DependentUpon>HardwareSerialNumberWriterAddOneSNpopupWindow.xaml</DependentUpon>

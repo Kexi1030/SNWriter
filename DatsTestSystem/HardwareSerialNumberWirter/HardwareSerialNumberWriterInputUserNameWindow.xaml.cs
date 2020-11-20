@@ -21,10 +21,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     public partial class HardwareSerialNumberWriterInputUserNameWindow : Window
     {
         public OperatorName operatorName { get; set; } = null;
+
+        public bool NameOr { get; set; } = false; // 是否输入了名字
+
         public HardwareSerialNumberWriterInputUserNameWindow()
         {
             InitializeComponent();
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            // this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void NameInputBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -42,6 +45,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void DefineOperator_Click(object sender, RoutedEventArgs e)
         {
             operatorName = new OperatorName() { operatorname = NameInputBox.Text.Trim() };
+            NameOr = true;
 
             this.Close();
         }

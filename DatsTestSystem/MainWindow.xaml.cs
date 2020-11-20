@@ -30,8 +30,18 @@ namespace DatsTestSystem
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
-            hardwareSerialNumberWriterMainWindow.ShowDialog();
+            HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
+            hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
+            hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
+            
+
+            if(hardwareSerialNumberWriterInputUserNameWindow.NameOr)
+            {
+                HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow(hardwareSerialNumberWriterInputUserNameWindow.operatorName);
+                hardwareSerialNumberWriterMainWindow.Owner = this;
+                hardwareSerialNumberWriterMainWindow.ShowDialog();
+            }
         }
     }
 }

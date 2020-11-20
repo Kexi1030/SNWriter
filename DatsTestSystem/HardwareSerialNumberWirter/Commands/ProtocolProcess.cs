@@ -1,34 +1,24 @@
-﻿using DatsTestSystem.HardwareSerialNumberWirter.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Test
+namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 {
-    class Program
+    class ProtocolProcess
     {
-        static void Main(string[] args)
-        {
-            string output = ProtocolProcessing("0000FF01025FFF");
-            Console.WriteLine(output);
-            Console.ReadLine();
-        }
-
-
-
         public static string ProtocolProcessing(string unprocessedString)
         {
             string ProcessedString;
 
             List<char> ProcessedChars = new List<char>();
 
-            for(int i =0; i<unprocessedString.Length;i++)
+            for (int i = 0; i < unprocessedString.Length; i++)
             {
-                if(unprocessedString[i] == 'F')
+                if (unprocessedString[i] == 'F')
                 {
-                    if(unprocessedString[i+1] == 'F' || unprocessedString[i+1] == '5')
+                    if (unprocessedString[i + 1] == 'F' || unprocessedString[i + 1] == '5')
                     {
                         ProcessedChars.Add('F');
                         ProcessedChars.Add('F');
@@ -37,7 +27,7 @@ namespace Test
                         i += 1;
                     }
                 }
-                else if(unprocessedString[i] == '5' && unprocessedString[i + 1] == 'F')
+                else if (unprocessedString[i] == '5' && unprocessedString[i + 1] == 'F')
                 {
                     ProcessedChars.Add('F');
                     ProcessedChars.Add('F');

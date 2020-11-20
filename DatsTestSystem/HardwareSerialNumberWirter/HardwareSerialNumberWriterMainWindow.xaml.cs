@@ -18,6 +18,7 @@ using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using DatsTestSystem.SerialPortManagement;
+using DatsTestSystem.HardwareSerialNumberWirter.Models;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -26,22 +27,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     /// </summary>
     public partial class HardwareSerialNumberWriterMainWindow : Window
     {
-        /*
-         * 存在问题 第一次输入操作人姓名的时候 点击X也会进入烧写主界面 未解决
-         */
-
         ObservableCollection<string> sNStringInListBoxes = new ObservableCollection<string>();
 
-        public HardwareSerialNumberWriterMainWindow()
+        public HardwareSerialNumberWriterMainWindow(Models.OperatorName operatorName)
         {
             InitializeComponent();
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-            HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
-            // hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
-            hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
-
-            this.OperatorNameTextBlock.DataContext = hardwareSerialNumberWriterInputUserNameWindow.operatorName;
+            this.OperatorNameTextBlock.DataContext = operatorName;
 
             SNList.ItemsSource = sNStringInListBoxes;
         }
@@ -102,6 +95,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             HardwareSerialNumberWriterAddOneSNpopupWindow hardwareSerialNumberWriterAddOneSNpopupWindow = new HardwareSerialNumberWriterAddOneSNpopupWindow();
             hardwareSerialNumberWriterAddOneSNpopupWindow.Owner = this;
+            hardwareSerialNumberWriterAddOneSNpopupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             hardwareSerialNumberWriterAddOneSNpopupWindow.ShowDialog();
 
             if (hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString != null)
@@ -144,6 +138,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             portControlWindow.Owner = this;
             portControlWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             portControlWindow.Show();
+        }
+
+        private void SNList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            CurrentSNTextBlock.Text = SNList.SelectedItem.ToString();
         }
     }
 }

@@ -83,5 +83,13 @@ namespace DatsTestSystem.SerialPortManagement
                 returnBytes[i] = Convert.ToByte(hexString.Substring(i * 2, 2).Replace(" ", ""), 16);
             return returnBytes;
         }
+
+        private byte[] DataReceived()
+        {
+            byte[] ReDatas = new byte[serialPort.BytesToRead];
+            serialPort.Read(ReDatas, 0, ReDatas.Length);
+
+            return ReDatas;
+        }
     }
 }
