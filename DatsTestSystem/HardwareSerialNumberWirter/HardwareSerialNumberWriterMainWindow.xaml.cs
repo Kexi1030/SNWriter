@@ -144,5 +144,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             CurrentSNTextBlock.Text = SNList.SelectedItem.ToString();
         }
+
+        private void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

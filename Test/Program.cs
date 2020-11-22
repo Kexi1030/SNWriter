@@ -1,9 +1,11 @@
-﻿using DatsTestSystem.HardwareSerialNumberWirter.Commands;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DatsTestSystem.SerialPortManagement;
+using DatsTestSystem.SerialPortManagement.Models;
+using System.Threading;
 
 namespace Test
 {
@@ -11,51 +13,26 @@ namespace Test
     {
         static void Main(string[] args)
         {
-            string output = ProtocolProcessing("0000FF01025FFF");
-            Console.WriteLine(output);
+            SerialPortManagement serialPortManagement = new SerialPortManagement();
+            var data = serialPortManagement.strToHexByte("F500000000A00A120000008203012034432151520AFF5F0C0D0E0FFFFF5F");
+
+            
+            SerialportConfigurationInformation serialportConfigurationInformation = new SerialportConfigurationInformation() { PortName ="COM4",BaudRate=9600,DataBits=8,StopBits="1"};
+            /*bool result = serialPortManagement.SendData(data,serialportConfigurationInformation);
+            Console.WriteLine(result);
+            */
+
+            //Thread.Sleep(1000);
+            var data2 = serialPortManagement.strToHexByte("F500000000E00300FFFF5F");
+            bool result2 = serialPortManagement.SendData(data2, serialportConfigurationInformation);
+            Console.WriteLine(result2);
+
+            Thread.Sleep(1000);
+            string data3 = serialPortManagement.DataReceived();
+            Console.WriteLine(data3);
+
             Console.ReadLine();
-        }
 
-
-
-        public static string ProtocolProcessing(string unprocessedString)
-        {
-            string ProcessedString;
-
-            List<char> ProcessedChars = new List<char>();
-
-            for(int i =0; i<unprocessedString.Length;i++)
-            {
-                if(unprocessedString[i] == 'F')
-                {
-                    if(unprocessedString[i+1] == 'F' || unprocessedString[i+1] == '5')
-                    {
-                        ProcessedChars.Add('F');
-                        ProcessedChars.Add('F');
-                        ProcessedChars.Add(unprocessedString[i]);
-                        ProcessedChars.Add(unprocessedString[i + 1]);
-                        i += 1;
-                    }
-                }
-                else if(unprocessedString[i] == '5' && unprocessedString[i + 1] == 'F')
-                {
-                    ProcessedChars.Add('F');
-                    ProcessedChars.Add('F');
-                    ProcessedChars.Add(unprocessedString[i]);
-                    ProcessedChars.Add(unprocessedString[i + 1]);
-                    i += 1;
-                }
-                else
-                {
-                    ProcessedChars.Add(unprocessedString[i]);
-                }
-            }
-
-            ProcessedString = string.Concat<char>(ProcessedChars);  // 字符数组转换为字符串
-
-            ProcessedString = ProcessedString.Insert(0, "F5");
-            ProcessedString = ProcessedString.Insert(ProcessedString.Length, "5F");
-            return ProcessedString;
         }
     }
 }

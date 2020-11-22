@@ -21,8 +21,10 @@ namespace DatsTestSystem.SerialPortManagement
         /// <param name="data"></param>
         /// <param name="serialportConfigurationInformation"> 表示选择的串口配置信息</param>
         /// <returns></returns>
-        public bool SendData(byte[] data, SerialportConfigurationInformation serialportConfigurationInformation)
+        public bool SendData(string data, SerialportConfigurationInformation serialportConfigurationInformation)
         {
+            byte[] dataSend = strToHexByte(data);
+
             serialPort.PortName = serialportConfigurationInformation.PortName;
             serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
             serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
@@ -42,7 +44,7 @@ namespace DatsTestSystem.SerialPortManagement
             {
                 try
                 {
-                    serialPort.Write(data, 0, data.Length);
+                    serialPort.Write(dataSend, 0, data.Length);
                     return true;
                 }
                 catch (Exception ex)
@@ -68,7 +70,6 @@ namespace DatsTestSystem.SerialPortManagement
             }
         }
 
-
         /// <summary>
         /// 字符串转换16进制字节数组
         /// </summary>
@@ -84,12 +85,37 @@ namespace DatsTestSystem.SerialPortManagement
             return returnBytes;
         }
 
-        private byte[] DataReceived()
+        /// <summary>
+        /// 接收数据
+        /// </summary>
+        /// <returns></returns>
+        public string DataReceived()
         {
             byte[] ReDatas = new byte[serialPort.BytesToRead];
             serialPort.Read(ReDatas, 0, ReDatas.Length);
 
-            return ReDatas;
+            string dataReceived = bytetoString(ReDatas);
+
+            return dataReceived;
+
+        }
+
+        /// <summary>
+        /// bute[] To string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string bytetoString(byte[] data)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sb.AppendFormat("{0:x2}" + " ", data[i]); // 向此实例追加通过处理复合格式字符串（包含零个或更多格式项）而返回的字符串。
+            }
+
+            string Result = sb.ToString().ToUpper();
+
+            return Result;
         }
     }
 }

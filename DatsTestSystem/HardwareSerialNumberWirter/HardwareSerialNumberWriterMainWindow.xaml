@@ -39,8 +39,8 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="3" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center">
-            <Button Content="开始" FontSize="24" Height="200" Margin="10"/>
-            <Button Content="结束" FontSize="24" Height="50" Margin="10"/>
+            <Button x:Name="StartButton" Content="开始" FontSize="24" Height="200" Margin="10" Click="Button_Click"/>
+            <Button x:Name="EndButton" Content="结束" FontSize="24" Height="50" Margin="10"/>
         </StackPanel>
 
         <GroupBox Header="硬件序列号列表" FontSize="15" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Margin="5">
