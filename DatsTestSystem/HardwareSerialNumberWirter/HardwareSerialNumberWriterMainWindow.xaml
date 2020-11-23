@@ -5,14 +5,15 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatsTestSystem.HardwareSerialNumberWirter"
         mc:Ignorable="d"
-        Title="HardwareSerialNumberWriterMainWindow" Height="470" Width="800" ResizeMode="NoResize">
+        Title="HardwareSerialNumberWriterMainWindow" Height="500" Width="800" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1.5*"/>
             <RowDefinition Height="2*"/>
             <RowDefinition Height="2.5*"/>
             <RowDefinition Height="8*"/>
             <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
@@ -20,11 +21,9 @@
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
 
-        <Menu Grid.Row="0" Grid.ColumnSpan="3">
-            <MenuItem Header="串口管理" FontSize="16">
-                <MenuItem Name="PortControllerButton" Header="串口配置" Click="PortControllerButton_Click"/>
-            </MenuItem>
-        </Menu>
+        <ToolBar Grid.Row="0" Grid.ColumnSpan="3">
+            <Button x:Name="PortControllerButton" Content="串口管理" FontSize="14" Click="PortControllerButton_Click" />
+        </ToolBar>
 
         <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center">
             <Button x:Name="InitialButton" Content="新建" FontSize="24" Width="70" Margin="5" Click="InitialButton_Click"/>
@@ -39,16 +38,22 @@
         </StackPanel>
 
         <StackPanel Orientation="Vertical" Grid.Row="3" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center">
-            <Button x:Name="StartButton" Content="开始" FontSize="24" Height="200" Margin="10" Click="Button_Click"/>
+            <Button x:Name="StartButton" Content="开始" FontSize="24" Height="200" Margin="10" Click="StartButton_Click"/>
             <Button x:Name="EndButton" Content="结束" FontSize="24" Height="50" Margin="10"/>
         </StackPanel>
 
         <GroupBox Header="硬件序列号列表" FontSize="15" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Margin="5">
             <ListBox x:Name="SNList" Margin="5" SelectionChanged="SNList_SelectionChanged" />
         </GroupBox>
+        
         <GroupBox Header="当前序列号" FontSize="15" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
             <TextBlock x:Name="CurrentSNTextBlock" Margin="5"/>
         </GroupBox>
+        
         <GroupBox Header="状态信息" FontSize="15" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" Margin="5"/>
+
+        <StatusBar Grid.Row="5" Grid.ColumnSpan="3">
+            
+        </StatusBar>
     </Grid>
 </Window>

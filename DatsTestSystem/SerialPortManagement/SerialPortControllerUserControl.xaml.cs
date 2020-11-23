@@ -30,11 +30,11 @@ namespace DatsTestSystem.SerialPortManagement
             PortNamesComboBox.ItemsSource = SerialPort.GetPortNames();
             PortNamesComboBox.SelectedIndex = 0;
 
-            List<string> BaudRate = new List<string>() { "300", "9600" };
+            List<string> BaudRate = new List<string>() {"9600" ,"19200","38400","57600"};
             BaudRateComboBox.ItemsSource = BaudRate;
             BaudRateComboBox.SelectedIndex = 0;
 
-            List<int> DataBits = new List<int>() { 8, 7, 6 };
+            List<int> DataBits = new List<int>() { 8, 7, 6 ,5};
             DataBitsComboBox.ItemsSource = DataBits;
             DataBitsComboBox.SelectedIndex = 0;
 

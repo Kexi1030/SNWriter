@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using DatsTestSystem.SerialPortManagement;
+using DatsTestSystem.SerialPortManagement.Models;
+using System.Threading;
+using System.Windows;
 
 namespace DatsTestSystem.CommandAggregationStatusDistribution
 {
@@ -11,28 +15,41 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
     /// </summary>
     class CommandAggregate
     {
-        private string CommandPending { get; set; }
+        private SerialportConfigurationInformation SerialportConfigurationInformation = new SerialportConfigurationInformation() { PortName = "COM1", BaudRate = 9600, DataBits = 8, StopBits = "1" };
 
-        CommandAggregate(string CommandString)
+        private string CommandPending { get; set; }
+        public string StringBack { get; set; }
+
+        SerialPortManagementClass serialPortManagement;
+
+        public CommandAggregate()
         {
-            if(CommandString.Substring(0,2) == "FW")
+            serialPortManagement = new SerialPortManagementClass(SerialportConfigurationInformation);
+
+        }
+
+        public void FWSend(string CommandString)
+        {
+            if (CommandString == "FWF500000000E00300FFFF5F")
             {
-                FWCommand(CommandString);
+                FWReadCommand();
             }
             else
             {
-                QCCommand(CommandString);
+                serialPortManagement.SendData(CommandString.Remove(0, 2));
+
+
+                Thread.Sleep(800);
             }
         }
 
-        private void FWCommand(string FwString)
+        private string FWReadCommand() => StringBack = serialPortManagement.DataReceived();
+
+
+        private void QCCommand(string QCString)
         {
 
         }
 
-        private void QCCommand (string QCString)
-        {
-
-        }
     }
 }

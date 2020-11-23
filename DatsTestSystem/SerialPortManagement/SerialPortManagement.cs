@@ -9,11 +9,25 @@ using System.Windows.Forms;
 
 namespace DatsTestSystem.SerialPortManagement
 {
-    class SerialPortManagement
+    class SerialPortManagementClass
     {
         private SerialPort serialPort = new SerialPort();
 
-        private SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation() { }; // 这里需要默认端口信息
+        public SerialPortManagementClass(SerialportConfigurationInformation serialportConfigurationInformation)
+        {
+
+            serialPort.PortName = serialportConfigurationInformation.PortName;
+            serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
+            serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
+            serialPort.DataBits = serialportConfigurationInformation.DataBits;
+            serialPort.StopBits = (StopBits)Convert.ToInt32(serialportConfigurationInformation.StopBits);
+        }
+
+        private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation() 
+        {
+            PortName="COM1",BaudRate=9600,DataBits=8,StopBits="1",Parity="None"
+        }; // 这里需要默认端口信息
+
 
         /// <summary>
         /// 发送数据
@@ -21,15 +35,9 @@ namespace DatsTestSystem.SerialPortManagement
         /// <param name="data"></param>
         /// <param name="serialportConfigurationInformation"> 表示选择的串口配置信息</param>
         /// <returns></returns>
-        public bool SendData(string data, SerialportConfigurationInformation serialportConfigurationInformation)
+        public bool SendData(string data)
         {
             byte[] dataSend = strToHexByte(data);
-
-            serialPort.PortName = serialportConfigurationInformation.PortName;
-            serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
-            serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
-            serialPort.DataBits = serialportConfigurationInformation.DataBits;
-            serialPort.StopBits = (StopBits)Convert.ToInt32(serialportConfigurationInformation.StopBits);
 
             try
             {

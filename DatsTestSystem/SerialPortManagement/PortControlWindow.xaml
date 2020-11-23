@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DatsTestSystem.SerialPortManagement"
         mc:Ignorable="d"
-        Title="PortControlWindow" Height="430" Width="370" ResizeMode="NoResize">
+        Title="串口管理" Height="450" Width="370" ResizeMode="NoResize">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>

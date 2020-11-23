@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 {
-    class ProtocolProcess
+    /// <summary>
+    /// 协议处理的静态类 F5 5F
+    /// </summary>
+    static class ProtocolProcess
     {
         public static string ProtocolProcessing(string unprocessedString)
         {

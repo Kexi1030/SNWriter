@@ -2,9 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +16,7 @@ using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.HardwareSerialNumberWirter.Models;
+using DatsTestSystem.CommandAggregationStatusDistribution;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -37,8 +35,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             this.OperatorNameTextBlock.DataContext = operatorName;
 
             SNList.ItemsSource = sNStringInListBoxes;
+            SNList.DrawMode = DrawMode.OwnerDrawFixed;
         }
 
+        /// <summary>
+        /// 新建按钮点击
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void InitialButton_Click(object sender, RoutedEventArgs e)
         {
             HardwareSerialNumberWriterInitialSNinofWindow hardwareSerialNumberWriterInitialSNinofWindow = new HardwareSerialNumberWriterInitialSNinofWindow();
@@ -56,7 +60,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 }
             }
         }
-
 
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
         {
@@ -147,7 +150,68 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            // 将别的按钮设置失效
+            ButtonsStatusChange(false);
 
+            // 生成需要发送的数据 包括查询帧和配置序列号帧
+            CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(this.CurrentSNTextBlock.Text.Replace(" ", ""));
+
+            CommandAggregate commandAggregate = new CommandAggregate();
+            commandAggregate.FWSend(commandFrameGeneration.FwReadString);
+            string StringBackNo1 = commandAggregate.StringBack;
+            if(StringBackNo1 == null)
+            {
+                commandAggregate.FWSend(commandFrameGeneration.FwReadString);
+                if(commandAggregate.StringBack == null) // 再次查询不到
+                {
+                    ButtonsStatusChange(true);
+
+                    // 是否跳过 弹窗显示错误信息 未完成
+                    return;
+                }
+            }
+
+            commandAggregate.FWSend(commandFrameGeneration.FwWriteString);
+
+            commandAggregate.FWSend(commandFrameGeneration.FwReadString);
+            string StringBack = commandAggregate.StringBack;
+            if(StringBack == null)
+            {
+                commandAggregate.FWSend(commandFrameGeneration.FwReadString);
+                if (commandAggregate.StringBack == null) // 再次查询不到
+                {
+                    ButtonsStatusChange(true);
+
+                    // 是否跳过 弹窗显示错误信息 未完成
+                    //return;
+                }
+            }
+
+            bool EqualOr = StatusFrameAnalysis.SnComparision(StringBack, this.CurrentSNTextBlock.Text.Replace(" ", ""));
+            if (EqualOr)
+            {
+                // 变色或者添加图片 未完成
+                SNList.SelectedIndex += 1;
+            }
+            else
+            {
+                // 是否跳过 弹窗展示错误信息 未完成
+            }
+
+
+            ButtonsStatusChange(true);
         }
+
+        private void ButtonsStatusChange(bool status)
+        {
+            StartButton.IsEnabled = status;
+            EndButton.IsEnabled = status;
+            ModifyUserName.IsEnabled = status;
+            PortControllerButton.IsEnabled = status;
+            InitialButton.IsEnabled = status;
+            InitialSNListFromFileButton.IsEnabled = status;
+            AddOneSNstringButton.IsEnabled = status;
+        }
+
     }
 }

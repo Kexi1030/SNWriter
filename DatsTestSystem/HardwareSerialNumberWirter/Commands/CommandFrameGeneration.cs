@@ -3,20 +3,26 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using DatsTestSystem.CommandAggregationStatusDistribution;
+using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 {
+    /// <summary>
+    /// 命令帧生成
+    /// </summary>
     class CommandFrameGeneration
     {
 
         public string FwWriteString { get; set; }
         public string FwReadString { get; set; }
 
-        CommandFrameGeneration(string SnString)
+        public CommandFrameGeneration(string SnString)
         {
             this.FwWriteString = FWCommandFrameGenertation(SnString);
 
-            this.FwReadString = "FW00000000E00300FF";
+            this.FwReadString = "FWF500000000E00300FFFF5F";
         }
 
         /// <summary>
@@ -26,15 +32,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         /// <returns></returns>
         private string FWCommandFrameGenertation(string SnString)
         {
-            string FwString = "FW00000000A00A120000";
+            string FwString = "00000000A00A120000";
             FwString += SnString;
             FwString += "000000000000FF";
-            return FwString;
+            return "FW" + ProtocolProcess.ProtocolProcessing(FwString);
         }
-        
-
-
-
-
     }
 }
