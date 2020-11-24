@@ -8,9 +8,6 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Forms;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
@@ -35,7 +32,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             this.OperatorNameTextBlock.DataContext = operatorName;
 
             SNList.ItemsSource = sNStringInListBoxes;
-            SNList.DrawMode = DrawMode.OwnerDrawFixed;
+            // SNList.DrawMode = DrawMode.OwnerDrawFixed;
         }
 
         /// <summary>
@@ -153,8 +150,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
 
+            string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
+
             // 生成需要发送的数据 包括查询帧和配置序列号帧
-            CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(this.CurrentSNTextBlock.Text.Replace(" ", ""));
+            CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
+            this.SNFWStatusTextBlock.Text += string.Format("当前操作的序列号是{0}\n\n", CurrentSn);
 
             CommandAggregate commandAggregate = new CommandAggregate();
             commandAggregate.FWSend(commandFrameGeneration.FwReadString);
@@ -164,12 +164,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
                 if(commandAggregate.StringBack == null) // 再次查询不到
                 {
-                    ButtonsStatusChange(true);
+                    this.SNFWStatusTextBlock.Text += "查询失败\n";
 
-                    // 是否跳过 弹窗显示错误信息 未完成
+                    MessageBoxPopUpToNextSNOR();
                     return;
                 }
             }
+
+            this.SNFWStatusTextBlock.Text += string.Format("{0}\t正在烧写\n", CurrentSn);
 
             commandAggregate.FWSend(commandFrameGeneration.FwWriteString);
 
@@ -180,10 +182,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
                 if (commandAggregate.StringBack == null) // 再次查询不到
                 {
-                    ButtonsStatusChange(true);
-
-                    // 是否跳过 弹窗显示错误信息 未完成
-                    //return;
+                    this.SNFWStatusTextBlock.Text += "查询失败\n烧写失败\n";
+                    MessageBoxPopUpToNextSNOR();
+                    return;
                 }
             }
 
@@ -191,11 +192,24 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             if (EqualOr)
             {
                 // 变色或者添加图片 未完成
-                SNList.SelectedIndex += 1;
+                // 写入 Json文件 未完成
+
+                JsonCreate jsonCreate = new JsonCreate();
+                JsonFormat JsonReturn = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要修改
+                List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+                eachSNStatuses.Add(new EachSNStatus() { SnString = CurrentSn, OperatorName = this.OperatorNameTextBlock.Text, OperateTime = DateTime.Now.ToString(), Done = "成功" });
+                JsonReturn.eachSNStatuses = eachSNStatuses.ToArray();
+
+
+
+                SnListToNext();
+                this.SNFWStatusTextBlock.Text += "烧写成功\n";
             }
             else
             {
-                // 是否跳过 弹窗展示错误信息 未完成
+                this.SNFWStatusTextBlock.Text += "烧写失败\n";
+                MessageBoxPopUpToNextSNOR();
+                return;
             }
 
 
@@ -213,5 +227,36 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             AddOneSNstringButton.IsEnabled = status;
         }
 
+        /// <summary>
+        /// 序列号跳到下一个如果已经写完了那就跳过 返回被跳过的序列号
+        /// </summary>
+        private string SnListToNext()
+        {
+            string ReturnString;
+            ReturnString = this.CurrentSNTextBlock.Text.Replace(" ", "");
+            // 跳到下一个如果已经写完了那就跳过 未完成
+            SNList.SelectedIndex += 1;
+
+            return ReturnString;
+        }
+
+        /// <summary>
+        /// 弹出框询问是否跳过当前的序列号 
+        /// </summary>
+        private void MessageBoxPopUpToNextSNOR()
+        {
+            MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("是否跳过当前的硬件序列号？", "错误", MessageBoxButton.YesNo, MessageBoxImage.Question);
+            switch (messageBoxResult)
+            {
+                case MessageBoxResult.Yes:
+                    string SNPassed = SnListToNext(); // 跳到下一个序列号
+                    this.SNFWStatusTextBlock.Text += string.Format("{0}已经被跳过\n", SNPassed);
+                    ButtonsStatusChange(true);
+                    return;
+                case MessageBoxResult.No:
+                    ButtonsStatusChange(true);
+                    return;
+            }
+        }
     }
 }
