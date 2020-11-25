@@ -54,10 +54,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandAggregate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SerialportConfigurationInformation.cs" />
     <Compile Include="SerialPortManagement.cs" />
+    <Compile Include="StatusDistribution.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

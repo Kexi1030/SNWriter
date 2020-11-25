@@ -4,16 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO.Ports;
-using DatsTestSystem.SerialPortManagement.Models;
-using System.Windows.Forms;
 
-namespace DatsTestSystem.SerialPortManagement
+using System.Windows.Forms;
+using System.Threading;
+
+namespace Test
 {
+    delegate void EventHandler2(string demo);
+
     class SerialPortManagement
     {
+        public event EventHandler2 ToStatusDistribution;
+
         private SerialPort serialPort = new SerialPort();
 
-        private SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation() { }; // 这里需要默认端口信息
+        public SerialPortManagement(SerialportConfigurationInformation serialportConfigurationInformation)
+        {
+
+            serialPort.PortName = serialportConfigurationInformation.PortName;
+            serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
+            serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
+            serialPort.DataBits = serialportConfigurationInformation.DataBits;
+            serialPort.StopBits = (StopBits)Convert.ToInt32(serialportConfigurationInformation.StopBits);
+        }
 
         /// <summary>
         /// 发送数据
@@ -21,14 +34,11 @@ namespace DatsTestSystem.SerialPortManagement
         /// <param name="data"></param>
         /// <param name="serialportConfigurationInformation"> 表示选择的串口配置信息</param>
         /// <returns></returns>
-        public bool SendData(byte[] data, SerialportConfigurationInformation serialportConfigurationInformation)
+        public string SendData(string data)
         {
-            serialPort.PortName = serialportConfigurationInformation.PortName;
-            serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
-            serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
-            serialPort.DataBits = serialportConfigurationInformation.DataBits;
-            serialPort.StopBits = (StopBits)Convert.ToInt32(serialportConfigurationInformation.StopBits);
-
+            byte[] dataSend = strToHexByte(data);
+            Console.WriteLine(data);
+ 
             try
             {
                 serialPort.Open();
@@ -42,8 +52,10 @@ namespace DatsTestSystem.SerialPortManagement
             {
                 try
                 {
-                    serialPort.Write(data, 0, data.Length);
-                    return true;
+                    serialPort.Write(dataSend, 0, dataSend.Length);
+                    Thread.Sleep(1000);
+
+                    return serialPort.BytesToRead.ToString();
                 }
                 catch (Exception ex)
                 {
@@ -54,7 +66,7 @@ namespace DatsTestSystem.SerialPortManagement
             {
                 MessageBox.Show("串口未打开", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
-            return false;
+            return "1";
         }
 
         /// <summary>
@@ -68,13 +80,12 @@ namespace DatsTestSystem.SerialPortManagement
             }
         }
 
-
         /// <summary>
         /// 字符串转换16进制字节数组
         /// </summary>
         /// <param name="hexString"></param>
         /// <returns></returns>
-        public byte[] strToHexByte(string hexString)
+        private byte[] strToHexByte(string hexString)
         {
             hexString = hexString.Replace(" ", "");
             if ((hexString.Length % 2) != 0) hexString += " ";
@@ -84,21 +95,49 @@ namespace DatsTestSystem.SerialPortManagement
             return returnBytes;
         }
 
-        public string DataReceived()
+        /// <summary>
+        /// 接收数据
+        /// </summary>
+        /// <returns></returns>
+        public string FWDataReceived(string demo)
         {
             byte[] ReDatas = new byte[serialPort.BytesToRead];
             serialPort.Read(ReDatas, 0, ReDatas.Length);
 
             string dataReceived = bytetoString(ReDatas);
 
+            StatusDistribution status = new StatusDistribution();
+            ToStatusDistribution += new EventHandler2(status.getFWString);
+
+            ToStatusDistribution(dataReceived);
             return dataReceived;
-            
+
+
+        }
+        public string QCDataReceived(string demo)
+        {
+            byte[] ReDatas = new byte[serialPort.BytesToRead];
+            serialPort.Read(ReDatas, 0, ReDatas.Length);
+
+            string dataReceived = bytetoString(ReDatas);
+
+            StatusDistribution status = new StatusDistribution();
+            ToStatusDistribution += new EventHandler2(status.getQCString);
+
+            ToStatusDistribution(dataReceived);
+            return dataReceived;
+
         }
 
-        private string bytetoString (byte[] data)
+        /// <summary>
+        /// bute[] To string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string bytetoString(byte[] data)
         {
             StringBuilder sb = new StringBuilder();
-            for(int i =0;i<data.Length;i++)
+            for (int i = 0; i < data.Length; i++)
             {
                 sb.AppendFormat("{0:x2}" + " ", data[i]); // 向此实例追加通过处理复合格式字符串（包含零个或更多格式项）而返回的字符串。
             }
@@ -109,3 +148,4 @@ namespace DatsTestSystem.SerialPortManagement
         }
     }
 }
+
