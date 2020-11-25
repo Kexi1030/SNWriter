@@ -14,6 +14,7 @@ using OpenFileDialog = System.Windows.Forms.OpenFileDialog;
 using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.HardwareSerialNumberWirter.Models;
 using DatsTestSystem.CommandAggregationStatusDistribution;
+using System.Threading;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -164,7 +165,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
                 if(commandAggregate.StringBack == null) // 再次查询不到
                 {
-                    this.SNFWStatusTextBlock.Text += "查询失败\n";
+                    this.SNFWStatusTextBlock.Text += "初次查询失败\n";
+
+                    Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, this.OperatorNameTextBlock.Text, "初次查询失败"));
+                    SaveChangethread.Start();
 
                     MessageBoxPopUpToNextSNOR();
                     return;
@@ -182,7 +186,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
                 if (commandAggregate.StringBack == null) // 再次查询不到
                 {
-                    this.SNFWStatusTextBlock.Text += "查询失败\n烧写失败\n";
+                    this.SNFWStatusTextBlock.Text += "查询失败\t烧写失败\n";
+
+                    Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, this.OperatorNameTextBlock.Text, "失败"));
+                    SaveChangethread.Start();
+
                     MessageBoxPopUpToNextSNOR();
                     return;
                 }
@@ -192,22 +200,20 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             if (EqualOr)
             {
                 // 变色或者添加图片 未完成
-                // 写入 Json文件 未完成
 
-                JsonCreate jsonCreate = new JsonCreate();
-                JsonFormat JsonReturn = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要修改
-                List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
-                eachSNStatuses.Add(new EachSNStatus() { SnString = CurrentSn, OperatorName = this.OperatorNameTextBlock.Text, OperateTime = DateTime.Now.ToString(), Done = "成功" });
-                JsonReturn.eachSNStatuses = eachSNStatuses.ToArray();
-
-
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn,this.OperatorNameTextBlock.Text,"成功"));
+                SaveChangethread.Start();
 
                 SnListToNext();
-                this.SNFWStatusTextBlock.Text += "烧写成功\n";
+                this.SNFWStatusTextBlock.Text += string.Format("当前查询返回{0}\t烧写成功\n",StringBack);
             }
             else
             {
                 this.SNFWStatusTextBlock.Text += "烧写失败\n";
+
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, this.OperatorNameTextBlock.Text, "失败"));
+                SaveChangethread.Start();
+
                 MessageBoxPopUpToNextSNOR();
                 return;
             }
@@ -257,6 +263,16 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     ButtonsStatusChange(true);
                     return;
             }
+        }
+
+        private static void SaveChangeToJson(string currentSn,string OperatorName,string status)
+        {
+            JsonCreate jsonCreate = new JsonCreate();
+            JsonFormat JsonReturn = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要修改
+            List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+            eachSNStatuses.Add(new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status });
+            JsonReturn.eachSNStatuses = eachSNStatuses.ToArray();
+            jsonCreate.CreateJson(JsonReturn);
         }
     }
 }

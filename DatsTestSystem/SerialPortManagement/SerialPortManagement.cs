@@ -12,21 +12,24 @@ namespace DatsTestSystem.SerialPortManagement
     class SerialPortManagementClass
     {
         private SerialPort serialPort = new SerialPort();
+        private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation()
+        {
+            PortName = "COM5",
+            BaudRate = 9600,
+            DataBits = 8,
+            StopBits = "1"
+        }; // 这里需要默认端口信息
 
         public SerialPortManagementClass(SerialportConfigurationInformation serialportConfigurationInformation)
         {
 
-            serialPort.PortName = serialportConfigurationInformation.PortName;
-            serialPort.BaudRate = serialportConfigurationInformation.BaudRate;
-            serialPort.Parity = (Parity)Convert.ToInt32(serialportConfigurationInformation.Parity);
-            serialPort.DataBits = serialportConfigurationInformation.DataBits;
-            serialPort.StopBits = (StopBits)Convert.ToInt32(serialportConfigurationInformation.StopBits);
+            serialPort.PortName = DefaultSerialPortInfo.PortName;
+            serialPort.BaudRate = DefaultSerialPortInfo.BaudRate;
+            serialPort.Parity = (Parity)Convert.ToInt32(DefaultSerialPortInfo.Parity);
+            serialPort.DataBits = DefaultSerialPortInfo.DataBits;
+            serialPort.StopBits = (StopBits)Convert.ToInt32(DefaultSerialPortInfo.StopBits);
         }
 
-        private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation() 
-        {
-            PortName="COM1",BaudRate=9600,DataBits=8,StopBits="1",Parity="None"
-        }; // 这里需要默认端口信息
 
 
         /// <summary>
