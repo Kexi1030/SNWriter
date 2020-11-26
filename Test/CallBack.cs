@@ -21,8 +21,7 @@ namespace Test
         public void callback()
         {
             temp = 1;
-            Console.WriteLine("这是CallBack的回调函数的ThreadID");
-            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.WriteLine("这是CallBack的回调函数的ThreadID\t"+ Thread.CurrentThread.ManagedThreadId.ToString());
             Console.ReadLine();
         }
     }

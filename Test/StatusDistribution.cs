@@ -17,7 +17,7 @@ namespace Test
 
         public void getFWString(string demo)
         {
-            Console.WriteLine("分发的getFWString的ThreadID为" + Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.WriteLine("分发的getFWString的ThreadID为\t" + Thread.CurrentThread.ManagedThreadId.ToString());
 
             FWstringBack = demo;
             Console.WriteLine("这是烧写的返回值");

@@ -36,7 +36,7 @@ namespace Test
         /// <returns></returns>
         public string SendData(string data)
         {
-            Console.WriteLine("SendData的ThreadID" + Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.WriteLine("SendData的ThreadID\t" + Thread.CurrentThread.ManagedThreadId.ToString());
             byte[] dataSend = strToHexByte(data);
             Console.WriteLine(data);
  
@@ -102,7 +102,7 @@ namespace Test
         /// <returns></returns>
         public string FWDataReceived(string demo)
         {
-            Console.WriteLine("FWDataReceived的THreadID" + Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.WriteLine("FWDataReceived的THreadID\t" + Thread.CurrentThread.ManagedThreadId.ToString());
             byte[] ReDatas = new byte[serialPort.BytesToRead];
             serialPort.Read(ReDatas, 0, ReDatas.Length);
 

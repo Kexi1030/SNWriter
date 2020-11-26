@@ -32,11 +32,18 @@ namespace Test
             {
                 SerialPortManagement serialPortManagement = new SerialPortManagement(serialportConfigurationInformation);
                 ToPortManagement += new EventHandler(serialPortManagement.SendData);
-
                 ToPortManagement += new EventHandler(serialPortManagement.FWDataReceived);
 
                 ToPortManagement(stringget);
+
+                Action<string> action = Go; //???
+                action.BeginInvoke(stringget, null, null);
             }
+        }
+
+        private void Go(string demo)
+        {
+            ToPortManagement(demo);
         }
 
         public void callback()
