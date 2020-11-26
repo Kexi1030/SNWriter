@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Test
@@ -32,11 +33,17 @@ namespace Test
                 SerialPortManagement serialPortManagement = new SerialPortManagement(serialportConfigurationInformation);
                 ToPortManagement += new EventHandler(serialPortManagement.SendData);
 
-                ToPortManagement += new EventHandler(serialPortManagement.QCDataReceived);
+                ToPortManagement += new EventHandler(serialPortManagement.FWDataReceived);
 
-                Console.WriteLine("开始写");
                 ToPortManagement(stringget);
             }
+        }
+
+        public void callback()
+        {
+            Console.WriteLine("这是commandAggregate的回调函数的ThreadID");
+            Console.WriteLine(Thread.CurrentThread.ManagedThreadId.ToString());
+            Console.ReadLine();
         }
 
     }
