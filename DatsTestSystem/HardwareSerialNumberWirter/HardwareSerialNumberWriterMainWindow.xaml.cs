@@ -18,6 +18,7 @@ using System.Threading;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
+
     /// <summary>
     /// HardwareSerialNumberWriterMainWindow.xaml 的交互逻辑
     /// </summary>
@@ -152,13 +153,34 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             ButtonsStatusChange(false);
 
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
+            string StringGet;
 
-            // 生成需要发送的数据 包括查询帧和配置序列号帧
-            CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
             this.SNFWStatusTextBlock.Text += string.Format("当前操作的序列号是{0}\n\n", CurrentSn);
 
-            CommandAggregate commandAggregate = new CommandAggregate();
-            commandAggregate.FWSend(commandFrameGeneration.FwReadString);
+            StringGet = FW.Send(CurrentSn);
+
+            this.SNFWStatusTextBlock.Text += StringGet;
+            this.SNFWStatusTextBlock.Text += "\n\n";
+
+            if (StringGet == "False")
+            {
+                MessageBoxPopUpToNextSNOR();
+                this.SNFWStatusTextBlock.Text += "烧写失败\n";
+            }
+            else
+            {
+                SnListToNext();
+
+                String Name = this.OperatorNameTextBlock.Text;
+
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn,Name, "成功"));
+                //SaveChangethread.IsBackground = true;
+                SaveChangethread.Start();
+            }
+                
+
+
+            /*
             string StringBackNo1 = commandAggregate.StringBack;
             if(StringBackNo1 == null)
             {
@@ -170,7 +192,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, this.OperatorNameTextBlock.Text, "初次查询失败"));
                     SaveChangethread.Start();
 
-                    MessageBoxPopUpToNextSNOR();
+                    MessageBoxPopUpToNextSNOR();    
                     return;
                 }
             }
@@ -218,7 +240,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 return;
             }
 
-
+            */
             ButtonsStatusChange(true);
         }
 
@@ -231,6 +253,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             InitialButton.IsEnabled = status;
             InitialSNListFromFileButton.IsEnabled = status;
             AddOneSNstringButton.IsEnabled = status;
+            StartButton.IsEnabled = status;
         }
 
         /// <summary>
@@ -269,6 +292,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             JsonCreate jsonCreate = new JsonCreate();
             JsonFormat JsonReturn = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要修改
+            if(JsonReturn.eachSNStatuses)
+            {
+                List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+            }
             List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
             eachSNStatuses.Add(new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status });
             JsonReturn.eachSNStatuses = eachSNStatuses.ToArray();

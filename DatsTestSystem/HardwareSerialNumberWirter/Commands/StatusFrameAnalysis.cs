@@ -19,7 +19,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         /// <returns></returns>
         public static bool SnComparision(string snBack,string snSend)
         {
-            string snBackProcessed = snBack.Substring(23, 33).Replace(" ","");
+            string snBackProcessed = snBack.Substring(26, 30).Replace(" ","");
             bool EqualOr = snBackProcessed.Equals(snSend);
 
             return EqualOr;

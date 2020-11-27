@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO.Ports;
 using DatsTestSystem.SerialPortManagement.Models;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace DatsTestSystem.SerialPortManagement
 {
@@ -14,7 +15,7 @@ namespace DatsTestSystem.SerialPortManagement
         private SerialPort serialPort = new SerialPort();
         private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation()
         {
-            PortName = "COM5",
+            PortName = "COM4",
             BaudRate = 9600,
             DataBits = 8,
             StopBits = "1"
@@ -38,34 +39,41 @@ namespace DatsTestSystem.SerialPortManagement
         /// <param name="data"></param>
         /// <param name="serialportConfigurationInformation"> 表示选择的串口配置信息</param>
         /// <returns></returns>
-        public bool SendData(string data)
+        public bool SendData(string data,ref string stringBack)
         {
             byte[] dataSend = strToHexByte(data);
 
-            try
+            if (!serialPort.IsOpen)
             {
-                serialPort.Open();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                try
+                {
+                    serialPort.Open();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "错误1", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
             }
 
             if (serialPort.IsOpen)
             {
                 try
                 {
-                    serialPort.Write(dataSend, 0, data.Length);
+                    serialPort.Write(dataSend, 0, dataSend.Length);
+
+                    Thread.Sleep(1000);
+                    stringBack = DataReceived();
+
                     return true;
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(ex.Message, "错误2", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
             }
             else
             {
-                MessageBox.Show("串口未打开", "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("串口未打开", "错误3", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             return false;
         }

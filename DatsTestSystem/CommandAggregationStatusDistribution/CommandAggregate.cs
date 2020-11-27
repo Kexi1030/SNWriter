@@ -7,9 +7,11 @@ using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.SerialPortManagement.Models;
 using System.Threading;
 using System.Windows;
+using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 
 namespace DatsTestSystem.CommandAggregationStatusDistribution
 {
+    public delegate bool FWDelegate(string CommandString, ref string stringGet);
     /// <summary>
     /// 根据发来的指令 分为烧写还是QC 执行不同的操作
     /// </summary>
@@ -17,7 +19,6 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
     {
         private SerialportConfigurationInformation SerialportConfigurationInformation = new SerialportConfigurationInformation() { PortName = "COM1", BaudRate = 9600, DataBits = 8, StopBits = "1" };
 
-        private string CommandPending { get; set; }
         public string StringBack { get; set; }
 
         SerialPortManagementClass serialPortManagement;
@@ -28,19 +29,12 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         }
 
-        public void FWSend(string CommandString)
-        {
-            if (CommandString == "FWF500000000E00300FFFF5F")
-            {
-                FWReadCommand();
-            }
-            else
-            {
-                serialPortManagement.SendData(CommandString.Remove(0, 2));
+        public void FWSend(string CommandString,ref string stringGet)
+        { 
+            FWDelegate fWDelegate = new FWDelegate(serialPortManagement.SendData);
+            var result = fWDelegate.BeginInvoke(CommandString, ref stringGet,null, null);
 
-
-                Thread.Sleep(800);
-            }
+            fWDelegate.EndInvoke(ref stringGet, result);
         }
 
         private string FWReadCommand() => StringBack = serialPortManagement.DataReceived();

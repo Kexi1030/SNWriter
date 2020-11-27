@@ -22,11 +22,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         {
             this.FwWriteString = FWCommandFrameGenertation(SnString);
 
-            this.FwReadString = "FWF500000000E00300FFFF5F";
+            this.FwReadString = "F500000000E00300FFFF5F";
         }
 
         /// <summary>
-        /// 返回需要发送的烧写指令帧 前面附加了FW
+        /// 返回需要发送的烧写指令帧
         /// </summary>
         /// <param name="SnString"></param>
         /// <returns></returns>
@@ -35,7 +35,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
             string FwString = "00000000A00A120000";
             FwString += SnString;
             FwString += "000000000000FF";
-            return "FW" + ProtocolProcess.ProtocolProcessing(FwString);
+            return ProtocolProcess.ProtocolProcessing(FwString);
         }
     }
 }
