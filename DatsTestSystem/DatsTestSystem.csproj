@@ -70,7 +70,6 @@
     <Compile Include="CommandAggregationStatusDistribution\StatusDistribution.cs" />
     <Compile Include="CommandFrameCollection.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\CommandFrameGeneration.cs" />
-    <Compile Include="HardwareSerialNumberWirter\Commands\FW.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\JsonCreate.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\ProtocolProcess.cs" />
     <Compile Include="HardwareSerialNumberWirter\Commands\ReportCreation.cs" />

@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace DatsTestSystem.CommandAggregationStatusDistribution
 {
-    class StatusDistribution
+    public class StatusDistribution
     {
+        public Task Task;
+
+        public string FWString { get; set; }
+
+        public void FWStringGet(string stringBack)
+        {
+            FWString = stringBack;
+            Task.Start();
+        }
     }
 }

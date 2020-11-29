@@ -10,8 +10,12 @@ using System.Threading;
 
 namespace DatsTestSystem.SerialPortManagement
 {
-    class SerialPortManagementClass
+    public class SerialPortManagementClass
     {
+        public Task Task;
+
+        public string StringBack { get; set; }
+
         private SerialPort serialPort = new SerialPort();
         private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation()
         {
@@ -23,7 +27,10 @@ namespace DatsTestSystem.SerialPortManagement
 
         public SerialPortManagementClass(SerialportConfigurationInformation serialportConfigurationInformation)
         {
+        }
 
+        public SerialPortManagementClass()
+        {
             serialPort.PortName = DefaultSerialPortInfo.PortName;
             serialPort.BaudRate = DefaultSerialPortInfo.BaudRate;
             serialPort.Parity = (Parity)Convert.ToInt32(DefaultSerialPortInfo.Parity);
@@ -31,15 +38,13 @@ namespace DatsTestSystem.SerialPortManagement
             serialPort.StopBits = (StopBits)Convert.ToInt32(DefaultSerialPortInfo.StopBits);
         }
 
-
-
         /// <summary>
         /// 发送数据
         /// </summary>
         /// <param name="data"></param>
         /// <param name="serialportConfigurationInformation"> 表示选择的串口配置信息</param>
         /// <returns></returns>
-        public bool SendData(string data,ref string stringBack)
+        public bool SendData(string data)
         {
             byte[] dataSend = strToHexByte(data);
 
@@ -62,7 +67,10 @@ namespace DatsTestSystem.SerialPortManagement
                     serialPort.Write(dataSend, 0, dataSend.Length);
 
                     Thread.Sleep(1000);
-                    stringBack = DataReceived();
+
+                    StringBack = DataReceived();
+
+                    Task.Start();
 
                     return true;
                 }

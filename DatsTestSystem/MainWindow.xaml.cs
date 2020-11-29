@@ -4,15 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using DatsTestSystem.HardwareSerialNumberWirter;
+using DatsTestSystem.SerialPortManagement;
+using DatsTestSystem.CommandAggregationStatusDistribution;
 
 namespace DatsTestSystem
 {
@@ -21,15 +15,30 @@ namespace DatsTestSystem
     /// </summary>
     public partial class MainWindow : Window
     {
+        HardwareSerialNumberWriterMainWindow thisFWWindow;
+        
         public MainWindow()
         {
             InitializeComponent();
+
+            SerialPortManagementClass serialPortManagementClass = new SerialPortManagementClass();
+            CommandAggregate commandAggregate = new CommandAggregate();
+            StatusDistribution statusDistribution = new StatusDistribution();
+            HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+            thisFWWindow = hardwareSerialNumberWriterMainWindow;
+
+            hardwareSerialNumberWriterMainWindow.command = commandAggregate;
+            hardwareSerialNumberWriterMainWindow.status = statusDistribution;
+            hardwareSerialNumberWriterMainWindow.SPM = serialPortManagementClass;
 
             this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
         }
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)
         {
+            thisFWWindow.ShowDialog();
+
+            /*
             HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
             hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
             hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -41,7 +50,9 @@ namespace DatsTestSystem
                 HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow(hardwareSerialNumberWriterInputUserNameWindow.operatorName);
                 hardwareSerialNumberWriterMainWindow.Owner = this;
                 hardwareSerialNumberWriterMainWindow.ShowDialog();
+
             }
+            */
         }
     }
 }

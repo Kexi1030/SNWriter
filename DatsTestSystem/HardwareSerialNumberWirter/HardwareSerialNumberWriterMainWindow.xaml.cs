@@ -15,6 +15,7 @@ using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.HardwareSerialNumberWirter.Models;
 using DatsTestSystem.CommandAggregationStatusDistribution;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -24,6 +25,21 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     /// </summary>
     public partial class HardwareSerialNumberWriterMainWindow : Window
     {
+        public Task task;
+
+        public CommandAggregate command;
+        public StatusDistribution status;
+        public SerialPortManagementClass SPM;
+
+        public string CurrentString
+        {
+            get; set;
+        }
+
+        private string FrameBack { get; set; }
+
+        private int FrameBackLook { get; set; }
+
         ObservableCollection<string> sNStringInListBoxes = new ObservableCollection<string>();
 
         public HardwareSerialNumberWriterMainWindow(Models.OperatorName operatorName)
@@ -35,6 +51,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             SNList.ItemsSource = sNStringInListBoxes;
             // SNList.DrawMode = DrawMode.OwnerDrawFixed;
+        }
+
+        public HardwareSerialNumberWriterMainWindow()
+        {
+            InitializeComponent();
+
+            this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            SNList.ItemsSource = sNStringInListBoxes;
         }
 
         /// <summary>
@@ -76,7 +100,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
         {
-
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "请选择需要导入的Json配置文件";
             openFileDialog.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
@@ -152,36 +175,53 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
 
+            string OperatorName = this.OperatorNameTextBlock.Text;
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
-            string StringGet;
-
             this.SNFWStatusTextBlock.Text += string.Format("当前操作的序列号是{0}\n\n", CurrentSn);
+            Thread.Sleep(2000);
 
-            StringGet = FW.Send(CurrentSn);
 
-            this.SNFWStatusTextBlock.Text += StringGet;
-            this.SNFWStatusTextBlock.Text += "\n\n";
+            CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
+            CurrentString = commandFrameGeneration.FwWriteString;
 
-            if (StringGet == "False")
+            this.SNFWStatusTextBlock.Text += "开始烧写\n";
+
+            TaskStart();
+            while (FrameBackLook == 0)
             {
-                MessageBoxPopUpToNextSNOR();
-                this.SNFWStatusTextBlock.Text += "烧写失败\n";
+
+            }
+
+            CurrentString = commandFrameGeneration.FwReadString;
+            TaskStart();
+            while (FrameBackLook == 0)
+            {
+
+            }
+            bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
+            if(EqualOr)
+            {
+                this.SNFWStatusTextBlock.Text = string.Format("当前板读出序列号为{0}\t烧写成功", CurrentSn);
+
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
+                SaveChangethread.Start();
+
+                SnListToNext();
             }
             else
             {
-                SnListToNext();
+                // 变色或添加图片未完成 
+                this.SNFWStatusTextBlock.Text += "烧写失败\n";
 
-                String Name = this.OperatorNameTextBlock.Text;
-
-                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn,Name, "成功"));
-                //SaveChangethread.IsBackground = true;
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
                 SaveChangethread.Start();
+
+                MessageBoxPopUpToNextSNOR();
+                return;
             }
-                
 
 
             /*
-            string StringBackNo1 = commandAggregate.StringBack;
             if(StringBackNo1 == null)
             {
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
@@ -197,12 +237,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 }
             }
 
-            this.SNFWStatusTextBlock.Text += string.Format("{0}\t正在烧写\n", CurrentSn);
 
-            commandAggregate.FWSend(commandFrameGeneration.FwWriteString);
-
-            commandAggregate.FWSend(commandFrameGeneration.FwReadString);
-            string StringBack = commandAggregate.StringBack;
             if(StringBack == null)
             {
                 commandAggregate.FWSend(commandFrameGeneration.FwReadString);
@@ -217,31 +252,23 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     return;
                 }
             }
-
-            bool EqualOr = StatusFrameAnalysis.SnComparision(StringBack, this.CurrentSNTextBlock.Text.Replace(" ", ""));
-            if (EqualOr)
-            {
-                // 变色或者添加图片 未完成
-
-                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn,this.OperatorNameTextBlock.Text,"成功"));
-                SaveChangethread.Start();
-
-                SnListToNext();
-                this.SNFWStatusTextBlock.Text += string.Format("当前查询返回{0}\t烧写成功\n",StringBack);
-            }
-            else
-            {
-                this.SNFWStatusTextBlock.Text += "烧写失败\n";
-
-                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, this.OperatorNameTextBlock.Text, "失败"));
-                SaveChangethread.Start();
-
-                MessageBoxPopUpToNextSNOR();
-                return;
-            }
-
             */
             ButtonsStatusChange(true);
+        }
+
+        private void TaskStart()
+        {
+            FrameBackLook = 0;
+            ReFreshTasks();
+            task.Start();
+        }
+
+        private void ReFreshTasks()
+        {
+            task = new Task(()=> command.GetFWString(this.CurrentString));
+            command.task = new Task(()=> SPM.SendData(command.CommandFromFW));
+            SPM.Task = new Task(() =>status.FWStringGet(SPM.StringBack));
+            status.Task = new Task(() =>this.GetBackFrame(status.FWString));
         }
 
         private void ButtonsStatusChange(bool status)
@@ -288,18 +315,30 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
         }
 
-        private static void SaveChangeToJson(string currentSn,string OperatorName,string status)
+        
+        private static void SaveChangeToJson(string currentSn, string OperatorName, string status)
         {
             JsonCreate jsonCreate = new JsonCreate();
             JsonFormat JsonReturn = jsonCreate.CreateSNFromJsonFile("OUTPUT.json"); // 需要修改
-            if(JsonReturn.eachSNStatuses)
+            List<EachSNStatus> AllStatus; // 存放所有的烧写信息
+            if (JsonReturn.eachSNStatuses == null)
             {
-                List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+                 AllStatus = new List<EachSNStatus>();
             }
-            List<EachSNStatus> eachSNStatuses = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
-            eachSNStatuses.Add(new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status });
-            JsonReturn.eachSNStatuses = eachSNStatuses.ToArray();
+            else
+            {
+                 AllStatus = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+            }
+            AllStatus.Add(new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status });
+            JsonReturn.eachSNStatuses = AllStatus.ToArray();
             jsonCreate.CreateJson(JsonReturn);
+        }
+        
+
+        public void GetBackFrame(string stringBack)
+        {
+            FrameBack = stringBack;
+            FrameBackLook = 1;
         }
     }
 }
