@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Web.Script.Serialization;
 using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         public void CreateJson(JsonFormat jsonFormat)
         {
             string outputJson = JsonConvert.SerializeObject(jsonFormat, new JsonSerializerSettings() { Formatting = Formatting.Indented });
-            File.WriteAllText("OUTPUT.json", outputJson);
+            File.WriteAllText(DateTime.Now.ToString("yyyy-MM-dd") + ".json", outputJson); // 保存到
         }
 
         public JsonFormat CreateSNFromJsonFile(string FileLoad)

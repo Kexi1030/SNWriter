@@ -26,6 +26,7 @@ namespace DatsTestSystem
             StatusDistribution statusDistribution = new StatusDistribution();
             HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
             thisFWWindow = hardwareSerialNumberWriterMainWindow;
+            thisFWWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
             hardwareSerialNumberWriterMainWindow.command = commandAggregate;
             hardwareSerialNumberWriterMainWindow.status = statusDistribution;
@@ -36,23 +37,8 @@ namespace DatsTestSystem
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            thisFWWindow.ShowDialog();
-
-            /*
-            HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
-            hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
-            hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
-            
-
-            if(hardwareSerialNumberWriterInputUserNameWindow.NameOr)
-            {
-                HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow(hardwareSerialNumberWriterInputUserNameWindow.operatorName);
-                hardwareSerialNumberWriterMainWindow.Owner = this;
-                hardwareSerialNumberWriterMainWindow.ShowDialog();
-
-            }
-            */
+            thisFWWindow.Owner = this;
+            thisFWWindow.ShowOperatorNameInputWindow();
         }
     }
 }

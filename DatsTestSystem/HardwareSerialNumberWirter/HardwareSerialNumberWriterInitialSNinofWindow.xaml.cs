@@ -115,6 +115,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
             catch(Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 MessageBox.Show("输入有误请检查");
             }
         }

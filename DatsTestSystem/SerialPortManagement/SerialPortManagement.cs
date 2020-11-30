@@ -66,7 +66,7 @@ namespace DatsTestSystem.SerialPortManagement
                 {
                     serialPort.Write(dataSend, 0, dataSend.Length);
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(500);
 
                     StringBack = DataReceived();
 

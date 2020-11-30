@@ -11,20 +11,9 @@ using System.IO;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 {
-    class ReportCreation
+    static class ReportCreation
     {
-        private string FileLoad
-        {
-            get;
-            set;
-        }
-
-        public ReportCreation(string fileload)
-        {
-            FileLoad = fileload;
-        }
-
-        private void CreateReport()
+        public static void CreateReport(string FileLoad)
         {
             JsonCreate jsonCreate = new JsonCreate();
 
@@ -32,7 +21,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 
             List<string> contentText = new List<string>();
 
-            foreach(var i in JsonData.eachSNStatuses)
+            foreach (var i in JsonData.eachSNStatuses)
             {
                 string temp = "";
                 temp += i.SnString;
@@ -46,19 +35,20 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
                 contentText.Add(temp);
             }
 
-            create(contentText);
+            create(contentText,FileLoad.Split('.')[0]);
         }
 
-        private static void create(List<string> contentText)
+        private static void create(List<string> contentText,string fileload)
         {
             Document document = new Document(); // 创建一个文件
 
-            PdfWriter.GetInstance(document, new FileStream("Report.pdf", FileMode.Create)); // pdf的实例化到当前文件夹
+            PdfWriter.GetInstance(document, new FileStream(fileload+".pdf", FileMode.Create)); // pdf的实例化到当前文件夹
             BaseFont baseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\SIMSUN.TTC,1", BaseFont.IDENTITY_H, BaseFont.NOT_CACHED);//找到基础字体
             Font contentFont = new Font(baseFont, 12);//创建一个新的字体
 
             document.Open();
-            foreach(string eachstring in contentText)
+            document.Add(new Paragraph("      序列号          是否成功              操作时间               操作人", contentFont));
+            foreach (string eachstring in contentText)
             {
                 document.Add(new Paragraph(eachstring, contentFont));
             }
