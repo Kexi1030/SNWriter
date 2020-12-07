@@ -1,0 +1,66 @@
+﻿<Window x:Class="DatsTestSystem.HardwareSerialNumberWirter.HardwareSerialNumberWriterMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DatsTestSystem.HardwareSerialNumberWirter"
+        mc:Ignorable="d"
+        Closing="FWWindowClosing"
+        Title="HardwareSerialNumberWriterMainWindow" Height="500" Width="800" ResizeMode="NoResize">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1.5*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="2.5*"/>
+            <RowDefinition Height="8*"/>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+
+        <ToolBar Grid.Row="0" Grid.ColumnSpan="3">
+            <Button x:Name="PortControllerButton" Content="串口管理" FontSize="14" Click="PortControllerButton_Click" />
+        </ToolBar>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="4" Grid.Column="0" HorizontalAlignment="Center">
+            <Button x:Name="InitialButton" Content="新建" FontSize="24" Width="70" Margin="5" Click="InitialButton_Click"/>
+            <Button x:Name="InitialSNListFromFileButton" Content="导入" FontSize="24" Width="70" Margin="5" Click="InitialSNListFromFileButton_Click"/>
+            <Button x:Name="AddOneSNstringButton" Content="+" FontSize="28" Width="70" Margin="5" Click="AddOneSNstringButton_Click"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1"  Grid.ColumnSpan="2" HorizontalAlignment="Center">
+            <Label Content="当前操作人为:" FontSize="24" Margin="5"/>
+            <TextBlock x:Name="OperatorNameTextBlock"  FontSize="26" Text="{Binding Path=operatorname}" Width="240" Margin="5"/>
+            <Button x:Name="ModifyUserName" Content="修改" FontSize="24" Width="70" Margin="5" Click="ModifyUserName_Click" />
+        </StackPanel>
+
+        <StackPanel Orientation="Vertical" Grid.Row="3" Grid.RowSpan="2" Grid.Column="2" VerticalAlignment="Center">
+            <Button x:Name="StartButton" Content="开始" FontSize="24" Height="200" Margin="10" Click="StartButton_Click"/>
+            <Button x:Name="EndButton" Content="结束" FontSize="24" Height="50" Margin="10" Click="EndButton_Click"/>
+        </StackPanel>
+
+        <GroupBox Header="硬件序列号列表" FontSize="15" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Margin="5">
+            <ListBox x:Name="SNList" Margin="5" SelectionChanged="SNList_SelectionChanged"  />
+        </GroupBox>
+        
+        <GroupBox Header="当前序列号" FontSize="15" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">
+            <TextBlock x:Name="CurrentSNTextBlock" Margin="5"/>
+        </GroupBox>
+
+        <GroupBox Header="状态信息" FontSize="15" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" Margin="5">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <ScrollViewer.Content>
+                    <TextBlock x:Name="SNFWStatusTextBlock" FontSize="13" TextWrapping="Wrap" Margin="5"/>
+                </ScrollViewer.Content>
+            </ScrollViewer>
+        </GroupBox>
+
+        <StatusBar Grid.Row="5" Grid.ColumnSpan="3">
+            
+        </StatusBar>
+    </Grid>
+</Window>
