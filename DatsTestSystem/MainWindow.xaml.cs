@@ -16,15 +16,19 @@ namespace DatsTestSystem
     public partial class MainWindow : Window
     {
         HardwareSerialNumberWriterMainWindow thisFWWindow;
-        
+        SerialPortManagementClass serialPortManagementClass;
+        CommandAggregate commandAggregate;
+        StatusDistribution statusDistribution;
+        HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            SerialPortManagementClass serialPortManagementClass = new SerialPortManagementClass();
-            CommandAggregate commandAggregate = new CommandAggregate();
-            StatusDistribution statusDistribution = new StatusDistribution();
-            HardwareSerialNumberWriterMainWindow hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+            serialPortManagementClass = new SerialPortManagementClass();
+            commandAggregate = new CommandAggregate();
+            statusDistribution = new StatusDistribution();
+            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
             thisFWWindow = hardwareSerialNumberWriterMainWindow;
             thisFWWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 

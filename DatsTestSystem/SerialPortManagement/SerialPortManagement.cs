@@ -7,11 +7,110 @@ using System.IO.Ports;
 using DatsTestSystem.SerialPortManagement.Models;
 using System.Windows.Forms;
 using System.Threading;
-
+using System.Diagnostics;
 namespace DatsTestSystem.SerialPortManagement
 {
     public class SerialPortManagementClass
     {
+
+        public delegate void DataReadyHandler(byte[] data);
+        public event DataReadyHandler DataReadyEvent;
+
+        private Thread _writeThread, _readThread;
+        private List<byte[]> _writeList;
+        object _writeObj;
+        private bool _Running;
+        AutoResetEvent _event = new AutoResetEvent(false);
+
+        private void ReadThread()
+        {
+            while (_Running)
+            {
+                byte[] buf = new byte[128];
+                try
+                {
+                    int ret = serialPort.Read(buf, 0, buf.Length);
+                    if (ret > 0)
+                    {
+                        byte[] tmp = new byte[ret];
+                        for (int i = 0; i < ret; i++)
+                            tmp[i] = buf[i];
+                        DataReadyEvent(tmp);
+                    }
+                }
+                catch (InvalidOperationException e)
+                {
+                    Console.WriteLine("Open serial port first, error {0}", e.ToString());
+                    return;
+                }
+            }
+        }
+
+        public void AddData(byte[] cmd)
+        {
+            lock (_writeObj)
+            {
+                _writeList.Add(cmd);
+            }
+            _event.Set();
+        }
+
+        private void WriteThread()
+        {
+
+            while (_Running)
+            {
+                byte[] buf = null;
+                lock (_writeObj)
+                {
+                    if (_writeList.Count > 0)
+                    {
+                        buf = _writeList[0];
+                        _writeList.RemoveAt(0);
+                    }
+                }
+                if (buf != null)
+                {
+                    try
+                    {
+                        serialPort.Write(buf, 0, buf.Length);
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Console.WriteLine("{0}", e.ToString());
+                        return;
+                    }
+                }
+                else
+                {
+                    _event.WaitOne();
+                }
+            }
+        }
+
+        public void Open()
+        {
+            Debug.Assert((serialPort != null) && (!serialPort.IsOpen));
+            try
+            {
+                serialPort.Open();
+                lock (_writeObj)
+                {
+                    _writeList.Clear();
+                }
+                _Running = true;
+                _event.Reset();
+                _readThread.Start();
+                _writeThread.Start();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "错误1", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+
+
         public Task Task;
 
         public string StringBack { get; set; }
@@ -31,6 +130,12 @@ namespace DatsTestSystem.SerialPortManagement
 
         public SerialPortManagementClass()
         {
+            ////
+            _readThread = new Thread(ReadThread);
+            _writeThread = new Thread(WriteThread);
+            _writeList.Clear();
+
+
             serialPort.PortName = DefaultSerialPortInfo.PortName;
             serialPort.BaudRate = DefaultSerialPortInfo.BaudRate;
             serialPort.Parity = (Parity)Convert.ToInt32(DefaultSerialPortInfo.Parity);
@@ -94,6 +199,10 @@ namespace DatsTestSystem.SerialPortManagement
             if (serialPort.IsOpen)
             {
                 serialPort.Close();
+
+                _Running = false;
+                _writeThread.Join();
+                _readThread.Join();
             }
         }
 
