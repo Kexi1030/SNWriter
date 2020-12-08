@@ -24,6 +24,8 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         private object _commandlock;
         private List<string> commandstringList;
 
+        AutoResetEvent _event = new AutoResetEvent(false);
+
         public CommandAggregate()
         {
             _commandlock = new object();
@@ -32,13 +34,13 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             _CommandDataToPortThread.Start();
         }
 
-
         public void AddMsg(string msg)
         {
             lock (_commandlock)
             {
                 commandstringList.Add(msg);
             }
+            _event.Set();
         }
 
         private void CommandDataToPortThread()
@@ -61,7 +63,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 }
                 else 
                 {
-
+                    _event.WaitOne();
                 }
             }
         }

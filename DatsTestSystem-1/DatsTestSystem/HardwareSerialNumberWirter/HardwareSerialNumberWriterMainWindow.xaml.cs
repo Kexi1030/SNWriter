@@ -28,9 +28,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     {
         public Task task;
 
-        public CommandAggregate command;
-        public StatusDistribution status;
-        public SerialPortManagementClass SPM;
+        public delegate void SNToCommandAggregate(string snString);
+        public event SNToCommandAggregate sntocommandaggregate;
+
+        public delegate void StatusDistrubuteControl(bool open,bool clearor);
+        public event StatusDistrubuteControl statusdistrubutionControl;
+
+        public StatusDistribution StatusDistribution;
+
 
         public string CurrentString
         {
@@ -229,18 +234,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void TaskStart()
         {
             FrameBackLook = 0;
-            ReFreshTasks();
+            //ReFreshTasks();
             task.Start();
 
             Thread.Sleep(2000); // 等待返回
-        }
-
-        private void ReFreshTasks()
-        {
-            task = new Task(()=> command.GetFWString(this.CurrentString));
-            command.task = new Task(()=> SPM.SendData(command.CommandFromFW));
-            SPM.Task = new Task(() =>status.FWStringGet(SPM.StringBack));
-            status.Task = new Task(() =>this.GetBackFrame(status.FWString));
         }
 
         /// <summary>
@@ -340,8 +337,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             }
 
-
-
             ThreadStart threadStart = new ThreadStart(() => ReportCreation.CreateReport(FileLoad+".json"));
             Thread CreateReportThread = new Thread(threadStart);
             CreateReportThread.Start();
@@ -355,6 +350,22 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 case MessageBoxResult.No:
                     break;
             }
+        }
+
+        public void getFrameBack(byte[] data)
+        {
+
+        }
+
+
+        private void OpenDistrubuteThread()
+        {
+            StatusDistribution.OpenDisThread();
+        }
+
+        private void CloseDistrubuteThread()
+        {
+            StatusDistribution.CloseDisThread();
         }
     }
 }

@@ -15,7 +15,6 @@ namespace DatsTestSystem
     /// </summary>
     public partial class MainWindow : Window
     {
-        HardwareSerialNumberWriterMainWindow thisFWWindow;
         SerialPortManagementClass serialPortManagementClass;
         CommandAggregate commandAggregate;
         StatusDistribution statusDistribution;
@@ -24,30 +23,36 @@ namespace DatsTestSystem
         public MainWindow()
         {
             InitializeComponent();
+            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
 
+            init();
+            initFW();
+        }
+
+        private void initFW()
+        {
+            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+            hardwareSerialNumberWriterMainWindow.Owner = this;
+            hardwareSerialNumberWriterMainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
+
+        private void init()
+        {
             serialPortManagementClass = new SerialPortManagementClass();
             commandAggregate = new CommandAggregate();
             statusDistribution = new StatusDistribution();
-            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+
+            hardwareSerialNumberWriterMainWindow.StatusDistribution = statusDistribution;
 
             serialPortManagementClass.DataReadyEvent += statusDistribution.AddMsg;
             commandAggregate.CommandDataToPort += serialPortManagementClass.AddData;
-
-            thisFWWindow = hardwareSerialNumberWriterMainWindow;
-
-            thisFWWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-            hardwareSerialNumberWriterMainWindow.command = commandAggregate;
-            hardwareSerialNumberWriterMainWindow.status = statusDistribution;
-            hardwareSerialNumberWriterMainWindow.SPM = serialPortManagementClass;
-
-            this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            statusDistribution._DataToSn += hardwareSerialNumberWriterMainWindow.getFrameBack;
+            hardwareSerialNumberWriterMainWindow.sntocommandaggregate += commandAggregate.AddMsg;
         }
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)
         {
-            thisFWWindow.Owner = this;
-            thisFWWindow.ShowOperatorNameInputWindow();
+            hardwareSerialNumberWriterMainWindow.ShowOperatorNameInputWindow();
         }
     }
 }

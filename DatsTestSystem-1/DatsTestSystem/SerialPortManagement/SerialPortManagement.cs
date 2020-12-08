@@ -13,7 +13,7 @@ namespace DatsTestSystem.SerialPortManagement
     public class SerialPortManagementClass
     {
         
-        public delegate void DataReadyHandler(string data);
+        public delegate void DataReadyHandler(byte[] data);
         public event DataReadyHandler DataReadyEvent; // 接收到的msg的处理事件
 
         private Thread _writeThread, _readThread;
@@ -47,10 +47,10 @@ namespace DatsTestSystem.SerialPortManagement
                     if(ret > 0)
                     {
                         byte[] tmp = new byte[ret];
+
                         for (int i = 0; i < ret; i++)
                             tmp[i] = buf[i];
-                        // 需要将byte数组转换为string
-                        DataReadyEvent(bytetoString(tmp)); // 对读取上来的数据处理
+                        DataReadyEvent(tmp); // 对读取上来的数据处理
                     }
                 }catch(InvalidOperationException e)
                 {
