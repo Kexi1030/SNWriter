@@ -12,22 +12,28 @@ namespace DatsTestSystem.SerialPortManagement
 {
     public class SerialPortManagementClass
     {
-        
+
         public delegate void DataReadyHandler(byte[] data);
         public event DataReadyHandler DataReadyEvent; // 接收到的msg的处理事件
 
         private Thread _writeThread, _readThread;
-        private List<byte[]>  _writeList;
+        private List<byte[]> _writeList;
         object _writeObj;
         private bool _Running;
         AutoResetEvent _event = new AutoResetEvent(false);
 
         public SerialPortManagementClass()
         {
+            _writeObj = new object();
+
             _readThread = new Thread(ReadThread);
             _writeThread = new Thread(WriteThread);
-            _writeList.Clear();
 
+            _writeThread.Start();
+
+            _writeList = new List<byte[]>();
+            _writeList.Clear();
+            _Running = true;
 
             serialPort.PortName = DefaultSerialPortInfo.PortName;
             serialPort.BaudRate = DefaultSerialPortInfo.BaudRate;
@@ -36,15 +42,36 @@ namespace DatsTestSystem.SerialPortManagement
             serialPort.StopBits = (StopBits)Convert.ToInt32(DefaultSerialPortInfo.StopBits);
         }
 
+        public void Virtualframegeneration()
+        {
+            byte[] FrameGeneration = new byte[] { 0, 0 };
+
+            while (_Running)
+            {
+                byte[] temp = new byte[] { 1, 1, 1, 1 };
+
+                var m = new List<byte>();
+                m.AddRange(FrameGeneration);
+                m.AddRange(temp);
+                //temp.CopyTo(FrameGeneration, FrameGeneration.Length);
+
+                FrameGeneration = m.ToArray();
+                Thread.Sleep(100);
+
+                DataReadyEvent(FrameGeneration);
+                Thread.Sleep(100);
+            }
+        }
+
         private void ReadThread() // 读线程
         {
-            while(_Running)
+            while (_Running)
             {
                 byte[] buf = new byte[128];
                 try
                 {
                     int ret = serialPort.Read(buf, 0, buf.Length);
-                    if(ret > 0)
+                    if (ret > 0)
                     {
                         byte[] tmp = new byte[ret];
 
@@ -52,7 +79,8 @@ namespace DatsTestSystem.SerialPortManagement
                             tmp[i] = buf[i];
                         DataReadyEvent(tmp); // 对读取上来的数据处理
                     }
-                }catch(InvalidOperationException e)
+                }
+                catch (InvalidOperationException e)
                 {
                     Console.WriteLine("Open serial port first, error {0}", e.ToString());
                     return;
@@ -71,6 +99,8 @@ namespace DatsTestSystem.SerialPortManagement
 
         private void WriteThread() // 对串口数据进行写入的线程
         {
+            //Virtualframegeneration();
+            
             while(_Running)
             {
                 byte[] buf = null;
@@ -99,6 +129,7 @@ namespace DatsTestSystem.SerialPortManagement
                     _event.WaitOne();
                 }
             }
+            
         }
 
         public void Open() // 打开串口

@@ -101,6 +101,7 @@
     </Compile>
     <Compile Include="SerialPortManagement\SerialPortManagement.cs" />
     <Compile Include="StatusFrameDistribution.cs" />
+    <Compile Include="StrAndByteProcessClass.cs" />
     <Page Include="HardwareSerialNumberWirter\HardwareSerialNumberWriterAddOneSNpopupWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

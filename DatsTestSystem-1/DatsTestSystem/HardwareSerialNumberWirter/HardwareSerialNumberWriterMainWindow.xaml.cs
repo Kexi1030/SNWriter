@@ -17,6 +17,7 @@ using DatsTestSystem.CommandAggregationStatusDistribution;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
+using System.Text;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -26,16 +27,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     /// </summary>
     public partial class HardwareSerialNumberWriterMainWindow : Window
     {
-        public Task task;
-
         public delegate void SNToCommandAggregate(string snString);
         public event SNToCommandAggregate sntocommandaggregate;
 
-        public delegate void StatusDistrubuteControl(bool open,bool clearor);
-        public event StatusDistrubuteControl statusdistrubutionControl;
-
         public StatusDistribution StatusDistribution;
-
 
         public string CurrentString
         {
@@ -43,8 +38,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         }
 
         private string FrameBack { get; set; }
-
-        private int FrameBackLook { get; set; }
 
         private string FileLoad { get; set; }
 
@@ -145,7 +138,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
                 // 写入到Json文件中去
                 JsonCreate jsonCreate = new JsonCreate();
-                JsonFormat ReturnJsonCreate = jsonCreate.CreateSNFromJsonFile(FileLoad+".json"); // 需要更改 文件路径需要更改
+                JsonFormat ReturnJsonCreate = jsonCreate.CreateSNFromJsonFile(FileLoad + ".json"); // 需要更改 文件路径需要更改
 
                 List<string> newSnList = new List<string>(ReturnJsonCreate.SnList);
                 newSnList.Add(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString);
@@ -193,17 +186,24 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             string OperatorName = this.OperatorNameTextBlock.Text;
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
-            this.SNFWStatusTextBlock.Text += string.Format("当前操作的序列号是{0}\n\n", CurrentSn);
+            Console.WriteLine(string.Format("当前操作的序列号是{0}\n", CurrentSn));
 
             CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
             CurrentString = commandFrameGeneration.FwWriteString;
 
-            this.SNFWStatusTextBlock.Text += "开始烧写\n";
+            Console.WriteLine("开始烧写");
 
-            TaskStart();
+            if(SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
+            {
+                SendData(commandFrameGeneration.FwWriteString);
+            }
+            else
+            {
+                SendData
+            }
 
+            /*
             CurrentString = commandFrameGeneration.FwReadString;
-            TaskStart();
 
             this.SNFWStatusTextBlock.Text += "正在进行烧写检查\n";
             bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
@@ -229,15 +229,47 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
 
             ButtonsStatusChange(true);
+            */
         }
 
-        private void TaskStart()
+        private bool SendData(string data)
         {
-            FrameBackLook = 0;
-            //ReFreshTasks();
-            task.Start();
+            sntocommandaggregate(data); // 发送到指令帧汇聚模块
+            OpenDistrubuteThread(); // 打开状态帧分发的线程
 
-            Thread.Sleep(2000); // 等待返回
+            if (data == "F500000000E00300FFFF5F") // 如果是查询硬件序列号的帧
+            {
+                DateTime OpenDistrubuteTime = new DateTime();
+
+                while (FrameBack == null)
+                {
+                    DateTime DateTimeNow = new DateTime();
+                    var timeSpan = (DateTimeNow - OpenDistrubuteTime).TotalMilliseconds;
+                    if (timeSpan > 2000) // 如果超时
+                    {
+                        Console.WriteLine(timeSpan.ToString());
+                        // 超时处理 未完成
+                        return false;
+                    }
+                }
+                Console.WriteLine("FrameBack:\n");
+                Console.WriteLine(FrameBack);
+                FrameBack = "";
+                Console.WriteLine("结束");
+
+                Thread thread = new Thread(() =>
+                {
+                    Thread.Sleep(1000);
+                    CloseDistrubuteThread();
+                });
+                thread.Start();
+                return true;
+            }
+            else // 如果是烧写硬件序列号
+            {
+                Thread.Sleep(1000);
+                return true;
+            }
         }
 
         /// <summary>
@@ -301,22 +333,15 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             List<EachSNStatus> AllStatus; // 存放所有的烧写信息
             if (JsonReturn.eachSNStatuses == null)
             {
-                 AllStatus = new List<EachSNStatus>();
+                AllStatus = new List<EachSNStatus>();
             }
             else
             {
-                 AllStatus = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
+                AllStatus = new List<EachSNStatus>(JsonReturn.eachSNStatuses);
             }
             AllStatus.Add(new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status });
             JsonReturn.eachSNStatuses = AllStatus.ToArray();
             jsonCreate.CreateJson(JsonReturn);
-        }
-        
-
-        public void GetBackFrame(string stringBack)
-        {
-            FrameBack = stringBack;
-            FrameBackLook = 1;
         }
 
         private void FWWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -328,24 +353,24 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             // 对当前列表进行检查是否还有没烧写完毕的序列号  未完成
 
-            MessageBoxResult result = System.Windows.MessageBox.Show("当前序列号未全部烧写完成，是否退出","退出",MessageBoxButton.YesNo,MessageBoxImage.Question);
-            
-            switch(result)
+            MessageBoxResult result = System.Windows.MessageBox.Show("当前序列号未全部烧写完成，是否退出", "退出", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            switch (result)
             {
                 case MessageBoxResult.Yes:
                     break;
 
             }
 
-            ThreadStart threadStart = new ThreadStart(() => ReportCreation.CreateReport(FileLoad+".json"));
+            ThreadStart threadStart = new ThreadStart(() => ReportCreation.CreateReport(FileLoad + ".json"));
             Thread CreateReportThread = new Thread(threadStart);
             CreateReportThread.Start();
 
             MessageBoxResult messageBoxResult = System.Windows.MessageBox.Show("正在生成报告，是否需要查看？", "报告生成", MessageBoxButton.YesNo, MessageBoxImage.Question);
-            switch(messageBoxResult)
+            switch (messageBoxResult)
             {
                 case MessageBoxResult.Yes:
-                    Process.Start(FileLoad+".pdf");
+                    Process.Start(FileLoad + ".pdf");
                     break;
                 case MessageBoxResult.No:
                     break;
@@ -354,7 +379,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         public void getFrameBack(byte[] data)
         {
-
+            Console.WriteLine("getFrameBack\n");
+            FrameBack = bytetoString(data);
         }
 
 
@@ -367,5 +393,24 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             StatusDistribution.CloseDisThread();
         }
+
+        /// <summary>
+        /// bute[] To string
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
+        private string bytetoString(byte[] data)
+        {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < data.Length; i++)
+            {
+                sb.AppendFormat("{0:x2}" + " ", data[i]); // 向此实例追加通过处理复合格式字符串（包含零个或更多格式项）而返回的字符串。
+            }
+
+            string Result = sb.ToString().ToUpper();
+
+            return Result;
+        }
+
     }
 }

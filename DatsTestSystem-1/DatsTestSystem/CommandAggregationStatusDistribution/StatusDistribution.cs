@@ -9,18 +9,22 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 {
     public class StatusDistribution
     {
+        List<string> AllusefulFrameStart;
+
         private object _msgLock;
         private List<byte[]> msgList;
         Thread _distributeThread; // 状态帧分发的线程
         private bool _start;
 
         public delegate void DataBackHandler(byte[] data);
-        public event DataBackHandler _DataToSn;
+        public event DataBackHandler DataDistrubution;
 
         AutoResetEvent _event = new AutoResetEvent(false);
 
         public StatusDistribution()
         {
+            AllusefulFrameStart = new List<string>() { "E0" };
+
             _msgLock = new object();
             msgList = new List<byte[]>();
             //_distributeThread = new Thread(StartDistributeThread);
@@ -30,6 +34,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         public void OpenDisThread()
         {
             // 线程打开
+            Console.WriteLine("OpenDisThread\n");
             _start = true;
             _distributeThread = new Thread(StartDistributeThread);
             _distributeThread.Start();
@@ -58,9 +63,12 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         /// </summary>
         public void StartDistributeThread()
         {
-            byte[] FrameBack = null;
+            Console.WriteLine("StartDistributeThread Start\n");
+            byte[] FrameBack = new byte[] { };
             while(_start)
             {
+                //Console.WriteLine("While Start\n");
+
                 byte[] curr_msg = null; // 当前要处理的数据
                 lock(_msgLock)
                 {
@@ -68,16 +76,31 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                     {
                         curr_msg = msgList[0];
                         msgList.RemoveAt(0); // 移除索引0处的元素
+                        Console.WriteLine("msgList Add Done");
                     }
                 }
 
                 if(curr_msg != null)
                 {
-                    curr_msg.CopyTo(FrameBack, FrameBack.Length);
-                    if(FrameBack.Length == 54)
+                    //curr_msg.CopyTo(FrameBack, FrameBack.Length);
+                    var m = new List<byte>();
+                    m.AddRange(curr_msg);
+                    m.AddRange(FrameBack);
+                    FrameBack = m.ToArray();
+                    Console.WriteLine(FrameBack.Length);
+                    //Thread.Sleep(500);
+                    if(FrameBack.Length >= 106)
                     {
-                        _DataToSn(FrameBack);
-                        FrameBack = null;
+                        if(AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(2).ToArray()))) // 如果帧头匹配成功
+                        {
+                            DataDistrubution(FrameBack.Take(106).ToArray());
+                            Console.WriteLine("_DataToSn Done");
+                            FrameBack = new byte[] { };
+                        }
+                        else
+                        {
+                            // 当前帧无用 丢弃 未完成
+                        }
                     }
                 }
                 else // 当前接收的列表为空

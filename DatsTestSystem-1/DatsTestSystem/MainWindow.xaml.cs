@@ -7,6 +7,8 @@ using System.Windows;
 using DatsTestSystem.HardwareSerialNumberWirter;
 using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.CommandAggregationStatusDistribution;
+using System.IO;
+using System.Windows.Controls;
 
 namespace DatsTestSystem
 {
@@ -31,9 +33,32 @@ namespace DatsTestSystem
 
         private void initFW()
         {
-            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
-            hardwareSerialNumberWriterMainWindow.Owner = this;
+            //hardwareSerialNumberWriterMainWindow.Owner = this;
             hardwareSerialNumberWriterMainWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
+
+        public class TextBoxOutputter : TextWriter
+        {
+            TextBox textBox = null;
+
+            public TextBoxOutputter(TextBox output)
+            {
+                textBox = output;
+            }
+
+            public override void Write(char value)
+            {
+                base.Write(value);
+                textBox.Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    textBox.AppendText(value.ToString());
+                }));
+            }
+
+            public override Encoding Encoding
+            {
+                get { return System.Text.Encoding.UTF8; }
+            }
         }
 
         private void init()
@@ -41,13 +66,18 @@ namespace DatsTestSystem
             serialPortManagementClass = new SerialPortManagementClass();
             commandAggregate = new CommandAggregate();
             statusDistribution = new StatusDistribution();
+            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
 
-            hardwareSerialNumberWriterMainWindow.StatusDistribution = statusDistribution;
+            TextBoxOutputter outputter;
+            outputter = new TextBoxOutputter(hardwareSerialNumberWriterMainWindow.SNFWStatusTextBlock);
+            Console.SetOut(outputter);
 
             serialPortManagementClass.DataReadyEvent += statusDistribution.AddMsg;
             commandAggregate.CommandDataToPort += serialPortManagementClass.AddData;
-            statusDistribution._DataToSn += hardwareSerialNumberWriterMainWindow.getFrameBack;
+            statusDistribution.DataDistrubution += hardwareSerialNumberWriterMainWindow.getFrameBack;
             hardwareSerialNumberWriterMainWindow.sntocommandaggregate += commandAggregate.AddMsg;
+
+            hardwareSerialNumberWriterMainWindow.StatusDistribution = statusDistribution;
         }
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)

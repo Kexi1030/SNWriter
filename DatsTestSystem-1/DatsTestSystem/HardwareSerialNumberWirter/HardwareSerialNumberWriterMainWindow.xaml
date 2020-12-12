@@ -54,7 +54,7 @@
         <GroupBox Header="状态信息" FontSize="15" Grid.Row="3" Grid.RowSpan="2" Grid.Column="1" Margin="5">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
                 <ScrollViewer.Content>
-                    <TextBlock x:Name="SNFWStatusTextBlock" FontSize="13" TextWrapping="Wrap" Margin="5"/>
+                    <TextBox x:Name="SNFWStatusTextBlock" FontSize="13" TextWrapping="Wrap" Margin="5"/>
                 </ScrollViewer.Content>
             </ScrollViewer>
         </GroupBox>
