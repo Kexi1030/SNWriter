@@ -78,6 +78,7 @@ namespace DatsTestSystem
             hardwareSerialNumberWriterMainWindow.sntocommandaggregate += commandAggregate.AddMsg;
 
             hardwareSerialNumberWriterMainWindow.StatusDistribution = statusDistribution;
+            hardwareSerialNumberWriterMainWindow.commandAggregate = commandAggregate;
         }
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)

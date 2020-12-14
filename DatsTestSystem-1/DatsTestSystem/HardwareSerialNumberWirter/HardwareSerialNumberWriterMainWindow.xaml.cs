@@ -31,6 +31,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public event SNToCommandAggregate sntocommandaggregate;
 
         public StatusDistribution StatusDistribution;
+        public CommandAggregate commandAggregate;
 
         public string CurrentString
         {
@@ -46,6 +47,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public HardwareSerialNumberWriterMainWindow()
         {
             InitializeComponent();
+            this.Closing += windowClosingFunc;
 
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
 
@@ -191,46 +193,99 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
             CurrentString = commandFrameGeneration.FwWriteString;
 
-            Console.WriteLine("开始烧写");
+            Console.WriteLine("开始烧写.....");
 
+            if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
+            {
+                SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
+            }
+            else
+            {
+                if(SendData(commandFrameGeneration.FwReadString)) //再次发送查询序列号 如果有返回
+                {
+                    SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
+                }
+                else
+                {
+                    Console.WriteLine("当前Dat无法查询");
+                    FailFwFunc(CurrentSn,OperatorName);
+                    return;
+                }
+            }
+
+            // 烧写完进行查询
             if(SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
-                SendData(commandFrameGeneration.FwWriteString);
-            }
-            else
-            {
-                SendData
-            }
-
-            /*
-            CurrentString = commandFrameGeneration.FwReadString;
-
-            this.SNFWStatusTextBlock.Text += "正在进行烧写检查\n";
-            bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
-            if(EqualOr)
-            {
-                this.SNFWStatusTextBlock.Text += string.Format("当前板读出序列号为{0} \n烧写成功\n\n", CurrentSn);
-
-                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
-                SaveChangethread.Start();
-
-                SnListToNext();
-            }
-            else
-            {
-                // 变色或添加图片未完成 
-                this.SNFWStatusTextBlock.Text += "烧写失败\n";
-
-                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
-                SaveChangethread.Start();
-
-                MessageBoxPopUpToNextSNOR();
+                Console.WriteLine("正在进行烧写检查......");
+                bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
+                if(EqualOr)
+                {
+                    SuccessfulFwFunc(CurrentSn, OperatorName);
+                }
+                else
+                {
+                    FailFwFunc(CurrentSn, OperatorName);
+                }
                 return;
             }
+            else
+            {
+                if(SendData(commandFrameGeneration.FwReadString))
+                {
+                    Console.WriteLine("正在进行烧写检查......");
+                    bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
+                    if (EqualOr)
+                    {
+                        SuccessfulFwFunc(CurrentSn, OperatorName);
+                    }
+                    else
+                    {
+                        FailFwFunc(CurrentSn, OperatorName);
+                    }
+                    return;
+                }
+                else
+                {
+                    Console.WriteLine("查询失败");
+                    FailFwFunc(CurrentSn, OperatorName);
+                    return;
+                }
+            }
 
-            ButtonsStatusChange(true);
-            */
+                /*
+                else
+                {
+                    // 变色或添加图片未完成 
+                    this.SNFWStatusTextBlock.Text += "烧写失败\n";
+
+                    Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
+                    SaveChangethread.Start();
+
+                    MessageBoxPopUpToNextSNOR();
+                    return;
+                }
+
+                ButtonsStatusChange(true);
+                */
         }
+
+        private void SuccessfulFwFunc(string CurrentSn,String OperatorName)
+        {
+            Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
+            Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
+            SaveChangethread.Start();
+            SnListToNext(); // 切换到下一个序列号
+        }
+
+        private void FailFwFunc(string CurrentSn, String OperatorName)
+        {
+            // Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
+            Console.WriteLine("烧写失败");
+            Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
+            SaveChangethread.Start();
+            MessageBoxPopUpToNextSNOR();
+        }
+
 
         private bool SendData(string data)
         {
@@ -311,7 +366,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             {
                 case MessageBoxResult.Yes:
                     string SNPassed = SnListToNext(); // 跳到下一个序列号
-                    this.SNFWStatusTextBlock.Text += string.Format("{0}已经被跳过\n", SNPassed);
+                    Console.WriteLine("{0}已经被跳过\n", SNPassed);
                     ButtonsStatusChange(true);
                     return;
                 case MessageBoxResult.No:
@@ -380,7 +435,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public void getFrameBack(byte[] data)
         {
             Console.WriteLine("getFrameBack\n");
-            FrameBack = bytetoString(data);
+            FrameBack = StrAndByteProcessClass.bytetoString(data);
         }
 
 
@@ -394,22 +449,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             StatusDistribution.CloseDisThread();
         }
 
-        /// <summary>
-        /// bute[] To string
-        /// </summary>
-        /// <param name="data"></param>
-        /// <returns></returns>
-        private string bytetoString(byte[] data)
+        private void windowClosingFunc(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < data.Length; i++)
-            {
-                sb.AppendFormat("{0:x2}" + " ", data[i]); // 向此实例追加通过处理复合格式字符串（包含零个或更多格式项）而返回的字符串。
-            }
-
-            string Result = sb.ToString().ToUpper();
-
-            return Result;
+            // 将状态帧的分发模块之前的捆绑消除
+            StatusDistribution.DataDistrubution -= this.getFrameBack;
         }
 
     }
