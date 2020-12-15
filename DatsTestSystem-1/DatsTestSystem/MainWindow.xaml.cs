@@ -79,6 +79,7 @@ namespace DatsTestSystem
 
             hardwareSerialNumberWriterMainWindow.StatusDistribution = statusDistribution;
             hardwareSerialNumberWriterMainWindow.commandAggregate = commandAggregate;
+            hardwareSerialNumberWriterMainWindow.serialPortManagementClass = serialPortManagementClass;
         }
 
         private void HardwareSerialNumberButton_Click(object sender, RoutedEventArgs e)

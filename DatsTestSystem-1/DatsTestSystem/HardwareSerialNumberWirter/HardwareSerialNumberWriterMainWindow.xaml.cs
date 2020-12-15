@@ -18,6 +18,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Text;
+using DatsTestSystem.SerialPortManagement.Models;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -33,20 +34,22 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public StatusDistribution StatusDistribution;
         public CommandAggregate commandAggregate;
 
-        public string CurrentString
-        {
-            get; set;
-        }
+        public string CurrentString { get; set; }
 
         private string FrameBack { get; set; }
 
         private string FileLoad { get; set; }
+
+        public SerialportConfigurationInformation portconfiginfo;
+        public SerialPortManagementClass serialPortManagementClass;
+        PortControlWindow portControlWindow;
 
         ObservableCollection<string> sNStringInListBoxes = new ObservableCollection<string>();
 
         public HardwareSerialNumberWriterMainWindow()
         {
             InitializeComponent();
+            portControlWindow = new PortControlWindow();
             this.Closing += windowClosingFunc;
 
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -54,7 +57,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             SNList.ItemsSource = sNStringInListBoxes;
 
             this.FileLoad = DateTime.Now.ToShortDateString();
-
         }
 
         public void ShowOperatorNameInputWindow()
@@ -170,10 +172,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void PortControllerButton_Click(object sender, RoutedEventArgs e)
         {
-            PortControlWindow portControlWindow = new PortControlWindow();
             portControlWindow.Owner = this;
             portControlWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             portControlWindow.Show();
+
+            portControlWindow.HardwareSerialNumberWriterMainWindow = this;
         }
 
         private void SNList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -183,12 +186,20 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            // 串口配置
+
+
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
 
             string OperatorName = this.OperatorNameTextBlock.Text;
+            if (this.CurrentSNTextBlock.Text == "")
+            {
+                Console.WriteLine("请选择你要烧写的序列号\n结束");
+                return;
+            }
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
-            Console.WriteLine(string.Format("当前操作的序列号是{0}\n", CurrentSn));
+            Console.WriteLine(string.Format("当前操作的序列号是{0}", CurrentSn));
 
             CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
             CurrentString = commandFrameGeneration.FwWriteString;
@@ -201,75 +212,79 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
             else
             {
-                if(SendData(commandFrameGeneration.FwReadString)) //再次发送查询序列号 如果有返回
+                if (SendData(commandFrameGeneration.FwReadString)) //再次发送查询序列号 如果有返回
                 {
                     SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
                 }
                 else
                 {
-                    Console.WriteLine("当前Dat无法查询");
-                    FailFwFunc(CurrentSn,OperatorName);
+                    Console.WriteLine("当前Dat无法查询\n结束");
+                    FailFwFunc(CurrentSn, OperatorName);
                     return;
                 }
             }
 
             // 烧写完进行查询
-            if(SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
+            if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
                 Console.WriteLine("正在进行烧写检查......");
                 bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
-                if(EqualOr)
+                if (EqualOr)
                 {
                     SuccessfulFwFunc(CurrentSn, OperatorName);
+                    Console.WriteLine("烧写成功");
                 }
                 else
                 {
                     FailFwFunc(CurrentSn, OperatorName);
+                    Console.WriteLine("烧写失败");
                 }
                 return;
             }
             else
             {
-                if(SendData(commandFrameGeneration.FwReadString))
+                if (SendData(commandFrameGeneration.FwReadString))
                 {
                     Console.WriteLine("正在进行烧写检查......");
                     bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
                     if (EqualOr)
                     {
                         SuccessfulFwFunc(CurrentSn, OperatorName);
+                        Console.WriteLine("烧写成功");
                     }
                     else
                     {
                         FailFwFunc(CurrentSn, OperatorName);
+                        Console.WriteLine("烧写失败");
                     }
                     return;
                 }
                 else
                 {
-                    Console.WriteLine("查询失败");
+                    Console.WriteLine("查询失败\n烧写失败");
                     FailFwFunc(CurrentSn, OperatorName);
                     return;
                 }
             }
 
-                /*
-                else
-                {
-                    // 变色或添加图片未完成 
-                    this.SNFWStatusTextBlock.Text += "烧写失败\n";
+            /*
+            else
+            {
+                // 变色或添加图片未完成 
+                this.SNFWStatusTextBlock.Text += "烧写失败\n";
 
-                    Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
-                    SaveChangethread.Start();
+                Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
+                SaveChangethread.Start();
 
-                    MessageBoxPopUpToNextSNOR();
-                    return;
-                }
+                MessageBoxPopUpToNextSNOR();
+                return;
+            }
 
-                ButtonsStatusChange(true);
-                */
+            ButtonsStatusChange(true);
+            */
         }
 
-        private void SuccessfulFwFunc(string CurrentSn,String OperatorName)
+        private void SuccessfulFwFunc(string CurrentSn, String OperatorName)
         {
             Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
