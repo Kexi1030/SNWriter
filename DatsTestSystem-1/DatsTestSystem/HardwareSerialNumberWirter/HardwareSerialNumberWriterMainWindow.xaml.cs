@@ -50,6 +50,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             InitializeComponent();
             portControlWindow = new PortControlWindow();
+            portControlWindow.HardwareSerialNumberWriterMainWindow = this;
+            portControlWindow.initConfigurationInformation();
+
             this.Closing += windowClosingFunc;
 
             this.WindowStartupLocation = WindowStartupLocation.CenterOwner;
@@ -175,8 +178,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             portControlWindow.Owner = this;
             portControlWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             portControlWindow.Show();
-
-            portControlWindow.HardwareSerialNumberWriterMainWindow = this;
         }
 
         private void SNList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -187,15 +188,16 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             // 串口配置
-
+            serialPortManagementClass.inifPort(portconfiginfo);
 
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
 
             string OperatorName = this.OperatorNameTextBlock.Text;
-            if (this.CurrentSNTextBlock.Text == "")
+            if (this.CurrentSNTextBlock.Text == "") // 如果没有选中sn
             {
                 Console.WriteLine("请选择你要烧写的序列号\n结束");
+                ButtonsStatusChange(true);
                 return;
             }
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
@@ -220,6 +222,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     Console.WriteLine("当前Dat无法查询\n结束");
                     FailFwFunc(CurrentSn, OperatorName);
+                    ButtonsStatusChange(true);
                     return;
                 }
             }
@@ -239,6 +242,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     FailFwFunc(CurrentSn, OperatorName);
                     Console.WriteLine("烧写失败");
                 }
+                ButtonsStatusChange(true);
                 return;
             }
             else
@@ -257,12 +261,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                         FailFwFunc(CurrentSn, OperatorName);
                         Console.WriteLine("烧写失败");
                     }
+                    ButtonsStatusChange(true);
                     return;
                 }
                 else
                 {
                     Console.WriteLine("查询失败\n烧写失败");
                     FailFwFunc(CurrentSn, OperatorName);
+                    ButtonsStatusChange(true);
                     return;
                 }
             }

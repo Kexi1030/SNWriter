@@ -9,8 +9,10 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using DatsTestSystem.HardwareSerialNumberWirter;
+
 namespace DatsTestSystem.SerialPortManagement
 {
+
     public class SerialPortManagementClass
     {
         public delegate void DataReadyHandler(byte[] data);
@@ -34,12 +36,15 @@ namespace DatsTestSystem.SerialPortManagement
             _writeList = new List<byte[]>();
             _writeList.Clear();
             _Running = true;
+        }
 
-            serialPort.PortName = DefaultSerialPortInfo.PortName;
-            serialPort.BaudRate = DefaultSerialPortInfo.BaudRate;
-            //serialPort.Parity = (Parity)Convert.ToInt32(DefaultSerialPortInfo.Parity);
-            serialPort.DataBits = DefaultSerialPortInfo.DataBits;
-            //serialPort.StopBits = (StopBits)Convert.ToInt32(DefaultSerialPortInfo.StopBits);
+        public void inifPort(SerialportConfigurationInformation portinfo)
+        {
+            serialPort.PortName = portinfo.PortName;
+            serialPort.BaudRate = portinfo.BaudRate;
+            serialPort.DataBits = portinfo.DataBits;
+            serialPort.Parity = (System.IO.Ports.Parity)Convert.ToInt32(portinfo.Parity.ToString());
+            serialPort.StopBits = (System.IO.Ports.StopBits)Convert.ToInt32(portinfo.StopBits);
         }
 
         public void Virtualframegeneration()
@@ -100,19 +105,19 @@ namespace DatsTestSystem.SerialPortManagement
         private void WriteThread() // 对串口数据进行写入的线程
         {
             //Virtualframegeneration();
-            
-            while(_Running)
+
+            while (_Running)
             {
                 byte[] buf = null;
                 lock (_writeObj)
                 {
-                    if(_writeList.Count > 0) 
+                    if (_writeList.Count > 0)
                     {
                         buf = _writeList[0];
                         _writeList.RemoveAt(0);
                     }
                 }
-                if(buf != null)
+                if (buf != null)
                 {
                     try
                     {
@@ -129,7 +134,7 @@ namespace DatsTestSystem.SerialPortManagement
                     _event.WaitOne();
                 }
             }
-            
+
         }
 
         public void Open() // 打开串口
@@ -174,7 +179,7 @@ namespace DatsTestSystem.SerialPortManagement
         /// <returns></returns>
         public bool SendData(string data)
         {
-            byte[] dataSend = strToHexByte(data);
+            byte[] dataSend = StrAndByteProcessClass.strToHexByte(data);
 
             if (!serialPort.IsOpen)
             {
@@ -196,7 +201,7 @@ namespace DatsTestSystem.SerialPortManagement
 
                     Thread.Sleep(500);
 
-                    StringBack = DataReceived();
+                    //StringBack = DataReceived();
 
                     Task.Start();
 
