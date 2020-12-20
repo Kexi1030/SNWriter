@@ -18,7 +18,7 @@ namespace DatsTestSystem.SerialPortManagement
         public delegate void DataReadyHandler(byte[] data);
         public event DataReadyHandler DataReadyEvent; // 接收到的msg的处理事件
 
-        private Thread _writeThread, _readThread;
+        public Thread _writeThread, _readThread;
         private List<byte[]> _writeList;
         object _writeObj;
         private bool _Running;
@@ -28,14 +28,17 @@ namespace DatsTestSystem.SerialPortManagement
         {
             _writeObj = new object();
 
-            _readThread = new Thread(ReadThread);
-            _writeThread = new Thread(WriteThread);
-
-            _writeThread.Start();
-
             _writeList = new List<byte[]>();
             _writeList.Clear();
+
             _Running = true;
+
+            _writeThread = new Thread(WriteThread);
+            _writeThread.Name = "_writeThread";
+            _writeThread.Start();
+            _readThread = new Thread(ReadThread);
+            _readThread.Name = "_readThread";
+            //_readThread.Start();
         }
 
         public void inifPort(SerialportConfigurationInformation portinfo)
@@ -149,12 +152,24 @@ namespace DatsTestSystem.SerialPortManagement
                 }
                 _Running = true;
                 _event.Reset();
-                _readThread.Start();
-                _writeThread.Start();
+                //_readThread.Start();
+                //_writeThread.Start();
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message, "错误1", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(ex.Message, "串口打开错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public void Close() // 关闭串口
+        {
+            try
+            {
+                serialPort.Close();
+            }
+            catch(Exception e)
+            {
+                MessageBox.Show(e.Message, "串口关闭错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
@@ -233,8 +248,5 @@ namespace DatsTestSystem.SerialPortManagement
                 _readThread.Join();
             }
         }
-
-
-
     }
 }

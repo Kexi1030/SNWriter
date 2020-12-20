@@ -189,6 +189,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             // 串口配置
             serialPortManagementClass.inifPort(portconfiginfo);
+            serialPortManagementClass.Open();
+            Console.WriteLine("串口配置完成");
 
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
@@ -198,6 +200,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             {
                 Console.WriteLine("请选择你要烧写的序列号\n结束");
                 ButtonsStatusChange(true);
+                serialPortManagementClass.Close();
                 return;
             }
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
@@ -207,10 +210,15 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             CurrentString = commandFrameGeneration.FwWriteString;
 
             Console.WriteLine("开始烧写.....");
+            serialPortManagementClass._readThread.Start();
+
+
+            //SendData(commandFrameGeneration.FwReadString);
 
             if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
                 SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
+                Console.WriteLine("硬件序列号正在写入...");
             }
             else
             {
@@ -235,12 +243,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 if (EqualOr)
                 {
                     SuccessfulFwFunc(CurrentSn, OperatorName);
-                    Console.WriteLine("烧写成功");
                 }
                 else
                 {
+                    Console.WriteLine("查询结果和待烧写序列号不匹配，烧写失败");
                     FailFwFunc(CurrentSn, OperatorName);
-                    Console.WriteLine("烧写失败");
                 }
                 ButtonsStatusChange(true);
                 return;
@@ -254,19 +261,18 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     if (EqualOr)
                     {
                         SuccessfulFwFunc(CurrentSn, OperatorName);
-                        Console.WriteLine("烧写成功");
                     }
                     else
                     {
+                        Console.WriteLine("查询结果和待烧写序列号不匹配，烧写失败");
                         FailFwFunc(CurrentSn, OperatorName);
-                        Console.WriteLine("烧写失败");
                     }
                     ButtonsStatusChange(true);
                     return;
                 }
                 else
                 {
-                    Console.WriteLine("查询失败\n烧写失败");
+                    Console.WriteLine("查询失败");
                     FailFwFunc(CurrentSn, OperatorName);
                     ButtonsStatusChange(true);
                     return;
@@ -288,11 +294,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             ButtonsStatusChange(true);
             */
+
+            //serialPortManagementClass.Close();
         }
 
         private void SuccessfulFwFunc(string CurrentSn, String OperatorName)
         {
-            Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
+            Console.WriteLine("当前板读出序列号为{0}\n烧写成功", CurrentSn);
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
             SaveChangethread.Start();
             SnListToNext(); // 切换到下一个序列号
@@ -312,26 +320,27 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             sntocommandaggregate(data); // 发送到指令帧汇聚模块
             OpenDistrubuteThread(); // 打开状态帧分发的线程
+            Console.WriteLine(FrameBack);
 
             if (data == "F500000000E00300FFFF5F") // 如果是查询硬件序列号的帧
-            {
-                DateTime OpenDistrubuteTime = new DateTime();
+            { 
+                DateTime opendistrubutetime = DateTime.Now;
 
                 while (FrameBack == null)
                 {
-                    DateTime DateTimeNow = new DateTime();
-                    var timeSpan = (DateTimeNow - OpenDistrubuteTime).TotalMilliseconds;
-                    if (timeSpan > 2000) // 如果超时
+                    DateTime datetimenow = DateTime.Now;
+                    var timespan = (datetimenow - opendistrubutetime).TotalMilliseconds;
+                    if (timespan > 2000) // 如果超时
                     {
-                        Console.WriteLine(timeSpan.ToString());
+                        Console.WriteLine(timespan.ToString());
+                        Console.WriteLine("超时");
                         // 超时处理 未完成
                         return false;
                     }
                 }
-                Console.WriteLine("FrameBack:\n");
-                Console.WriteLine(FrameBack);
-                FrameBack = "";
-                Console.WriteLine("结束");
+                //Console.WriteLine("frameback:\t");
+                //Console.WriteLine(FrameBack);
+                Console.WriteLine("SendData结束");
 
                 Thread thread = new Thread(() =>
                 {
@@ -344,9 +353,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             else // 如果是烧写硬件序列号
             {
                 Thread.Sleep(1000);
+                //FrameBack = null;
                 return true;
             }
         }
+
+
 
         /// <summary>
         /// 更改其他按钮的可用信息 在烧写过程中不允许点击其他按钮
@@ -455,8 +467,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         public void getFrameBack(byte[] data)
         {
-            Console.WriteLine("getFrameBack\n");
             FrameBack = StrAndByteProcessClass.bytetoString(data);
+            Console.WriteLine("FrameBack的值为\t", FrameBack);
         }
 
 

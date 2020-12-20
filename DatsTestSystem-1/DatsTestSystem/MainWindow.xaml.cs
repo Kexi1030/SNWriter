@@ -63,10 +63,10 @@ namespace DatsTestSystem
 
         private void init()
         {
-            serialPortManagementClass = new SerialPortManagementClass();
+            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
             commandAggregate = new CommandAggregate();
             statusDistribution = new StatusDistribution();
-            hardwareSerialNumberWriterMainWindow = new HardwareSerialNumberWriterMainWindow();
+            serialPortManagementClass = new SerialPortManagementClass();
 
             TextBoxOutputter outputter;
             outputter = new TextBoxOutputter(hardwareSerialNumberWriterMainWindow.SNFWStatusTextBlock);

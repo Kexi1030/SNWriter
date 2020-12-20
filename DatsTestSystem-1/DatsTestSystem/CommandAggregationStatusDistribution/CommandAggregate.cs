@@ -41,6 +41,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 commandstringList.Add(msg);
             }
             _event.Set();
+            //Console.WriteLine("CommandDataToPortThread Set");
         }
 
         private void CommandDataToPortThread()
@@ -48,6 +49,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             _start = true;
             while(_start)
             {
+                //Console.WriteLine("CommandDataToPortThread Open");
                 string curr_data = null;
                 lock(_commandlock)
                 {
@@ -64,6 +66,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 else 
                 {
                     _event.WaitOne();
+                    //Console.WriteLine("CommandDataToPortThread WaitOne");
                 }
             }
         }

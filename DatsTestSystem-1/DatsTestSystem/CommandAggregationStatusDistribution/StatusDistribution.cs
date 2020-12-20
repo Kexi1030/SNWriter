@@ -23,7 +23,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         public StatusDistribution()
         {
-            AllusefulFrameStart = new List<string>() { "E0" };
+            AllusefulFrameStart = new List<string>() { "E0 " };
 
             _msgLock = new object();
             msgList = new List<byte[]>();
@@ -34,7 +34,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         public void OpenDisThread()
         {
             // 线程打开
-            Console.WriteLine("OpenDisThread\n");
+            //Console.WriteLine("OpenDisThread\n");
             _start = true;
             _distributeThread = new Thread(StartDistributeThread);
             _distributeThread.Start();
@@ -63,12 +63,9 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         /// </summary>
         public void StartDistributeThread()
         {
-            Console.WriteLine("StartDistributeThread Start\n");
             byte[] FrameBack = new byte[] { };
             while(_start)
             {
-                //Console.WriteLine("While Start\n");
-
                 byte[] curr_msg = null; // 当前要处理的数据
                 lock(_msgLock)
                 {
@@ -76,7 +73,6 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                     {
                         curr_msg = msgList[0];
                         msgList.RemoveAt(0); // 移除索引0处的元素
-                        Console.WriteLine("msgList Add Done");
                     }
                 }
 
@@ -84,21 +80,24 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 {
                     //curr_msg.CopyTo(FrameBack, FrameBack.Length);
                     var m = new List<byte>();
-                    m.AddRange(curr_msg);
                     m.AddRange(FrameBack);
+                    m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
-                    Console.WriteLine(FrameBack.Length);
-                    //Thread.Sleep(500);
-                    if(FrameBack.Length >= 106)
+                    //Console.WriteLine(FrameBack.Length);
+                    if (FrameBack.Length >= 106)
                     {
-                        if(AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(2).ToArray()))) // 如果帧头匹配成功
+                        if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(1).ToArray()))) // 如果帧头匹配成功
                         {
+                            //Console.WriteLine("匹配成功！！！！！！！！！！！！！！！！");
                             DataDistrubution(FrameBack.Take(106).ToArray());
-                            Console.WriteLine("_DataToSn Done");
-                            FrameBack = new byte[] { };
+                            //Console.WriteLine("DataDistrubution");
+                            Array.Clear(FrameBack, 0, FrameBack.Length);
+                            Console.WriteLine("FrameBack已清空");
                         }
                         else
                         {
+                            Console.WriteLine("匹配失败！！！！！！！！！！！！！！");
+
                             // 当前帧无用 丢弃 未完成
                         }
                     }
