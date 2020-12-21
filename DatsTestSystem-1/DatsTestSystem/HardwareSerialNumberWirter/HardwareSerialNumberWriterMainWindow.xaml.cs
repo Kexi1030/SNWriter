@@ -187,6 +187,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+            // test
+            OpenDistrubuteThread();
+
             // 串口配置
             serialPortManagementClass.inifPort(portconfiginfo);
             serialPortManagementClass.Open();
@@ -217,6 +220,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
+                Console.WriteLine("烧写前查询检查结束");
                 SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
                 Console.WriteLine("硬件序列号正在写入...");
             }
@@ -234,6 +238,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     return;
                 }
             }
+            FrameBack = null;
 
             // 烧写完进行查询
             if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
@@ -258,6 +263,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     Console.WriteLine("正在进行烧写检查......");
                     bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
+                    Console.WriteLine(EqualOr);
                     if (EqualOr)
                     {
                         SuccessfulFwFunc(CurrentSn, OperatorName);
@@ -319,8 +325,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private bool SendData(string data)
         {
             sntocommandaggregate(data); // 发送到指令帧汇聚模块
-            OpenDistrubuteThread(); // 打开状态帧分发的线程
-            Console.WriteLine(FrameBack);
+            /*OpenDistrubuteThread();*/ // 打开状态帧分发的线程
+            //Console.WriteLine(FrameBack);
 
             if (data == "F500000000E00300FFFF5F") // 如果是查询硬件序列号的帧
             { 
@@ -335,24 +341,33 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                         Console.WriteLine(timespan.ToString());
                         Console.WriteLine("超时");
                         // 超时处理 未完成
+
+                        //Thread closeDistrubuteThread = new Thread(() =>
+                        // {
+                        //     Thread.Sleep(1000);
+                        //     CloseDistrubuteThread();
+                        // });
+                        //closeDistrubuteThread.Start();
+                        //CloseDistrubuteThread();
                         return false;
                     }
                 }
                 //Console.WriteLine("frameback:\t");
                 //Console.WriteLine(FrameBack);
-                Console.WriteLine("SendData结束");
 
-                Thread thread = new Thread(() =>
-                {
-                    Thread.Sleep(1000);
-                    CloseDistrubuteThread();
-                });
-                thread.Start();
+                //Thread thread = new Thread(() =>
+                //{
+                //    Thread.Sleep(1000);
+                //    CloseDistrubuteThread();
+                //});
+                //thread.Start();
+                //CloseDistrubuteThread();
                 return true;
             }
             else // 如果是烧写硬件序列号
             {
                 Thread.Sleep(1000);
+                //CloseDistrubuteThread();
                 //FrameBack = null;
                 return true;
             }
@@ -468,7 +483,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public void getFrameBack(byte[] data)
         {
             FrameBack = StrAndByteProcessClass.bytetoString(data);
-            Console.WriteLine("FrameBack的值为\t", FrameBack);
+            //FrameBack = null;
         }
 
 

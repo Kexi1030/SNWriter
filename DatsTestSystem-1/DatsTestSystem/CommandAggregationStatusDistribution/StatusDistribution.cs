@@ -34,10 +34,10 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         public void OpenDisThread()
         {
             // 线程打开
-            //Console.WriteLine("OpenDisThread\n");
             _start = true;
             _distributeThread = new Thread(StartDistributeThread);
             _distributeThread.Start();
+            Console.WriteLine("分发线程已经打开");
             lock (_msgLock)
             {
                 msgList.Clear();
@@ -47,6 +47,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         public void CloseDisThread()
         {
             _start = false;
+            Console.WriteLine("分发线程已经关闭");
         }
 
         public void AddMsg(byte[] msg)
@@ -83,22 +84,25 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
-                    //Console.WriteLine(FrameBack.Length);
                     if (FrameBack.Length >= 106)
                     {
                         if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(1).ToArray()))) // 如果帧头匹配成功
                         {
                             //Console.WriteLine("匹配成功！！！！！！！！！！！！！！！！");
+                            Console.WriteLine("当前FrameBack大于106 值为{0}", StrAndByteProcessClass.bytetoString(FrameBack.Take(106).ToArray()));
                             DataDistrubution(FrameBack.Take(106).ToArray());
-                            //Console.WriteLine("DataDistrubution");
-                            Array.Clear(FrameBack, 0, FrameBack.Length);
+                            // 已经分发给其他模块将其删除
+                            FrameBack = new byte[] { };
+                            curr_msg = null;
                             Console.WriteLine("FrameBack已清空");
                         }
                         else
                         {
-                            Console.WriteLine("匹配失败！！！！！！！！！！！！！！");
+                            Console.WriteLine("当前收到的帧为无用帧 结束");
 
-                            // 当前帧无用 丢弃 未完成
+                            // 当前帧无用 丢弃
+                            FrameBack = new byte[] { };
+                            curr_msg = null;
                         }
                     }
                 }
