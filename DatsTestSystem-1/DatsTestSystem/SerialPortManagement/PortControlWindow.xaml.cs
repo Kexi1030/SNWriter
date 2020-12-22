@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -65,6 +66,16 @@ namespace DatsTestSystem.SerialPortManagement
             Console.WriteLine("串口配置完成");
 
             this.Close();
+        }
+
+        /// <summary>
+        /// 重写OnClosing方法使窗口能够反复打开
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            e.Cancel = true;
+            this.Hide();
         }
     }
 }

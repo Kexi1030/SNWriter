@@ -96,7 +96,8 @@ namespace DatsTestSystem.SerialPortManagement
                 }
                 catch (InvalidOperationException e)
                 {
-                    Console.WriteLine("Open serial port first, error {0}", e.ToString());
+                    // Console.WriteLine("Open serial port first, error {0}", e.ToString());
+                    Console.WriteLine("当前串口无法操作，请尝试进行串口配置");
                     return;
                 }
             }
@@ -134,7 +135,8 @@ namespace DatsTestSystem.SerialPortManagement
                     }
                     catch (InvalidOperationException e)
                     {
-                        Console.WriteLine("{0}", e.ToString());
+                        //Console.WriteLine("{0}", e.ToString());
+                        Console.WriteLine("当前串口无法操作，请尝试进行串口配置");
                         return;
                     }
                 }

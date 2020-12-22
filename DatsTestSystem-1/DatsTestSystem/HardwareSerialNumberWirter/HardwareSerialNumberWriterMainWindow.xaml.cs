@@ -214,7 +214,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             CurrentString = commandFrameGeneration.FwWriteString;
 
             Console.WriteLine("开始烧写.....");
-            if(!serialPortManagementClass._readThread.IsAlive)
+            if(serialPortManagementClass._readThread.ThreadState == System.Threading.ThreadState.Unstarted)
             {
                 serialPortManagementClass._readThread.Start();
             }
@@ -345,7 +345,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     var timespan = (datetimenow - opendistrubutetime).TotalMilliseconds;
                     if (timespan > 2000) // 如果超时
                     {
-                        Console.WriteLine(timespan.ToString());
+                        //Console.WriteLine(timespan.ToString());
                         Console.WriteLine("超时\t没有收到返回的数据帧");
 
                         //Thread closeDistrubuteThread = new Thread(() =>
@@ -372,7 +372,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
             else // 如果是烧写硬件序列号
             {
-                Thread.Sleep(1000);
+                Thread.Sleep(500);
                 //CloseDistrubuteThread();
                 //FrameBack = null;
                 return true;

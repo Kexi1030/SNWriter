@@ -37,7 +37,10 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             _start = true;
             if(_distributeThread!=null)
             {
-                _distributeThread.Resume();
+                if(_distributeThread.ThreadState == ThreadState.Suspended)
+                {
+                    _distributeThread.Resume();
+                }
             }
             else
             {
