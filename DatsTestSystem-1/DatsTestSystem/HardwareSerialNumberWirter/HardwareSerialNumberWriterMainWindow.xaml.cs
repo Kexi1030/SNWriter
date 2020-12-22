@@ -176,6 +176,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void PortControllerButton_Click(object sender, RoutedEventArgs e)
         {
             portControlWindow.Owner = this;
+            portControlWindow.SerialPortManagementClass = this.serialPortManagementClass;
             portControlWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             portControlWindow.Show();
         }
@@ -187,13 +188,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            // test
+            // 打开状态帧分发的线程
             OpenDistrubuteThread();
 
             // 串口配置
-            serialPortManagementClass.inifPort(portconfiginfo);
-            serialPortManagementClass.Open();
-            Console.WriteLine("串口配置完成");
+            //serialPortManagementClass.inifPort(portconfiginfo);
+            //serialPortManagementClass.Open();
+            //Console.WriteLine("串口配置完成");
 
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
@@ -213,7 +214,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             CurrentString = commandFrameGeneration.FwWriteString;
 
             Console.WriteLine("开始烧写.....");
-            serialPortManagementClass._readThread.Start();
+            if(!serialPortManagementClass._readThread.IsAlive)
+            {
+                serialPortManagementClass._readThread.Start();
+            }
 
 
             //SendData(commandFrameGeneration.FwReadString);
@@ -310,6 +314,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
             SaveChangethread.Start();
             SnListToNext(); // 切换到下一个序列号
+
+            CloseDistrubuteThread(); // 关闭状态帧分发的线程
         }
 
         private void FailFwFunc(string CurrentSn, String OperatorName)
@@ -318,6 +324,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             Console.WriteLine("烧写失败");
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
             SaveChangethread.Start();
+
+            CloseDistrubuteThread(); // 关闭状态帧分发的线程
             MessageBoxPopUpToNextSNOR();
         }
 
@@ -326,7 +334,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             sntocommandaggregate(data); // 发送到指令帧汇聚模块
             /*OpenDistrubuteThread();*/ // 打开状态帧分发的线程
-            //Console.WriteLine(FrameBack);
 
             if (data == "F500000000E00300FFFF5F") // 如果是查询硬件序列号的帧
             { 
@@ -339,8 +346,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     if (timespan > 2000) // 如果超时
                     {
                         Console.WriteLine(timespan.ToString());
-                        Console.WriteLine("超时");
-                        // 超时处理 未完成
+                        Console.WriteLine("超时\t没有收到返回的数据帧");
 
                         //Thread closeDistrubuteThread = new Thread(() =>
                         // {
@@ -502,6 +508,5 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             // 将状态帧的分发模块之前的捆绑消除
             StatusDistribution.DataDistrubution -= this.getFrameBack;
         }
-
     }
 }

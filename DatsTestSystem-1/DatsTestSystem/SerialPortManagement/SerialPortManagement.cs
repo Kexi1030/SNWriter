@@ -43,11 +43,17 @@ namespace DatsTestSystem.SerialPortManagement
 
         public void inifPort(SerialportConfigurationInformation portinfo)
         {
-            serialPort.PortName = portinfo.PortName;
-            serialPort.BaudRate = portinfo.BaudRate;
-            serialPort.DataBits = portinfo.DataBits;
-            serialPort.Parity = (System.IO.Ports.Parity)Convert.ToInt32(portinfo.Parity.ToString());
-            serialPort.StopBits = (System.IO.Ports.StopBits)Convert.ToInt32(portinfo.StopBits);
+            if(!serialPort.IsOpen)
+            {
+                serialPort.PortName = portinfo.PortName;
+                serialPort.BaudRate = portinfo.BaudRate;
+                serialPort.DataBits = portinfo.DataBits;
+                serialPort.Parity = (System.IO.Ports.Parity)Convert.ToInt32(portinfo.Parity.ToString());
+                serialPort.StopBits = (System.IO.Ports.StopBits)Convert.ToInt32(portinfo.StopBits);
+            }
+            else
+            {
+            }
         }
 
         public void Virtualframegeneration()
@@ -142,7 +148,7 @@ namespace DatsTestSystem.SerialPortManagement
 
         public void Open() // 打开串口
         {
-            Debug.Assert((serialPort != null) && (!serialPort.IsOpen));
+            // Debug.Assert((serialPort != null) && (!serialPort.IsOpen));
             try
             {
                 serialPort.Open();

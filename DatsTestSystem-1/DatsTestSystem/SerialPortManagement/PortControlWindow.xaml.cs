@@ -22,7 +22,7 @@ namespace DatsTestSystem.SerialPortManagement
     {
         public SerialportConfigurationInformation configurationInformation { get; set; }
         public HardwareSerialNumberWirter.HardwareSerialNumberWriterMainWindow HardwareSerialNumberWriterMainWindow;
-
+        public SerialPortManagementClass SerialPortManagementClass;
         public PortControlWindow()
         {
             InitializeComponent();
@@ -58,6 +58,12 @@ namespace DatsTestSystem.SerialPortManagement
 
             configurationInformation = serialportConfigurationInformation;
             HardwareSerialNumberWriterMainWindow.portconfiginfo = configurationInformation;
+
+            // 串口配置
+            SerialPortManagementClass.inifPort(configurationInformation);
+            SerialPortManagementClass.Open();
+            Console.WriteLine("串口配置完成");
+
             this.Close();
         }
     }

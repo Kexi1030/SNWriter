@@ -35,9 +35,16 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         {
             // 线程打开
             _start = true;
-            _distributeThread = new Thread(StartDistributeThread);
-            _distributeThread.Start();
-            Console.WriteLine("分发线程已经打开");
+            if(_distributeThread!=null)
+            {
+                _distributeThread.Resume();
+            }
+            else
+            {
+                _distributeThread = new Thread(StartDistributeThread);
+                _distributeThread.Start();
+            }
+            //Console.WriteLine("分发线程已经打开");
             lock (_msgLock)
             {
                 msgList.Clear();
@@ -46,8 +53,9 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         public void CloseDisThread()
         {
-            _start = false;
-            Console.WriteLine("分发线程已经关闭");
+            //_start = false;
+            _distributeThread.Suspend();
+            //Console.WriteLine("分发线程已经关闭");
         }
 
         public void AddMsg(byte[] msg)
@@ -79,7 +87,6 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
                 if(curr_msg != null)
                 {
-                    //curr_msg.CopyTo(FrameBack, FrameBack.Length);
                     var m = new List<byte>();
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
@@ -94,7 +101,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                             // 已经分发给其他模块将其删除
                             FrameBack = new byte[] { };
                             curr_msg = null;
-                            Console.WriteLine("FrameBack已清空");
+                            //Console.WriteLine("FrameBack已清空");
                         }
                         else
                         {
