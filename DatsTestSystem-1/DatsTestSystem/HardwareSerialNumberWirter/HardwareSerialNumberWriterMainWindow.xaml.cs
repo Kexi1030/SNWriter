@@ -191,10 +191,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             // 打开状态帧分发的线程
             OpenDistrubuteThread();
 
-            // 串口配置
-            //serialPortManagementClass.inifPort(portconfiginfo);
-            //serialPortManagementClass.Open();
-            //Console.WriteLine("串口配置完成");
 
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
@@ -219,12 +215,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 serialPortManagementClass._readThread.Start();
             }
 
-
-            //SendData(commandFrameGeneration.FwReadString);
-
-            if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
+            if(SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
-                Console.WriteLine("烧写前查询检查结束");
+                //Console.WriteLine("烧写前查询检查结束");
                 SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
                 Console.WriteLine("硬件序列号正在写入...");
             }
@@ -233,6 +226,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 if (SendData(commandFrameGeneration.FwReadString)) //再次发送查询序列号 如果有返回
                 {
                     SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
+                    Console.WriteLine("硬件序列号正在写入...");
                 }
                 else
                 {
@@ -242,7 +236,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                     return;
                 }
             }
-            FrameBack = null;
 
             // 烧写完进行查询
             if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
@@ -310,7 +303,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void SuccessfulFwFunc(string CurrentSn, String OperatorName)
         {
-            Console.WriteLine("当前板读出序列号为{0}\n烧写成功", CurrentSn);
+            FrameBack = null;
+
+            Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "成功"));
             SaveChangethread.Start();
             SnListToNext(); // 切换到下一个序列号
@@ -320,8 +315,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void FailFwFunc(string CurrentSn, String OperatorName)
         {
-            // Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
-            Console.WriteLine("烧写失败");
+            FrameBack = null;
+
+            Console.WriteLine("烧写失败\n");
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
             SaveChangethread.Start();
 
@@ -358,23 +354,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                         return false;
                     }
                 }
-                //Console.WriteLine("frameback:\t");
-                //Console.WriteLine(FrameBack);
-
-                //Thread thread = new Thread(() =>
-                //{
-                //    Thread.Sleep(1000);
-                //    CloseDistrubuteThread();
-                //});
-                //thread.Start();
-                //CloseDistrubuteThread();
                 return true;
             }
             else // 如果是烧写硬件序列号
             {
-                Thread.Sleep(500);
-                //CloseDistrubuteThread();
-                //FrameBack = null;
+                FrameBack = null;
                 return true;
             }
         }

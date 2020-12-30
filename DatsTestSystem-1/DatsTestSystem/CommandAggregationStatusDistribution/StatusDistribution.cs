@@ -37,17 +37,19 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             _start = true;
             if(_distributeThread!=null)
             {
-                if(_distributeThread.ThreadState == ThreadState.Suspended)
+                if(_distributeThread.ThreadState != ThreadState.Running)
                 {
                     _distributeThread.Resume();
+                    Console.WriteLine(_distributeThread.ThreadState);
+                    Console.WriteLine("线程已经resume");
                 }
             }
             else
             {
                 _distributeThread = new Thread(StartDistributeThread);
                 _distributeThread.Start();
+                Console.WriteLine("线程Start了");
             }
-            //Console.WriteLine("分发线程已经打开");
             lock (_msgLock)
             {
                 msgList.Clear();
@@ -56,9 +58,9 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         public void CloseDisThread()
         {
-            //_start = false;
             _distributeThread.Suspend();
-            //Console.WriteLine("分发线程已经关闭");
+            Console.WriteLine(_distributeThread.ThreadState);
+            Console.WriteLine("分发线程已经挂起");
         }
 
         public void AddMsg(byte[] msg)
@@ -99,7 +101,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                         if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(1).ToArray()))) // 如果帧头匹配成功
                         {
                             //Console.WriteLine("匹配成功！！！！！！！！！！！！！！！！");
-                            Console.WriteLine("当前FrameBack大于106 值为{0}", StrAndByteProcessClass.bytetoString(FrameBack.Take(106).ToArray()));
+                            Console.WriteLine("当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.Take(106).ToArray()));
                             DataDistrubution(FrameBack.Take(106).ToArray());
                             // 已经分发给其他模块将其删除
                             FrameBack = new byte[] { };
