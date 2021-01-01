@@ -21,6 +21,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         AutoResetEvent _event = new AutoResetEvent(false);
 
+        int a = 0;
         public StatusDistribution()
         {
             AllusefulFrameStart = new List<string>() { "E0 " };
@@ -29,26 +30,38 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             msgList = new List<byte[]>();
             //_distributeThread = new Thread(StartDistributeThread);
             //_distributeThread.Start();
+
+            
         }
 
         public void OpenDisThread()
         {
             // 线程打开
             _start = true;
-            if(_distributeThread!=null)
+            if (_distributeThread != null)
             {
-                if(_distributeThread.ThreadState != ThreadState.Running)
+                //if (_distributeThread.ThreadState == ThreadState.SuspendRequested || _distributeThread.ThreadState == ThreadState.Suspended || _distributeThread.ThreadState == ThreadState.WaitSleepJoin)
+                if (_distributeThread.ThreadState != ThreadState.Running)
                 {
-                    _distributeThread.Resume();
-                    Console.WriteLine(_distributeThread.ThreadState);
-                    Console.WriteLine("线程已经resume");
+                    try
+                    {
+                        _distributeThread.Resume();
+                        //Console.WriteLine("线程已经resume");
+                    }
+                    catch
+                    {
+                        // Console.WriteLine("线程resume失败");
+                    }
+
+                    //Console.WriteLine(_distributeThread.ThreadState);
+                    //Console.WriteLine("线程已经resume");
                 }
             }
             else
             {
                 _distributeThread = new Thread(StartDistributeThread);
                 _distributeThread.Start();
-                Console.WriteLine("线程Start了");
+                // Console.WriteLine("线程Start了");
             }
             lock (_msgLock)
             {
@@ -59,8 +72,8 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
         public void CloseDisThread()
         {
             _distributeThread.Suspend();
-            Console.WriteLine(_distributeThread.ThreadState);
-            Console.WriteLine("分发线程已经挂起");
+            //Console.WriteLine(_distributeThread.ThreadState);
+            //Console.WriteLine("分发线程已经挂起");
         }
 
         public void AddMsg(byte[] msg)
@@ -71,28 +84,34 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             }
             _event.Set(); // 唤醒线程
         }
-        
+
         /// <summary>
         /// 用来分发状态帧的线程
         /// </summary>
         public void StartDistributeThread()
         {
             byte[] FrameBack = new byte[] { };
-            while(_start)
+            //int a = 0;
+            while (_start)
             {
                 byte[] curr_msg = null; // 当前要处理的数据
-                lock(_msgLock)
+                lock (_msgLock)
                 {
-                    if(msgList.Count>0)
+                    if (msgList.Count > 0)
                     {
                         curr_msg = msgList[0];
                         msgList.RemoveAt(0); // 移除索引0处的元素
                     }
                 }
 
-                if(curr_msg != null)
+                if (curr_msg != null)
                 {
                     var m = new List<byte>();
+                    if (a == 0)
+                    {
+                        m.AddRange(new byte[] {  1, 1, 1 });
+                        a = 1;
+                    }
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
@@ -101,20 +120,35 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                         if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(1).ToArray()))) // 如果帧头匹配成功
                         {
                             //Console.WriteLine("匹配成功！！！！！！！！！！！！！！！！");
-                            Console.WriteLine("当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.Take(106).ToArray()));
+                            //Console.WriteLine("当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.Take(106).ToArray()));
                             DataDistrubution(FrameBack.Take(106).ToArray());
                             // 已经分发给其他模块将其删除
                             FrameBack = new byte[] { };
-                            curr_msg = null;
                             //Console.WriteLine("FrameBack已清空");
                         }
                         else
                         {
                             Console.WriteLine("当前收到的帧为无用帧 结束");
-
+                            Console.WriteLine("当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.ToArray()));
                             // 当前帧无用 丢弃
-                            FrameBack = new byte[] { };
-                            curr_msg = null;
+                            //{
+                            //    for (int i = 0; i < FrameBack.Length; i++)
+                            //    {
+                            //        byte[] temp = { FrameBack[i] };
+                            //        if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(temp)))
+                            //        {
+                            //            List<byte> t = new List<byte>(FrameBack);
+                            //            t.RemoveRange(0, i);
+                            //            FrameBack = t.ToArray();
+                            //            Console.WriteLine("处理后当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.ToArray()));
+                            //        }
+                            //    }
+                            //}
+
+                            {
+                                FrameBack = new byte[] { };
+                                msgList = new List<byte[]>();
+                            }
                         }
                     }
                 }

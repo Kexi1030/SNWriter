@@ -189,8 +189,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             // 打开状态帧分发的线程
-            OpenDistrubuteThread();
+            // OpenDistrubuteThread();
 
+            SNFWStatusTextBlock.Text = null;
 
             // 将别的按钮设置失效
             ButtonsStatusChange(false);
@@ -215,18 +216,18 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 serialPortManagementClass._readThread.Start();
             }
 
-            if(SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
+            if (SendData(commandFrameGeneration.FwReadString)) // 如果查询发送成功有返回
             {
                 //Console.WriteLine("烧写前查询检查结束");
                 SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
-                Console.WriteLine("硬件序列号正在写入...");
+                Console.WriteLine("硬件序列号正在写入1...");
             }
             else
             {
                 if (SendData(commandFrameGeneration.FwReadString)) //再次发送查询序列号 如果有返回
                 {
                     SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
-                    Console.WriteLine("硬件序列号正在写入...");
+                    Console.WriteLine("硬件序列号正在写入2...");
                 }
                 else
                 {
@@ -260,7 +261,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     Console.WriteLine("正在进行烧写检查......");
                     bool EqualOr = StatusFrameAnalysis.SnComparision(FrameBack, CurrentSn);
-                    Console.WriteLine(EqualOr);
+
+
                     if (EqualOr)
                     {
                         SuccessfulFwFunc(CurrentSn, OperatorName);
@@ -310,7 +312,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             SaveChangethread.Start();
             SnListToNext(); // 切换到下一个序列号
 
-            CloseDistrubuteThread(); // 关闭状态帧分发的线程
+            //CloseDistrubuteThread(); // 关闭状态帧分发的线程
         }
 
         private void FailFwFunc(string CurrentSn, String OperatorName)
@@ -321,7 +323,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             Thread SaveChangethread = new Thread(() => SaveChangeToJson(CurrentSn, OperatorName, "失败"));
             SaveChangethread.Start();
 
-            CloseDistrubuteThread(); // 关闭状态帧分发的线程
+            //CloseDistrubuteThread(); // 关闭状态帧分发的线程
             MessageBoxPopUpToNextSNOR();
         }
 
@@ -329,10 +331,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private bool SendData(string data)
         {
             sntocommandaggregate(data); // 发送到指令帧汇聚模块
-            /*OpenDistrubuteThread();*/ // 打开状态帧分发的线程
+            OpenDistrubuteThread(); // 打开状态帧分发的线程
 
             if (data == "F500000000E00300FFFF5F") // 如果是查询硬件序列号的帧
-            { 
+            {
                 DateTime opendistrubutetime = DateTime.Now;
 
                 while (FrameBack == null)
@@ -354,11 +356,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                         return false;
                     }
                 }
+                CloseDistrubuteThread();
                 return true;
             }
             else // 如果是烧写硬件序列号
             {
                 FrameBack = null;
+                CloseDistrubuteThread();
                 return true;
             }
         }
