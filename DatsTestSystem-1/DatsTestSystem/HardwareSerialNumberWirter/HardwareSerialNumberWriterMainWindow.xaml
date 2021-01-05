@@ -7,6 +7,33 @@
         mc:Ignorable="d"
         Closing="FWWindowClosing"
         Title="HardwareSerialNumberWriterMainWindow" Height="500" Width="800" ResizeMode="NoResize">
+
+    <Window.Resources>
+        <Style TargetType="{x:Type ListBoxItem}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                 VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                                 TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- 设置触发器 -->
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=done}" Value="1">
+                    <Setter Property="Background" Value="green"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Path=done}" Value="-1">
+                    <Setter Property="Background" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1.5*"/>
@@ -44,7 +71,7 @@
         </StackPanel>
 
         <GroupBox Header="硬件序列号列表" FontSize="15" Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Margin="5">
-            <ListBox x:Name="SNList" Margin="5" SelectionChanged="SNList_SelectionChanged"  />
+            <ListBox x:Name="SNList" Margin="5" SelectionChanged="SNList_SelectionChanged"  DisplayMemberPath="snstring"/>
         </GroupBox>
         
         <GroupBox Header="当前序列号" FontSize="15" Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Margin="5">

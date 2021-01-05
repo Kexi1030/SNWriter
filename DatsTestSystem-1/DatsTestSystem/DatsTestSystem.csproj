@@ -89,6 +89,7 @@
     <Compile Include="HardwareSerialNumberWirter\Models\ComboboxDataUsedInInitialSNinfoWindow.cs" />
     <Compile Include="HardwareSerialNumberWirter\Models\JsonModels\EachSNStatus.cs" />
     <Compile Include="HardwareSerialNumberWirter\Models\JsonModels\JsonFormat.cs" />
+    <Compile Include="HardwareSerialNumberWirter\Models\ListBoxItems.cs" />
     <Compile Include="HardwareSerialNumberWirter\Models\OperatorName.cs" />
     <Compile Include="ParameterManagement.cs" />
     <Compile Include="SerialPortManagement\Commands\PortController.cs" />

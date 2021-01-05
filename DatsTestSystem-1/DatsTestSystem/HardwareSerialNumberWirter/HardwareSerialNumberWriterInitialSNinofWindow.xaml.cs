@@ -26,7 +26,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     public partial class HardwareSerialNumberWriterInitialSNinofWindow : Window
     {
 
-        public ObservableCollection<string> observableCollection
+        public ObservableCollection<ListBoxItems> observableCollection
         {
             get;
             set;
@@ -99,11 +99,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             {
                 jsonFormat.SnList = CreateSnListinJsonFormat(jsonFormat);
 
-                ObservableCollection<string> temp = new ObservableCollection<string>();
+                ObservableCollection<ListBoxItems> temp = new ObservableCollection<ListBoxItems>();
 
                 foreach (string i in jsonFormat.SnList)
                 {
-                    temp.Add(i);
+                    temp.Add(new ListBoxItems() { snstring = i });
                 }
                 observableCollection = temp;
 
