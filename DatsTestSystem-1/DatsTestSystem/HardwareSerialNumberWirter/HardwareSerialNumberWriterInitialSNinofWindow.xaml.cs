@@ -25,7 +25,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
     public partial class HardwareSerialNumberWriterInitialSNinofWindow : Window
     {
-
+        public string filename { get; set; }
         public ObservableCollection<ListBoxItems> observableCollection
         {
             get;
@@ -109,7 +109,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
                 // 保存在本地
                 JsonCreate jsonCreate = new JsonCreate();
-                jsonCreate.CreateJson(jsonFormat);
+                jsonCreate.CreateJson(jsonFormat,filename);
 
                 this.Close();
             }
@@ -194,10 +194,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             shortSNSerialNumber += sNinitalize.Year.Substring(2);
             shortSNSerialNumber += sNinitalize.Week.PadLeft(2,'0');
-            Console.WriteLine(sNinitalize.Week.PadLeft(2, '0'));
 
             shortSNSerialNumber += sNinitalize.HardWareNumber;
-            Console.WriteLine(sNinitalize.HardWareNumber);
             shortSNSerialNumber += sNinitalize.FirmWareNumber;
 
             return shortSNSerialNumber;

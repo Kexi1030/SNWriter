@@ -9,19 +9,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
 {
     class JsonCreate
     {
-        /*
-        public void CreateJson(JsonFormat jsonFormat)
-        {
-            JavaScriptSerializer ser = new JavaScriptSerializer();
-            string outputJson = ser.Serialize(jsonFormat);
-            File.WriteAllText("OUTPUT.json", outputJson);
-        }
-        */
-
-        public void CreateJson(JsonFormat jsonFormat)
+        public void CreateJson(JsonFormat jsonFormat,string filename)
         {
             string outputJson = JsonConvert.SerializeObject(jsonFormat, new JsonSerializerSettings() { Formatting = Formatting.Indented });
-            File.WriteAllText(DateTime.Now.ToString("yyyy-MM-dd") + ".json", outputJson); // 保存到
+            File.WriteAllText(filename, outputJson); // 保存
         }
 
         public JsonFormat CreateSNFromJsonFile(string FileLoad)

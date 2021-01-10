@@ -29,6 +29,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public StatusDistribution StatusDistribution;
         public CommandAggregate commandAggregate;
 
+        public string currentjsonfile { get; set; } // 当前操作的json文件路径
         public string CurrentString { get; set; }
         public int selectindex { get; set; }
         private string FrameBack { get; set; }
@@ -80,6 +81,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             HardwareSerialNumberWriterInitialSNinofWindow hardwareSerialNumberWriterInitialSNinofWindow = new HardwareSerialNumberWriterInitialSNinofWindow();
             hardwareSerialNumberWriterInitialSNinofWindow.Owner = this;
             hardwareSerialNumberWriterInitialSNinofWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            currentjsonfile = DateTime.Now.ToString("yyyy-MM-dd") + "_"+this.OperatorNameTextBlock.Text + ".json";
+            hardwareSerialNumberWriterInitialSNinofWindow.filename = currentjsonfile;
             hardwareSerialNumberWriterInitialSNinofWindow.ShowDialog();
 
             if (hardwareSerialNumberWriterInitialSNinofWindow.observableCollection != null)
@@ -118,6 +121,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 JsonCreate jsonCreate = new JsonCreate();
                 this.FileLoad = openFileDialog.FileName.Split('.')[0];
                 JsonFormat JsonData = jsonCreate.CreateSNFromJsonFile(openFileDialog.FileName);
+                currentjsonfile = FileLoad+".json";
 
                 foreach (var i in JsonData.SnList)
                 {
@@ -139,14 +143,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
                 // 写入到Json文件中去
                 JsonCreate jsonCreate = new JsonCreate();
-                JsonFormat ReturnJsonCreate = jsonCreate.CreateSNFromJsonFile(FileLoad + ".json"); // 需要更改 文件路径需要更改
+                JsonFormat ReturnJsonCreate = jsonCreate.CreateSNFromJsonFile(currentjsonfile); // 需要更改 文件路径需要更改
 
                 List<string> newSnList = new List<string>(ReturnJsonCreate.SnList);
                 newSnList.Add(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString);
 
                 ReturnJsonCreate.SnList = newSnList.ToArray();
 
-                jsonCreate.CreateJson(ReturnJsonCreate);
+                jsonCreate.CreateJson(ReturnJsonCreate,currentjsonfile);
             }
         }
 
@@ -190,8 +194,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            // 检查串口是否设置正常
-
             
             //打开状态帧分发的线程
              OpenDistrubuteThread();
@@ -457,7 +459,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 AllStatus[index_temp] = new EachSNStatus() { SnString = currentSn, OperatorName = OperatorName, OperateTime = DateTime.Now.ToString(), Done = status };
             }
             JsonReturn.eachSNStatuses = AllStatus.ToArray();
-            jsonCreate.CreateJson(JsonReturn);
+            jsonCreate.CreateJson(JsonReturn,currentjsonfile);
         }
 
         private void FWWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -471,12 +473,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             bool writealldone = true;
             for(int i = 0;i<sNStringInListBoxes.Count;i++)
             {
-                if(sNStringInListBoxes[i].done == -1)
+                if(sNStringInListBoxes[i].done != 1)
                 {
                     writealldone = false;
+                    break;
                 }
             }
-
 
             if(!writealldone)
             {
@@ -503,6 +505,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 case MessageBoxResult.No:
                     break;
             }
+
+            this.Close();
         }
 
         public void getFrameBack(byte[] data)
