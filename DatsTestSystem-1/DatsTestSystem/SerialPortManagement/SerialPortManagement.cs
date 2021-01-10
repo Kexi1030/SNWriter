@@ -184,14 +184,6 @@ namespace DatsTestSystem.SerialPortManagement
         public string StringBack { get; set; }
 
         private SerialPort serialPort = new SerialPort();
-        private static SerialportConfigurationInformation DefaultSerialPortInfo = new SerialportConfigurationInformation()
-        {
-            PortName = "COM4",
-            BaudRate = 9600,
-            DataBits = 8,
-            StopBits = "1"
-        }; // 这里需要默认端口信息
-
 
         /// <summary>
         /// 发送数据

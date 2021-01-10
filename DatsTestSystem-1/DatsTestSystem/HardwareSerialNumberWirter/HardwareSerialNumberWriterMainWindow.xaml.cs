@@ -222,7 +222,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            
+            // 如果更换了串口状态需要重新连接
+
+
             //打开状态帧分发的线程
              OpenDistrubuteThread();
          
@@ -248,6 +250,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             Console.WriteLine("开始烧写.....");
             if(serialPortManagementClass._readThread.ThreadState == System.Threading.ThreadState.Unstarted)
             {
+                //Console.WriteLine("打开了串口的读线程");
                 serialPortManagementClass._readThread.Start();
             }
 
@@ -255,7 +258,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             {
                 //Console.WriteLine("烧写前查询检查结束");
                 SendData(commandFrameGeneration.FwWriteString); // 烧写硬件序列号
-                Console.WriteLine(commandFrameGeneration.FwWriteString);
+                //Console.WriteLine(commandFrameGeneration.FwWriteString);
                 Console.WriteLine("硬件序列号正在写入...");
             }
             else
@@ -433,8 +436,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             return ReturnString;
         }
-
-
 
         /// <summary>
         /// 弹出框询问是否跳过当前的序列号 

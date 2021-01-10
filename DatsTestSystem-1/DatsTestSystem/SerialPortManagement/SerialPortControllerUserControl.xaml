@@ -17,7 +17,7 @@
                     <RowDefinition Height="1*"/>
                 </Grid.RowDefinitions>
                 <StackPanel Orientation="Horizontal" Margin="5" Grid.Row="0">
-                    <ComboBox Name="PortNamesComboBox" Margin="5,10,15,10" FontSize="20" Width="220"/>
+                    <ComboBox Name="PortNamesComboBox" Margin="5,10,15,10" FontSize="20" Width="220" SelectionChanged="PortNamesComboBox_SelectionChanged"/>
                     <Label Content="端口" Margin="5" FontSize="20"/>
                 </StackPanel>
 

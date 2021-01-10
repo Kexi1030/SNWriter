@@ -47,5 +47,9 @@ namespace DatsTestSystem.SerialPortManagement
             ParityComboBox.SelectedIndex = 0;
         }
 
+        private void PortNamesComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

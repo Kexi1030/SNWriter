@@ -60,12 +60,19 @@ namespace DatsTestSystem.SerialPortManagement
             configurationInformation = serialportConfigurationInformation;
             HardwareSerialNumberWriterMainWindow.portconfiginfo = configurationInformation;
 
-            // 串口配置
+            PortChangedFunc();
+
+            this.Close();
+        }
+
+        /// <summary>
+        /// 串口配置
+        /// </summary>
+        public void PortChangedFunc()
+        {
             SerialPortManagementClass.inifPort(configurationInformation);
             SerialPortManagementClass.Open();
             Console.WriteLine("串口配置完成");
-
-            this.Close();
         }
 
         /// <summary>
@@ -76,6 +83,11 @@ namespace DatsTestSystem.SerialPortManagement
         {
             e.Cancel = true;
             this.Hide();
+        }
+
+        private void SerialPortController_Loaded(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
