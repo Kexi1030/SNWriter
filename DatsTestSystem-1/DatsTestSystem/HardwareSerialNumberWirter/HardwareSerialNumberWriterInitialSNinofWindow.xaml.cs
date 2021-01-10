@@ -120,7 +120,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
         }
 
-
         private string[] CreateSnListinJsonFormat(JsonFormat sNinitalize)
         {
             string SerialNumber = sNinitalize.SerialNumber;
@@ -194,9 +193,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
 
             shortSNSerialNumber += sNinitalize.Year.Substring(2);
-            shortSNSerialNumber += sNinitalize.Week;
+            shortSNSerialNumber += sNinitalize.Week.PadLeft(2,'0');
+            Console.WriteLine(sNinitalize.Week.PadLeft(2, '0'));
 
             shortSNSerialNumber += sNinitalize.HardWareNumber;
+            Console.WriteLine(sNinitalize.HardWareNumber);
             shortSNSerialNumber += sNinitalize.FirmWareNumber;
 
             return shortSNSerialNumber;

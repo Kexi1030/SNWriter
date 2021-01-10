@@ -31,9 +31,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Models
 
         public List<WeekOfYear> weekOfYears = new List<WeekOfYear>()
             {
-                new WeekOfYear(){weekofyear = ((DateTime.Now.DayOfYear/7)-1).ToString()},
                 new WeekOfYear(){weekofyear = (DateTime.Now.DayOfYear/7).ToString()},
-                new WeekOfYear(){weekofyear = ((DateTime.Now.DayOfYear/7)+1).ToString()},
+                new WeekOfYear(){weekofyear = (DateTime.Now.DayOfYear/7 + 1).ToString()},
+                new WeekOfYear(){weekofyear = ((DateTime.Now.DayOfYear/7)+2).ToString()},
             };
     }
     class ModelSelect

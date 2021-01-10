@@ -12,7 +12,6 @@ using DatsTestSystem.HardwareSerialNumberWirter;
 
 namespace DatsTestSystem.SerialPortManagement
 {
-
     public class SerialPortManagementClass
     {
         public delegate void DataReadyHandler(byte[] data);

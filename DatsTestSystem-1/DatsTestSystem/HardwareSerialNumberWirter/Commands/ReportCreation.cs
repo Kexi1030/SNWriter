@@ -42,7 +42,17 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         {
             Document document = new Document(); // 创建一个文件
 
-            PdfWriter.GetInstance(document, new FileStream(fileload+".pdf", FileMode.Create)); // pdf的实例化到当前文件夹
+            /*
+            // 如果report文件已经存在 就在原来的基础上进行修改
+            if (File.Exists(fileload + "_report.pdf"))
+            {
+                PdfWriter.GetInstance(document, new FileStream(fileload+"_report.pdf",FileMode.)
+            }
+            else
+                PdfWriter.GetInstance(document, new FileStream(fileload + "_report.pdf", FileMode.OpenOrCreate)); // pdf的实例化到当前文件夹
+            */
+
+            PdfWriter.GetInstance(document, new FileStream(fileload + "_report.pdf", FileMode.OpenOrCreate)); // pdf的实例化到当前文件夹
             BaseFont baseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\SIMSUN.TTC,1", BaseFont.IDENTITY_H, BaseFont.NOT_CACHED);//找到基础字体
             Font contentFont = new Font(baseFont, 12);//创建一个新的字体
 

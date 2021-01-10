@@ -29,9 +29,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
             _msgLock = new object();
             msgList = new List<byte[]>();
             //_distributeThread = new Thread(StartDistributeThread);
-            //_distributeThread.Start();
-
-            
+            //_distributeThread.Start(); 
         }
 
         public void OpenDisThread()
@@ -107,11 +105,12 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 if (curr_msg != null)
                 {
                     var m = new List<byte>();
-                    if (a == 0)
-                    {
-                        m.AddRange(new byte[] {  1, 1, 1 });
-                        a = 1;
-                    }
+                    // 添加无用信息
+                    //if (a == 0)
+                    //{
+                    //    m.AddRange(new byte[] {  1, 1, 1 });
+                    //    a = 1;
+                    //}
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
