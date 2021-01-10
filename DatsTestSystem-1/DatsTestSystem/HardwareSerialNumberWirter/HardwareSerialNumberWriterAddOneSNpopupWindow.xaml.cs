@@ -31,21 +31,28 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void DefineOneSNButton_Click(object sender, RoutedEventArgs e)
         {
-            addOneSnString = SNInputBox.Text.Trim();
-
-            this.Close();
+            string x = SNInputBox.Text.Trim();
+            if (x.Substring(0,2) != "00")
+                MessageBox.Show("当前序列号输入有误，请重新输入");
+            else if(x.Substring(2,2) != "82")
+                MessageBox.Show("当前序列号输入有误，请重新输入");
+            else if(x.Substring(4,2) != "02" && x.Substring(4, 2) != "03" && x.Substring(4, 2) != "04" && x.Substring(4, 2) != "05")
+                MessageBox.Show("当前序列号输入有误，请重新输入");
+            else if(x.Substring(6,2) != "00" && x.Substring(6,2) != "01")
+                MessageBox.Show("当前序列号输入有误，请重新输入");
+            else
+                this.Close();
         }
 
         private void SNInputBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            // 还需要对SN进行逻辑判断 缺
-            if (SNInputBox.Text.Trim().Length > 0)
+            if (SNInputBox.Text.Trim().Length != 20)
             {
-                DefineOneSNButton.IsEnabled = true;
+                DefineOneSNButton.IsEnabled = false;
             }
             else
             {
-                DefineOneSNButton.IsEnabled = false;
+                DefineOneSNButton.IsEnabled = true;
             }
         }
     }

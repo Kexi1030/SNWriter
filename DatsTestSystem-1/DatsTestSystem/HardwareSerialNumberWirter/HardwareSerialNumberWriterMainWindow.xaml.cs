@@ -127,6 +127,34 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     sNStringInListBoxes.Add(new ListBoxItems() { snstring = StringProcess(i), done = 0 });
                 }
+                // 将状态写入
+                foreach (var i in JsonData.eachSNStatuses)
+                {
+                    if (i.Done == "成功")
+                    {
+                        int indextemp = -1;
+                        for(int x = 0;x<sNStringInListBoxes.Count;x++)
+                        {
+                            if(sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                            {
+                                indextemp = x;
+                            }
+                        }
+                        sNStringInListBoxes[indextemp].done = 1;
+                    }
+                    else if (i.Done == "失败")
+                    {
+                        int indextemp = -1;
+                        for (int x = 0; x < sNStringInListBoxes.Count; x++)
+                        {
+                            if (sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                            {
+                                indextemp = x;
+                            }
+                        }
+                        sNStringInListBoxes[indextemp].done = -1;
+                    }
+                }
             }
         }
 
