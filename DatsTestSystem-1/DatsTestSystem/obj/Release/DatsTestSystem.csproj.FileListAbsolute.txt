@@ -29,3 +29,4 @@ F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Release\DatsTe
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Release\DatsTestSystem.exe
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Release\DatsTestSystem.pdb
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Release\DatsTestSystem.csproj.Fody.CopyLocal.cache
+F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Release\DatsTestSystem.csprojAssemblyReference.cache

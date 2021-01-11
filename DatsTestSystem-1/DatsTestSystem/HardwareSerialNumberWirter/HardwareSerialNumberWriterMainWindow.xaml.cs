@@ -47,6 +47,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             InitializeComponent();
             portControlWindow = new PortControlWindow();
+            portControlWindow.Title = "串口配置";
             portControlWindow.HardwareSerialNumberWriterMainWindow = this;
             portControlWindow.initConfigurationInformation();
 
@@ -60,7 +61,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public void ShowOperatorNameInputWindow()
         {
             HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
-            // hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
+            hardwareSerialNumberWriterInputUserNameWindow.Title = "用户名称";
             hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
 
@@ -79,6 +80,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void InitialButton_Click(object sender, RoutedEventArgs e)
         {
             HardwareSerialNumberWriterInitialSNinofWindow hardwareSerialNumberWriterInitialSNinofWindow = new HardwareSerialNumberWriterInitialSNinofWindow();
+            hardwareSerialNumberWriterInitialSNinofWindow.Title = "序列号配置";
             hardwareSerialNumberWriterInitialSNinofWindow.Owner = this;
             hardwareSerialNumberWriterInitialSNinofWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             currentjsonfile = DateTime.Now.ToString("yyyy-MM-dd") + "_"+this.OperatorNameTextBlock.Text + ".json";
@@ -99,6 +101,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void ModifyUserName_Click(object sender, RoutedEventArgs e)
         {
             HardwareSerialNumberWriterInputUserNameWindow hardwareSerialNumberWriterInputUserNameWindow = new HardwareSerialNumberWriterInputUserNameWindow();
+            hardwareSerialNumberWriterInputUserNameWindow.Title = "用户名称修改";
             hardwareSerialNumberWriterInputUserNameWindow.Owner = this;
             hardwareSerialNumberWriterInputUserNameWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             hardwareSerialNumberWriterInputUserNameWindow.ShowDialog();
@@ -127,33 +130,37 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     sNStringInListBoxes.Add(new ListBoxItems() { snstring = StringProcess(i), done = 0 });
                 }
-                // 将状态写入
-                foreach (var i in JsonData.eachSNStatuses)
+                if(JsonData.eachSNStatuses != null)
                 {
-                    if (i.Done == "成功")
+                    // 将状态写入
+                    foreach (var i in JsonData.eachSNStatuses)
                     {
-                        int indextemp = -1;
-                        for(int x = 0;x<sNStringInListBoxes.Count;x++)
+                        if (i.Done == "成功")
                         {
-                            if(sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                            int indextemp = -1;
+                            for (int x = 0; x < sNStringInListBoxes.Count; x++)
                             {
-                                indextemp = x;
+                                if (sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                                {
+                                    indextemp = x;
+                                }
                             }
+                            sNStringInListBoxes[indextemp].done = 1;
                         }
-                        sNStringInListBoxes[indextemp].done = 1;
-                    }
-                    else if (i.Done == "失败")
-                    {
-                        int indextemp = -1;
-                        for (int x = 0; x < sNStringInListBoxes.Count; x++)
+                        else if (i.Done == "失败")
                         {
-                            if (sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                            int indextemp = -1;
+                            for (int x = 0; x < sNStringInListBoxes.Count; x++)
                             {
-                                indextemp = x;
+                                if (sNStringInListBoxes[x].done == 0 && sNStringInListBoxes[x].snstring == StringProcess(i.SnString))
+                                {
+                                    indextemp = x;
+                                }
                             }
+                            sNStringInListBoxes[indextemp].done = -1;
                         }
-                        sNStringInListBoxes[indextemp].done = -1;
                     }
+               
                 }
             }
         }
@@ -161,6 +168,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
         {
             HardwareSerialNumberWriterAddOneSNpopupWindow hardwareSerialNumberWriterAddOneSNpopupWindow = new HardwareSerialNumberWriterAddOneSNpopupWindow();
+            hardwareSerialNumberWriterAddOneSNpopupWindow.Title = "添加单条序列号";
             hardwareSerialNumberWriterAddOneSNpopupWindow.Owner = this;
             hardwareSerialNumberWriterAddOneSNpopupWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             hardwareSerialNumberWriterAddOneSNpopupWindow.ShowDialog();
@@ -558,6 +566,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             // 将状态帧的分发模块之前的捆绑消除
             StatusDistribution.DataDistrubution -= this.getFrameBack;
+            System.Environment.Exit(0); // 彻底退出程序
         }
     }
 }

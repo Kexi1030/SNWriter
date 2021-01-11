@@ -148,6 +148,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                                 FrameBack = new byte[] { };
                                 msgList = new List<byte[]>();
                             }
+
                         }
                     }
                 }

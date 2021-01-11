@@ -97,9 +97,6 @@ C:\Users\18304\Desktop\SNWriter-master\DatsTestSystem\obj\Debug\DatsTestSystem.c
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\DatsTestSystem.exe.config
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\DatsTestSystem.exe
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\DatsTestSystem.pdb
-F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\BouncyCastle.Crypto.dll
-F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\itextsharp.dll
-F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\Newtonsoft.Json.dll
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\itextsharp.xml
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\Newtonsoft.Json.xml
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.csprojAssemblyReference.cache
@@ -196,3 +193,4 @@ C:\Users\Luohn\Downloads\Compressed\SNWriter-master\DatsTestSystem-1\DatsTestSys
 C:\Users\Luohn\Downloads\Compressed\SNWriter-master\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.csproj.CopyComplete
 C:\Users\Luohn\Downloads\Compressed\SNWriter-master\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.exe
 C:\Users\Luohn\Downloads\Compressed\SNWriter-master\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.pdb
+F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.csproj.Fody.CopyLocal.cache
