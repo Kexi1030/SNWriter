@@ -52,7 +52,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
                 PdfWriter.GetInstance(document, new FileStream(fileload + "_report.pdf", FileMode.OpenOrCreate)); // pdf的实例化到当前文件夹
             */
 
-            PdfWriter.GetInstance(document, new FileStream(fileload + "_report.pdf", FileMode.OpenOrCreate)); // pdf的实例化到当前文件夹
+            PdfWriter.GetInstance(document, new FileStream(fileload + "_报告.pdf", FileMode.OpenOrCreate)); // pdf的实例化到当前文件夹
             BaseFont baseFont = BaseFont.CreateFont(@"C:\Windows\Fonts\SIMSUN.TTC,1", BaseFont.IDENTITY_H, BaseFont.NOT_CACHED);//找到基础字体
             Font contentFont = new Font(baseFont, 12);//创建一个新的字体
 

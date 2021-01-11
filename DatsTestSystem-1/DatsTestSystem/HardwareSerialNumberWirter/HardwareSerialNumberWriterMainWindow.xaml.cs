@@ -121,6 +121,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             openFileDialog.InitialDirectory = System.Windows.Forms.Application.StartupPath;
             if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                // 如果之前的序列号列表已经有值了则需要清除重新导入
+                if(sNStringInListBoxes.Count > 0)
+                {
+                    sNStringInListBoxes.Clear();
+                }
+
                 JsonCreate jsonCreate = new JsonCreate();
                 this.FileLoad = openFileDialog.FileName.Split('.')[0];
                 JsonFormat JsonData = jsonCreate.CreateSNFromJsonFile(openFileDialog.FileName);
@@ -506,6 +512,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void EndButton_Click(object sender, RoutedEventArgs e)
         {
+            if(sNStringInListBoxes.Count == 0)// 如果当前序列号还没有导入
+            {
+                MessageBox.Show("请导入配置文件或者新建序列号", "错误",MessageBoxButton.OK,MessageBoxImage.Error);
+                return;
+            }
+
             // 对当前硬件序列号列表进行判断是否全部烧写完成 如果没有完成弹窗提醒
             bool writealldone = true;
             for(int i = 0;i<sNStringInListBoxes.Count;i++)
@@ -537,7 +549,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             switch (messageBoxResult)
             {
                 case MessageBoxResult.Yes:
-                    Process.Start(FileLoad + "_report.pdf");
+                    Process.Start(FileLoad + "_报告.pdf");
                     break;
                 case MessageBoxResult.No:
                     break;
