@@ -87,6 +87,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             hardwareSerialNumberWriterInitialSNinofWindow.filename = currentjsonfile;
             hardwareSerialNumberWriterInitialSNinofWindow.ShowDialog();
 
+            if (sNStringInListBoxes.Count > 0)
+                sNStringInListBoxes.Clear();
+
             if (hardwareSerialNumberWriterInitialSNinofWindow.observableCollection != null)
             {
                 foreach (var i in hardwareSerialNumberWriterInitialSNinofWindow.observableCollection)
@@ -126,6 +129,9 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 {
                     sNStringInListBoxes.Clear();
                 }
+
+                string[] xstring = openFileDialog.FileName.Split('\\');
+                this.Title = xstring[xstring.Length - 1];
 
                 JsonCreate jsonCreate = new JsonCreate();
                 this.FileLoad = openFileDialog.FileName.Split('.')[0];

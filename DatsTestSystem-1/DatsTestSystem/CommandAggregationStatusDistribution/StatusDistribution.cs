@@ -105,12 +105,12 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 if (curr_msg != null)
                 {
                     var m = new List<byte>();
-                    // 添加无用信息
-                    //if (a == 0)
-                    //{
-                    //    m.AddRange(new byte[] {  1, 1, 1 });
-                    //    a = 1;
-                    //}
+                    //添加无用信息
+                    if (a == 0)
+                    {
+                        m.AddRange(new byte[] { 1, 1, 1 });
+                        a = 1;
+                    }
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
@@ -129,25 +129,26 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                         {
                             Console.WriteLine("当前收到的帧为无用帧 结束");
                             Console.WriteLine("当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.ToArray()));
-                            // 当前帧无用 丢弃
-                            //{
-                            //    for (int i = 0; i < FrameBack.Length; i++)
-                            //    {
-                            //        byte[] temp = { FrameBack[i] };
-                            //        if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(temp)))
-                            //        {
-                            //            List<byte> t = new List<byte>(FrameBack);
-                            //            t.RemoveRange(0, i);
-                            //            FrameBack = t.ToArray();
-                            //            Console.WriteLine("处理后当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.ToArray()));
-                            //        }
-                            //    }
-                            //}
-
+                            // 当前帧无用 丢弃 下面的这种方法可以解决帧错位结果  错误
                             {
-                                FrameBack = new byte[] { };
-                                msgList = new List<byte[]>();
+                                for (int i = 0; i < FrameBack.Length; i++)
+                                {
+                                    byte[] temp = { FrameBack[i] };
+                                    if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(temp)))
+                                    {
+                                        List<byte> t = new List<byte>(FrameBack);
+                                        t.RemoveRange(0, i);
+                                        FrameBack = t.ToArray();
+                                        Console.WriteLine("处理后当前FrameBack{0}", StrAndByteProcessClass.bytetoString(FrameBack.ToArray()));
+                                    }
+                                }
                             }
+
+
+                            //{
+                            //    FrameBack = new byte[] { };
+                            //    msgList = new List<byte[]>();
+                            //}
 
                         }
                     }

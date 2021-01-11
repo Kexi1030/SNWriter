@@ -23,15 +23,15 @@
   "eachSNStatuses": [
     {
       "SnString": "00820300210200015152",
-      "Done": "失败",
-      "OperateTime": "2021/1/11 星期一 下午 9:02:29",
-      "OperatorName": "测试人员1"
+      "Done": "成功",
+      "OperateTime": "2021/1/11 星期一 下午 10:36:58",
+      "OperatorName": "测试"
     },
     {
       "SnString": "00820300210200025152",
       "Done": "成功",
-      "OperateTime": "2021/1/10 星期日 下午 4:49:58",
-      "OperatorName": "测试人员10"
+      "OperateTime": "2021/1/11 星期一 下午 10:17:06",
+      "OperatorName": "测试"
     },
     {
       "SnString": "00820300210200035152",
@@ -66,14 +66,20 @@
     {
       "SnString": "00820300210200105152",
       "Done": "成功",
-      "OperateTime": "2021/1/10 星期日 下午 5:18:59",
-      "OperatorName": "ss"
+      "OperateTime": "2021/1/11 星期一 下午 10:37:22",
+      "OperatorName": "测试"
     },
     {
       "SnString": "00820300210200085152",
       "Done": "成功",
       "OperateTime": "2021/1/10 星期日 下午 9:41:39",
       "OperatorName": "罗浩楠"
+    },
+    {
+      "SnString": "00820300210200095152",
+      "Done": "成功",
+      "OperateTime": "2021/1/11 星期一 下午 10:37:17",
+      "OperatorName": "测试"
     }
   ]
 }
