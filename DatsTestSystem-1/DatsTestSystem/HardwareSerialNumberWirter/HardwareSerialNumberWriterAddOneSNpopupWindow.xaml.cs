@@ -33,13 +33,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         {
             string x = SNInputBox.Text.Trim();
             if (x.Substring(0, 2) != "00")
-                MessageBox.Show("当前序列号输入有误，请重新输入");
+                MessageBox.Show("当前序列号输入有误，请重新输入", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (x.Substring(2, 2) != "82")
-                MessageBox.Show("当前序列号输入有误，请重新输入");
+                MessageBox.Show("当前序列号输入有误，请重新输入", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (x.Substring(4, 2) != "02" && x.Substring(4, 2) != "03" && x.Substring(4, 2) != "04" && x.Substring(4, 2) != "05")
-                MessageBox.Show("当前序列号输入有误，请重新输入");
+                MessageBox.Show("当前序列号输入有误，请重新输入", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             else if (x.Substring(6, 2) != "00" && x.Substring(6, 2) != "01")
-                MessageBox.Show("当前序列号输入有误，请重新输入");
+                MessageBox.Show("当前序列号输入有误，请重新输入", "错误", MessageBoxButton.OK, MessageBoxImage.Error);
             else
             {
                 // 将单条序列号加入到列表中

@@ -150,6 +150,11 @@ namespace DatsTestSystem.SerialPortManagement
         public void Open() // 打开串口
         {
             // Debug.Assert((serialPort != null) && (!serialPort.IsOpen));
+            if(serialPort.IsOpen)
+            {
+                serialPort.Close();
+                // 关闭现在正在运行的线程
+            }
             try
             {
                 serialPort.Open();

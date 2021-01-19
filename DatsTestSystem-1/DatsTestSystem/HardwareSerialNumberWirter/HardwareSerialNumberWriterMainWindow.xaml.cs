@@ -237,7 +237,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             //Console.WriteLine(SNList.SelectedIndex);
             //Console.WriteLine("a:{0}", a);
             //a = SNList.SelectedIndex;
-            CurrentSNTextBlock.Text = sNStringInListBoxes[a].snstring;
+            try
+            {
+                CurrentSNTextBlock.Text = sNStringInListBoxes[a].snstring;
+            }
+            catch (Exception ex)
+
+            { }
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)

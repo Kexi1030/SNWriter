@@ -106,11 +106,11 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                 {
                     var m = new List<byte>();
                     //添加无用信息
-                    if (a == 0)
-                    {
-                        m.AddRange(new byte[] { 1, 1, 1 });
-                        a = 1;
-                    }
+                    //if (a == 0)
+                    //{
+                    //    m.AddRange(new byte[] { 1, 1, 1 });
+                    //    a = 1;
+                    //}
                     m.AddRange(FrameBack);
                     m.AddRange(curr_msg);
                     FrameBack = m.ToArray();
