@@ -9,6 +9,7 @@ using DatsTestSystem.SerialPortManagement;
 using DatsTestSystem.CommandAggregationStatusDistribution;
 using System.IO;
 using System.Windows.Controls;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem
 {

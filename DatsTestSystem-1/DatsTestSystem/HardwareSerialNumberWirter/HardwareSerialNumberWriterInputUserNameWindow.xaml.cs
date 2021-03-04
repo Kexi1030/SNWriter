@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using DatsTestSystem.HardwareSerialNumberWirter.Models;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -21,7 +22,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
     public partial class HardwareSerialNumberWriterInputUserNameWindow : Window
     {
         public OperatorName operatorName { get; set; } = null;
-
         public bool NameOr { get; set; } = false; // 是否输入了名字
 
         public HardwareSerialNumberWriterInputUserNameWindow()
@@ -47,6 +47,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             operatorName = new OperatorName() { operatorname = NameInputBox.Text.Trim() };
             NameOr = true;
 
+            Logger.Debug("OperatorName---" + NameInputBox.Text.Trim());
             this.Close();
         }
     }

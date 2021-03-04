@@ -12,6 +12,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using DatsTestSystem.Log;
 using DatsTestSystem.SerialPortManagement.Models;
 
 namespace DatsTestSystem.SerialPortManagement
@@ -72,6 +73,7 @@ namespace DatsTestSystem.SerialPortManagement
         {
             SerialPortManagementClass.inifPort(configurationInformation);
             SerialPortManagementClass.Open();
+            Logger.Debug("Init Port Done---" + configurationInformation.PortName + "---"+ configurationInformation.BaudRate + "---" + configurationInformation.Parity + "---" + configurationInformation.DataBits + "---" + configurationInformation.StopBits);
             Console.WriteLine("串口配置完成");
         }
 

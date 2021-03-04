@@ -8,6 +8,7 @@ using DatsTestSystem.SerialPortManagement.Models;
 using System.Threading;
 using System.Windows;
 using DatsTestSystem.HardwareSerialNumberWirter.Commands;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem.CommandAggregationStatusDistribution
 {
@@ -36,6 +37,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
 
         public void AddMsg(string msg)
         {
+            //Logger.Info("CommandAggregate Get---" + msg);
             lock (_commandlock)
             {
                 commandstringList.Add(msg);

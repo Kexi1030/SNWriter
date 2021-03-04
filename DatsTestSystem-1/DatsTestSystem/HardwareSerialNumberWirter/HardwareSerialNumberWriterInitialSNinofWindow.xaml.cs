@@ -15,6 +15,7 @@ using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using DatsTestSystem.HardwareSerialNumberWirter.Commands;
 using DatsTestSystem.HardwareSerialNumberWirter.Models;
 using System.Collections.ObjectModel;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -31,7 +32,6 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             get;
             set;
         }
-
 
         public HardwareSerialNumberWriterInitialSNinofWindow()
         {
@@ -95,6 +95,10 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             jsonFormat.HardWareNumber = HardWareNumberTextBox.Text;
             jsonFormat.FirmWareNumber = FirmWareNumberTextBox.Text;
 
+            // log
+            Logger.Debug(ModelSelectComboBox.Text + "---" + PCBASelectComboBox.Text + "---" + YearSelectComboBox.Text + "---"
+                + WeekSelectComboBox.Text + "---" + SerialNumberTextBox.Text + "---" + HardWareNumberTextBox.Text + "---" + FirmWareNumberTextBox.Text + "---created_waiting for saving in json file");
+
             try
             {
                 jsonFormat.SnList = CreateSnListinJsonFormat(jsonFormat);
@@ -118,6 +122,8 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 MessageBox.Show(ex.Message);
                 MessageBox.Show("输入有误请检查");
             }
+
+
         }
 
         private string[] CreateSnListinJsonFormat(JsonFormat sNinitalize)

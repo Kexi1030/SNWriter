@@ -3,6 +3,7 @@ using System.IO;
 using System.Web.Script.Serialization;
 using DatsTestSystem.HardwareSerialNumberWirter.Models.JsonModels;
 using Newtonsoft.Json;
+using DatsTestSystem.Log;
 
 
 namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
@@ -13,6 +14,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter.Commands
         {
             string outputJson = JsonConvert.SerializeObject(jsonFormat, new JsonSerializerSettings() { Formatting = Formatting.Indented });
             File.WriteAllText(filename, outputJson); // 保存
+            Logger.Debug("Json file written done");
         }
 
         public JsonFormat CreateSNFromJsonFile(string FileLoad)

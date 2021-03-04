@@ -15,6 +15,7 @@ using System.Threading.Tasks;
 using System.Diagnostics;
 using System.Text;
 using DatsTestSystem.SerialPortManagement.Models;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem.HardwareSerialNumberWirter
 {
@@ -28,6 +29,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         public StatusDistribution StatusDistribution;
         public CommandAggregate commandAggregate;
+       
 
         public string currentjsonfile { get; set; } // 当前操作的json文件路径
         public string CurrentString { get; set; }
@@ -46,10 +48,12 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
         public HardwareSerialNumberWriterMainWindow()
         {
             InitializeComponent();
+
             portControlWindow = new PortControlWindow();
             portControlWindow.Title = "串口配置";
             portControlWindow.HardwareSerialNumberWriterMainWindow = this;
             portControlWindow.initConfigurationInformation();
+
 
             this.Closing += windowClosingFunc;
 
@@ -112,12 +116,13 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             if (hardwareSerialNumberWriterInputUserNameWindow.operatorName != null)
             {
                 this.OperatorNameTextBlock.DataContext = hardwareSerialNumberWriterInputUserNameWindow.operatorName;
+                Logger.Debug("Operator Name Change to " + hardwareSerialNumberWriterInputUserNameWindow.operatorName.operatorname);
             }
-
         }
 
         private void InitialSNListFromFileButton_Click(object sender, RoutedEventArgs e)
         {
+            Logger.Debug("Loading From Json File......");
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Title = "请选择需要导入的Json配置文件";
             openFileDialog.Filter = "json files (*.json)|*.json|All files (*.*)|*.*";
@@ -137,6 +142,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
                 this.FileLoad = openFileDialog.FileName.Split('.')[0];
                 JsonFormat JsonData = jsonCreate.CreateSNFromJsonFile(openFileDialog.FileName);
                 currentjsonfile = FileLoad+".json";
+                Logger.Debug("Load From Json File Done----" + currentjsonfile);
 
                 foreach (var i in JsonData.SnList)
                 {
@@ -179,6 +185,11 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void AddOneSNstringButton_Click(object sender, RoutedEventArgs e)
         {
+            if(currentjsonfile == null)
+            {
+                System.Windows.MessageBox.Show("请先新建或者从文件中导入", "添加错误", MessageBoxButton.OK);
+                return;
+            }
             HardwareSerialNumberWriterAddOneSNpopupWindow hardwareSerialNumberWriterAddOneSNpopupWindow = new HardwareSerialNumberWriterAddOneSNpopupWindow();
             hardwareSerialNumberWriterAddOneSNpopupWindow.Title = "添加单条序列号";
             hardwareSerialNumberWriterAddOneSNpopupWindow.Owner = this;
@@ -188,6 +199,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             if (hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString != null)
             {
                 sNStringInListBoxes.Add(new ListBoxItems() { snstring = StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString), done = 0 });
+                Logger.Debug("One SN Added---" + StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString));
 
                 // 写入到Json文件中去
                 JsonCreate jsonCreate = new JsonCreate();
@@ -269,6 +281,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
             }
             string CurrentSn = this.CurrentSNTextBlock.Text.Replace(" ", "");
             Console.WriteLine(string.Format("当前操作的序列号是{0}", CurrentSn));
+            Logger.Debug("Current SN ---" + CurrentSn);
 
             CommandFrameGeneration commandFrameGeneration = new CommandFrameGeneration(CurrentSn);
             CurrentString = commandFrameGeneration.FwWriteString;
@@ -353,6 +366,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void SuccessfulFwFunc(string CurrentSn, String OperatorName)
         {
+            Logger.Debug(CurrentSn + "----Succeed");
             FrameBack = null;
 
             Console.WriteLine("当前板读出序列号为{0}\n烧写成功\n", CurrentSn);
@@ -369,6 +383,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void FailFwFunc(string CurrentSn, String OperatorName)
         {
+            Logger.Debug(CurrentSn + "----Failed");
             FrameBack = null;
 
             Console.WriteLine("烧写失败\n");
@@ -385,6 +400,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private bool SendData(string data)
         {
+            Logger.Info("SendData---" + data);
             sntocommandaggregate(data); // 发送到指令帧汇聚模块
             OpenDistrubuteThread(); // 打开状态帧分发的线程
 
@@ -519,6 +535,7 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
         private void FWWindowClosing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            Logger.Debug(this.OperatorNameTextBlock.Text + "---quit\n");
             System.Windows.Application.Current.Shutdown(); // 只是关掉了UI 后台进程没有关闭
         }
 

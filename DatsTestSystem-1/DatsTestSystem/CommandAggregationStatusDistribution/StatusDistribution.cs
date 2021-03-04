@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DatsTestSystem.Log;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -116,6 +117,7 @@ namespace DatsTestSystem.CommandAggregationStatusDistribution
                     FrameBack = m.ToArray();
                     if (FrameBack.Length >= 106)
                     {
+                        Logger.Info("Back Frame---" + StrAndByteProcessClass.bytetoString(FrameBack));
                         if (AllusefulFrameStart.Contains(StrAndByteProcessClass.bytetoString(FrameBack.Take(1).ToArray()))) // 如果帧头匹配成功
                         {
                             //Console.WriteLine("匹配成功！！！！！！！！！！！！！！！！");

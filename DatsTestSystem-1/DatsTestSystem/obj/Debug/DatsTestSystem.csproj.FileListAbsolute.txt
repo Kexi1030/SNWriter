@@ -194,3 +194,6 @@ F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTest
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.exe
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.pdb
 F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem.csprojAssemblyReference.cache
+F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\NLog.xml
+F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\NLog.config
+F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\obj\Debug\DatsTestSystem_Content.g.cs

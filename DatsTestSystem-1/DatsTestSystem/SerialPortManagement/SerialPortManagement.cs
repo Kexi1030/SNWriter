@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Threading;
 using System.Diagnostics;
 using DatsTestSystem.HardwareSerialNumberWirter;
+using DatsTestSystem.Log;
 
 namespace DatsTestSystem.SerialPortManagement
 {
@@ -52,6 +53,7 @@ namespace DatsTestSystem.SerialPortManagement
             }
             else
             {
+                Logger.Debug("init port error", new Exception("串口初始化失败-SerialPortManagement.cs"));
             }
         }
 
