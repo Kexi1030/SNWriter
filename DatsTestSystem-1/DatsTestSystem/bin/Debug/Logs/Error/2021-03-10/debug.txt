@@ -1,0 +1,39 @@
+2021-03-10 20:53:02.4517 | Debug | OperatorName---测试人员1 
+2021-03-10 20:53:28.0492 | Debug | Init Port Done---COM1---9600---0---8---1 
+2021-03-10 20:54:43.0874 | Debug | 双路6.125m道间距版本 0x03---元森快捷制版 / 无锡鸿睿焊接 0x00---2021---10---1-10---51---52---created_waiting for saving in json file 
+2021-03-10 20:54:43.1932 | Debug | Json file written done 
+2021-03-10 20:55:19.5168 | Debug | One SN Added---0082 0300 2110 0010 5152 
+2021-03-10 20:55:19.5577 | Debug | Json file written done 
+2021-03-10 20:56:45.7536 | Debug | OperatorName---测试人员2 
+2021-03-10 20:56:45.7616 | Debug | Operator Name Change to 测试人员2 
+2021-03-10 20:56:57.8020 | Debug | Current SN ---00820300211000015152 
+2021-03-10 20:56:57.8020 | Info  | SendData---F500000000E00300FFFF5F 
+2021-03-10 20:56:59.8425 | Info  | SendData---F500000000E00300FFFF5F 
+2021-03-10 20:57:01.8584 | Debug | 00820300211000015152----Failed 
+2021-03-10 20:57:25.0374 | Debug | OperatorName---测试人员1 
+2021-03-10 20:57:28.7553 | Debug | Init Port Done---COM1---9600---0---8---1 
+2021-03-10 20:57:48.9048 | Debug | init port error System.Exception: 串口初始化失败-SerialPortManagement.cs 
+ PortControlWindow.PortChangedFunc => SerialPortManagementClass.inifPort => Logger.Debug 
+
+2021-03-10 20:57:48.9247 | Debug | Init Port Done---COM5---9600---0---8---1 
+2021-03-10 21:04:57.8343 | Debug | OperatorName---测试人员1 
+2021-03-10 21:04:59.4350 | Debug | Loading From Json File...... 
+2021-03-10 21:05:02.4532 | Debug | Load From Json File Done----F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\2021-03-10_测试人员1.json 
+2021-03-10 21:05:12.7509 | Debug | One SN Added---0082 0300 2110 0007 5152 
+2021-03-10 21:05:12.8486 | Debug | Json file written done 
+2021-03-10 21:05:33.7587 | Debug | OperatorName---测试人员1 
+2021-03-10 21:05:36.8545 | Debug | Loading From Json File...... 
+2021-03-10 21:05:38.7864 | Debug | Load From Json File Done----F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\2021-03-10_测试人员1.json 
+2021-03-10 21:10:54.7058 | Debug | OperatorName---测试人员1 
+2021-03-10 21:10:59.1466 | Debug | Loading From Json File...... 
+2021-03-10 21:11:01.5509 | Debug | Load From Json File Done----F:\Code\硬件序列号烧写\DatsTestSystem-1\DatsTestSystem\bin\Debug\2021-03-10_测试人员1.json 
+2021-03-10 21:11:20.5739 | Debug | 测试人员1---quit
+ 
+2021-03-10 21:17:22.0264 | Debug | OperatorName---测试人员1 
+2021-03-10 21:17:24.5071 | Debug | Init Port Done---COM1---9600---0---8---1 
+2021-03-10 21:17:43.5736 | Debug | init port error System.Exception: 串口初始化失败-SerialPortManagement.cs 
+ PortControlWindow.PortChangedFunc => SerialPortManagementClass.inifPort => Logger.Debug 
+
+2021-03-10 21:17:43.7550 | Debug | Init Port Done---COM5---9600---0---8---1 
+2021-03-10 21:17:54.6833 | Debug | 测试人员1---quit
+ 

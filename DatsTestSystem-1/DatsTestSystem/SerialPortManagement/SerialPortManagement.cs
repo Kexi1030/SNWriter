@@ -53,6 +53,8 @@ namespace DatsTestSystem.SerialPortManagement
             }
             else
             {
+                serialPort.Close();
+                inifPort(portinfo);
                 Logger.Debug("init port error", new Exception("串口初始化失败-SerialPortManagement.cs"));
             }
         }

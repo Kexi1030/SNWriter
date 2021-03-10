@@ -198,6 +198,14 @@ namespace DatsTestSystem.HardwareSerialNumberWirter
 
             if (hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString != null)
             {
+                foreach(var item in sNStringInListBoxes)
+                {
+                    if(item.snstring == StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString))
+                    {
+                        MessageBox.Show("请勿添加重复的硬件序列号", "错误", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
+                }
                 sNStringInListBoxes.Add(new ListBoxItems() { snstring = StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString), done = 0 });
                 Logger.Debug("One SN Added---" + StringProcess(hardwareSerialNumberWriterAddOneSNpopupWindow.addOneSnString));
 
